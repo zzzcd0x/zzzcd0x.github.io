@@ -1,0 +1,432 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>线段树 | Gridea</title>
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594710617272">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="线段树 | Gridea - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="组成
+
+1号结点为根结点，存储原数组区间1到6的数的和
+左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和
+右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和
+这里3和4时区间中点和中点+1
+用二进制运算比较快，..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zzzcd0x.github.io">
+  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1594710617272" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              线段树
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-07-14
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="组成">组成</h1>
+<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="image-20200705131925934" loading="lazy"></figure>
+<p>1号结点为根结点，存储原数组区间1到6的数的和</p>
+<p>左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和</p>
+<p>右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和</p>
+<p>这里3和4时区间中点和中点+1</p>
+<p>用二进制运算比较快，处理大量数据时常数可以低一点</p>
+<p>其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等</p>
+<h1 id="怎么维护呢">怎么维护呢</h1>
+<h2 id="先从建树开始">先从建树开始</h2>
+<p>从根节点开始递归建树 <strong>开四倍空间</strong></p>
+<p>1.数组写法</p>
+<pre><code class="language-cpp">int a[1005];  //原数组
+int t[4005]; //线段树
+
+void build(int now,int l,int r){
+
+    if(l == r)
+    {
+        t[now] = a[l];
+        return;
+    }
+
+    int mid = (l+r)&gt;&gt;1;
+
+    build(now&lt;&lt;1,l,mid);
+    build(now&lt;&lt;1|1,mid+1,r);
+
+    pushup(now); //回溯的时候更新父亲节点
+}
+</code></pre>
+<p>2.结构体写法</p>
+<pre><code class="language-cpp">struct Node{
+
+    int l,r;
+    int sum;
+}node[4005];
+
+void build(int now,int l,int r){
+
+    node[now].l = l;
+    node[now].r = r;
+
+    if(l == r)
+    {
+        node[now].sum = a[l];
+        return;
+    }
+
+    int mid = (l+r)&gt;&gt;1;
+
+    build(now&lt;&lt;1,l,mid);
+    build(now&lt;&lt;1|1,mid+1,r);
+
+    pushup(now);
+}
+</code></pre>
+<p>好像结构体写法更容易维护</p>
+<h2 id="区间查询">区间查询</h2>
+<ol>
+<li>当前查找到的区间被包含在需要查找的区间内则直接返回</li>
+<li>否则通过中点判断要查找到区间和左右子树哪个有交集</li>
+<li>如果都有则将两边的查找结果进行相应的处理后返回</li>
+<li>思想类似二分查找</li>
+</ol>
+<pre><code class="language-cpp">int find(int now,int L,int R){
+
+    int l = node[now].l;
+    int r = node[now].r;
+    if(L &lt;= l &amp;&amp; R &gt;= r)
+        return node[now].sum;
+    
+    int mid = (l+r)&gt;&gt;1;
+
+    if(mid &gt;= R)
+        return find(now&lt;&lt;1,L,R);
+    else if(mid &lt; l)
+        return find(now&lt;&lt;1|1,L,R);
+    else
+    {
+        int tot = 0;
+        tot += find(now&lt;&lt;1,L,R);
+        tot += find(now&lt;&lt;1|1,L,R);
+        return tot; 
+    }
+}
+</code></pre>
+<h2 id="区间修改">区间修改</h2>
+<ul>
+<li>大体步骤和区间查询类似</li>
+<li><strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息</li>
+</ul>
+<pre><code class="language-cpp">int tag[40005];
+
+void pushdown(int now){
+
+    if(tag[now])
+    {
+        tag[now&lt;&lt;1] += tag[now];
+        tag[now&lt;&lt;1|1] += tag[now];
+        node[now&lt;&lt;1].sum += tag[now]*(node[now&lt;&lt;1].r-node[now&lt;&lt;1]+1);
+        node[now&lt;&lt;1|1].sum += tag[now]*(node[now&lt;&lt;1|1].r-node[now&lt;&lt;1|1]+1);
+        tag[now] = 0;
+    }
+
+}
+
+void modify(int now,int L,int R,int k){
+
+    int l = node[now].l;
+    int r = node[now].r;
+
+    if(L &lt;= l &amp;&amp; R &gt;= r)
+    {
+        tag[now] += k;
+        node[now].sum += k*(r-l+1);
+    }
+
+    pushdown(now);
+
+    int mid = (l+r)&gt;&gt;1;
+    if(mid &gt;= L) modify(now&lt;&lt;1,L,R,k);
+    if(R &gt; mid) modify(now&lt;&lt;1|1,L,R,k);
+
+    pushup(now);
+}
+</code></pre>
+<ul>
+<li>pushup的作用是当某一个结点的子树的值被修改了则去用修改后的子树的信息去更新当前结点的信息</li>
+</ul>
+<pre><code class="language-cpp">void pushup(int now){
+    node[now].sum = node[now&lt;&lt;1].sum + ndoe[now&lt;&lt;1|1].sum;
+}
+</code></pre>
+<h2 id="单点修改">单点修改</h2>
+<pre><code class="language-cpp">void modifyP(int now,int to,int k){
+
+    int l = node[now].l;
+    int r = node[now].r;
+
+    if(l == r)
+    {
+        a[now] += k;
+        t[now] += k;
+        return;
+    }
+
+    int mid = (l+r)&gt;&gt;1;
+
+    if(mid &gt;= to) modifyP(now&lt;&lt;1,to,k);
+    else modifyP(now&lt;&lt;1|1,to,k);
+
+    pushup(now);
+}
+</code></pre>
+<h1 id="维护最大子段和">维护最大子段和</h1>
+<h2 id="什么是最大子段和">什么是最大子段和？</h2>
+<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值</p>
+<p>其他会用到的概念:</p>
+<p>最大左子段和:从区间左端点开始的最大子段和</p>
+<p>最大右子段和:从区间右端点开始的最大子段和</p>
+<h3 id="pushup">pushup</h3>
+<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理</p>
+<p>最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和<br>
+<img src="A20F4AB9F43A4E039EB88E7A82078C7B" alt="image" loading="lazy"><br>
+想不明白的话可以先拿这个图模拟一下</p>
+<pre><code class="language-cpp">void pushup(int now){
+
+    node[now].sum = node[now&lt;&lt;1].sum + node[now&lt;&lt;1|1].sum;
+    ndoe[now].Max = max(max(node[now&lt;&lt;1].Max,node[now&lt;&lt;1|1].Max),node[now&lt;&lt;1].rm+node[now&lt;&lt;1|1].lm);
+    node[now].lm = max(node[now&lt;&lt;1].lm,node[now&lt;&lt;1].sum+node[now&lt;&lt;1|1].lm);
+    node[now].rm = max(node[now&lt;&lt;1|1].rm,node[now&lt;&lt;1].rm+node[now&lt;&lt;1|1].sum);
+}
+</code></pre>
+<p>剩下的其实都和普通的差不多</p>
+<h3 id="建树">建树</h3>
+<pre><code class="language-cpp">void build(int now,int l,int r){
+
+    node[now].l = l;
+    ndoe[now].r = r;
+
+    if(l == r)
+    {
+        node[now].sum = a[l];
+        node[now].lm = a[l];
+        node[now].rm = a[l];
+        node[now].Max = a[l];
+        return;
+    }
+
+    int mid = (l+r)&gt;&gt;1;
+
+    builde(now&lt;&lt;1,l,mid);
+    build(now&lt;&lt;1|1,mid+1,r);
+
+    pushup(now);
+}
+</code></pre>
+<h3 id="区间修改-2">区间修改</h3>
+<p>直接更改某个点的值</p>
+<pre><code class="language-cpp">void modify(int now,int to,int k){
+
+    int l = node[now].l;
+    int r = node[now].r;
+
+    if(l == r)
+    {
+        node[now].sum = k;
+        node[now].Max = k;
+        node[now].lm = k;
+        node[now].rm = k;
+        return;
+    }
+
+    int mid = (l+r)&gt;&gt;1;
+
+    if(to &lt;= mid) modify(now&lt;&lt;1,to,k);
+    else modify(now&lt;&lt;1|1,to,k);
+
+    pushup(now);
+}
+</code></pre>
+<h3 id="区间查找">区间查找</h3>
+<p>因为查找的过程要用到查找到的区间的信息，因此返回值为Node</p>
+<pre><code class="language-cpp">Node ask(int now,int L,int R){
+
+    int l = node[now].l;
+    int r = ndoe[now].r;
+
+    if(L &lt;= l &amp;&amp; R &gt;= r)
+        return node[now];
+    
+    int mid = (l+r)&gt;&gt;1;
+
+    if(mid &gt;= R) return ask(now&lt;&lt;1,L,R);
+    else if(mid&lt;L) return ask(now&lt;&lt;1|1,L,R);
+    else{
+        Node ans;
+        Node left = ask(now&lt;&lt;1,L,R);
+        Node right = ask(now&lt;&lt;1|1,L,R);
+        ans.sum = left.sum + right.sum;
+        ans.lm = max(left.lm,left.sum+right.lm);
+        ans.rm = max(right.rm,right.sum+left.rm);
+        ans.Max = max(left.rm+right.lm,max(left.Max,right.Max));
+        return ans;
+    }
+}
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E7%BB%84%E6%88%90">组成</a></li>
+<li><a href="#%E6%80%8E%E4%B9%88%E7%BB%B4%E6%8A%A4%E5%91%A2">怎么维护呢</a>
+<ul>
+<li><a href="#%E5%85%88%E4%BB%8E%E5%BB%BA%E6%A0%91%E5%BC%80%E5%A7%8B">先从建树开始</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2">区间查询</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E4%BF%AE%E6%94%B9">区间修改</a></li>
+<li><a href="#%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9">单点修改</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BB%B4%E6%8A%A4%E6%9C%80%E5%A4%A7%E5%AD%90%E6%AE%B5%E5%92%8C">维护最大子段和</a>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%AE%B5%E5%92%8C">什么是最大子段和？</a>
+<ul>
+<li><a href="#pushup">pushup</a></li>
+<li><a href="#%E5%BB%BA%E6%A0%91">建树</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E4%BF%AE%E6%94%B9-2">区间修改</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E6%9F%A5%E6%89%BE">区间查找</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
