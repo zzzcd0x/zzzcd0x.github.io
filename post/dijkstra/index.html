@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Dijkstra | zzzcd0x &#39;s Blog</title>
+<meta name="description" content="越学越倒退选手">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594715625642">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                All
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                分类
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Dijkstra</h1>
+            <p class="article-meta">
+              2020-07-14
+              
+            </p>
+            
+            <div class="post-content">
+              <p>Dijkstra算法是一种用于解决无负权边的有向图的单源最短路问题的算法</p>
+<h1 id="大致思想">大致思想</h1>
+<p>初始时将图的源点的最短路设为0<br>
+其他点最短路长度设为INF<br>
+将图中的点分为两类 一类是已经更新过最短路的点称为红点，另一类是未找到确定的最短路的点，称为蓝点<br>
+从源点开始更新能达到的点的最短路，将已经求出最短路的点放入队列<br>
+找出当前最短路最小的蓝点，将该点改为红点，再去更新这个点能达到的点的最短路<br>
+重复上述过程直到队列中没有点</p>
+<h1 id="正确性证明">正确性证明</h1>
+<p>首先源点能够到达的点的最短路一定是与源点相连的边的权值<br>
+可是为什么当前最短路最小的蓝点可以改为红点呢？<br>
+用反证法证明<br>
+假设取出的蓝点为u<br>
+如果取出的蓝点还可以更新最短路，即还不能改为红点，那么能更新该点的最短路的点一定在队列后面，设该点为x<br>
+然而队是按最短路大小从小到大排序的 因此<br>
+<code>$ d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u] $</code><br>
+得证</p>
+<h1 id="朴素写法">朴素写法</h1>
+<p><strong>链式前向星部分已省略</strong></p>
+<pre><code class="language-cpp">int d[1005];
+bool b[1005];
+
+void dijkstra(){
+
+    memset(d,0x3f,sizeof(d));
+    int inf = d[s];
+    d[s] = 0;
+    for(int i = 1; i &lt;= n; i++)
+    {
+        int Min = inf;
+        for(int j = 1; j &lt;= n; j++)
+            if(!b[j])
+                if(Min == inf || d[j]&lt;d[Min])
+                    Min = j;
+        if(Min == inf) return ;
+        b[Min] = true;
+        for(int i = head[Min]; i ;i = edge[i].next)
+        {
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(!b[to])
+                d[to] = d[Min]+val;
+        }
+    }
+}
+</code></pre>
+<p><strong>时间复杂度<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></strong></p>
+<h1 id="堆优化">堆优化</h1>
+<p>朴素写法最大的瓶颈是寻找当前路径最短的蓝点，这个过程可以用优先队列和堆优化</p>
+<pre><code class="language-cpp">int d[1005];
+bool b[1005];
+priority_queue&lt;pair&lt;int,int&gt;,vector&lt;pair&lt;int,int&gt; &gt;, greater&lt;pair&lt;int ,int&gt; &gt; &gt; q;
+
+void dijkstra(){
+
+    d[s] = 0;
+    q.push(make_pair(0,s));
+    while(!q.empty())
+    {
+        int x = q.top().second;
+        q.pop();
+        if(b[x]) continue;
+        b[x] = true;
+        for(int i = head[x]; i ; i = edge[i].next)
+        {
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(d[to]&gt;d[x]+val)
+            {
+                d[to] = d[x]+val;
+                if(!b[x])
+                    q.push(make_pair(d[to],to));
+            }
+        }
+    }
+}
+</code></pre>
+<p>优化后时间复杂度可以降为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>+</mo><mi>m</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlogn+m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mclose">)</span></span></span></span><br>
+<s>其实还有线段树优化 然后我不会T-T</s></p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
+                <h3 class="post-title">
+                  树状数组
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594715625642" class="no-responsive avatar">
+    <div class="text-muted">越学越倒退选手</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/gcd-lcm/">gcd lcm</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/su-shu-shai/">素数筛</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">链式前向星</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">拓扑排序</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/kruskal/">kruskal</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/floyd/">Floyd</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/dijkstra/">Dijkstra</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">树状数组</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge ">
+          ACM
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

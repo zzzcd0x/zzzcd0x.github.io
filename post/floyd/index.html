@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ACM | zzzcd0x &#39;s Blog</title>
+<title>Floyd | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,6 +23,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
@@ -71,40 +72,66 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="current-tag">标签: ACM</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
-    </h2>
-    <p class="article-meta">
-      2020-07-14
-      
-        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge ">
-          ACM
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+          <article class="article">
+            <h1>Floyd</h1>
+            <p class="article-meta">
+              2020-07-14
+              
+            </p>
+            
+            <div class="post-content">
+              <ul>
+<li>
+<h1 id="干什么的呢">干什么的呢</h1>
+<p>大多用于求多源图中两点间的最短路，也可以用于判图是否连通</p>
+</li>
+<li>
+<h1 id="写法">写法</h1>
+</li>
+</ul>
+<pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
+        for(int i = 1; i &lt;= n; i++)
+            for(int j = 1; j &lt;= n; j++)
+                dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
+</code></pre>
+<p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
+<ul>
+<li>
+<h1 id="正确性证明">正确性证明</h1>
+<p>Floyd算法核心思想是动态规划<br>
+原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
+状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
+但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
+最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
+因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
+</li>
+<li>
+<h1 id="细节">细节</h1>
+<p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
+一般用Floyd时还要考虑边的权值</p>
+</li>
+</ul>
 
-
+            </div>
+          </article>
         </div>
-        <div class="row flex-edges">
-  
-  
-</div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/dijkstra/">
+                <h3 class="post-title">
+                  Dijkstra
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594715625642" class="no-responsive avatar">
@@ -203,6 +230,7 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
+
 
     </div>
 

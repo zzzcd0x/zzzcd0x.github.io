@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-14T08:28:18.185Z</updated>
+    <updated>2020-07-14T08:33:47.927Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,457 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[gcd lcm]]></title>
+        <id>https://zzzcd0x.github.io/post/gcd-lcm/</id>
+        <link href="https://zzzcd0x.github.io/post/gcd-lcm/">
+        </link>
+        <updated>2020-07-14T08:33:34.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="最大公因数gcd">最大公因数(gcd)</h2>
+<h3 id="性质">性质：</h3>
+<ol>
+<li>gcd(1,n) = 1</li>
+<li>设d = gcd(a,b) 则 gcd(a/d,b/d) = 1</li>
+<li>gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)</li>
+</ol>
+<h3 id="辗转相除法求解">辗转相除法求解：</h3>
+<p>由gcd(a,b) = gcd(a-b,b) 得 gcd(a,b) = gcd(a%b,b)</p>
+<p>因此求解过程可写为：</p>
+<ol>
+<li>如果a&lt;b,则交换a,b</li>
+<li>如果b = 0，则返回a</li>
+<li>令a = a%b</li>
+</ol>
+<p>重复上述过程</p>
+<pre><code class="language-cpp">int gcd(int a, int b) {
+    if (a &lt; b) {
+        int t = b;
+        b = a;
+        a = t;
+    }
+    if (b == 0) return a;
+    return gcd(a % b, b);
+}
+</code></pre>
+<h2 id="最小公倍数lcm">最小公倍数(lcm)</h2>
+<pre><code class="language-math">lcm(a,b) = {ab\over gcd(a,b)}
+</code></pre>
+<p><s>怎么求就不用说了吧</s></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[素数筛]]></title>
+        <id>https://zzzcd0x.github.io/post/su-shu-shai/</id>
+        <link href="https://zzzcd0x.github.io/post/su-shu-shai/">
+        </link>
+        <updated>2020-07-14T08:32:57.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="埃氏筛">埃氏筛</h1>
+<ul>
+<li>
+<h2 id="主要过程">主要过程</h2>
+</li>
+<li>
+<p>从2到n枚举，如果该数字没有标记(是素数)</p>
+</li>
+<li>
+<p>枚举范围内的该数字的倍数，将枚举到的数字标记为素数<br>
+这样枚举结束后所有的合数就被打了标记，没打标记的就是素数</p>
+</li>
+</ul>
+<h2 id="实现">实现</h2>
+<p>以找100以内的素数为例</p>
+<pre><code class="language-cpp">int n = 100;
+bool flag[105];
+
+void sieve(){
+    for(int i = 2; i &lt;= n; i++)
+            if(!flag[i])
+            {
+                printf(&quot;%d &quot;,i);
+                for(int j = 2; i*j &lt;= n; j++)
+                    flag[i*j] = true;
+            }
+}
+</code></pre>
+<p>时间复杂度：<code>O(n\log(\log(n)))</code></p>
+<h1 id="欧拉筛">欧拉筛</h1>
+<p>埃氏筛中有一部分数被筛了不止一次，例如6被2筛完又被3筛<br>
+然而一个合数被标记只需要被其最小素因子筛就好了<br>
+这样的筛法就是欧拉筛，也叫线性筛</p>
+<ul>
+<li>
+<h2 id="过程">过程</h2>
+</li>
+<li>
+<p>i从2开始枚举，在枚举的过程中，记录当前已知的素数</p>
+</li>
+<li>
+<p>枚举的每一步都去筛当前已知的所有的素数的i倍</p>
+</li>
+<li>
+<p><strong>当i能被枚举到的素数整除即已经筛到了当前情况下将要被筛的数的最小素因子则跳出循环</strong>应该被筛却没有被筛的数会在i更大的情况下被筛掉</p>
+</li>
+</ul>
+<h2 id="实现-2">实现</h2>
+<p>以找100以内的素数为例</p>
+<pre><code class="language-cpp">int cnt;
+int n = 100;
+int prime[100];
+bool flag[100];
+
+void sieve(){
+
+    for(int i = 2; i &lt;= n; i++)
+        {
+            if(!flag[i])
+            {
+                prime[++cnt] = i;
+                printf(&quot;%d &quot;,i);
+            }
+            for(int j = 1; prime[j] * i &lt;= n &amp;&amp; j &lt;= cnt; j++)
+            {
+                flag[prime[j]*i] = true;
+                if(i % prime[j] == 0) break;
+            }
+        }   
+}
+</code></pre>
+<p>时间复杂度：<code>O(n)</code><br>
+适合处理数据范围巨大的情况</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[链式前向星]]></title>
+        <id>https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/</id>
+        <link href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">
+        </link>
+        <updated>2020-07-14T08:32:26.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="原理">原理</h1>
+<pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
+</code></pre>
+<pre><code class="language-cpp">struct Edge{
+
+    int to;
+    int val;
+    int next = -1;              //每一个点的第一条边的next设为-1
+}edge[10005];
+int head[10005];                //每一个点的链表的头结点编号
+int tot = 0;                    //用于存储每一个点的头结点
+
+void add(){
+
+    int n, m;                   //n个点m条边的图
+    scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+    for(int i = 1; i &lt;= m; i++)
+    {
+        int from, to, val;                //从from到to的边权为val的边
+        scanf(&quot;%d %d %d&quot;,&amp;from,&amp;to,&amp;val);
+        edge[++tot].next = head[from];    //正在存储的这一条边的下一条边是当前链表的头结点
+        edge[tot].to = to;
+        edge[tot].val = val;
+        head[from] = tot;                 //将链表的头结点的编号设为当前存储的边
+    }
+}
+</code></pre>
+<h1 id="遍历">遍历</h1>
+<pre><code>与每一个点相连的边已经以链表的形式存储，头结点存储在head数组中，因此我们可以使用类似遍历链表的方式遍历与每一个点相连的每一条边
+</code></pre>
+<pre><code class="language-cpp">void search(){
+
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = head[i]; j != -1; j = edge[j].next)
+            printf(&quot;%d %d %d\n&quot;,edge[j].to,edge[j].val,edge[j].next);
+
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[拓扑排序]]></title>
+        <id>https://zzzcd0x.github.io/post/tuo-bu-pai-xu/</id>
+        <link href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">
+        </link>
+        <updated>2020-07-14T08:31:44.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="什么是dag">什么是DAG</h1>
+<pre><code>通俗来说DAG就是有向无环图的简称，通过名字就可以看出，DAG的基本特点是边为有向边，且图内无环
+</code></pre>
+<p>这个图虽然看似有环，但因为边都是有向边，所以并没有构成环。<br>
+观察一下上面那个图，不难发现以每一个结点为起点都可以找到对应的一条链，因此许多图论问题都可以抽象为找DAG中的最短链或者最长链。<br>
+然而在一些图论问题中结点之间存在先后关系，这样就不能直接用平常的遍历方式来对图进行遍历，而是需要先对结点按照先后顺序进行排序，转化为一个序列后再进行遍历</p>
+<h1 id="拓扑排序">拓扑排序</h1>
+<pre><code>上述过程应用的排序算法就是拓扑排序，排序后整张图就被转化成了一个序列，然后通过这个序列来解决问题
+</code></pre>
+<h2 id="过程">过程</h2>
+<ol>
+<li>在存图是记录每个结点的入度和出度</li>
+<li>存图结束后将入度为0的点加入序列</li>
+<li>那处序列头部的点x，遍历该点可以到达的所有点y</li>
+<li>删掉x到y的边，即y点的入度减一</li>
+<li>如果y点入度为0则加入序列</li>
+<li>重复2~5直至序列为空</li>
+</ol>
+<pre><code class="language-cpp">struct edge{
+    int to;
+    int val;
+    int next;
+}e[10005];
+
+int n, m;
+int ind[10005];    //入度
+int head[100005];
+
+queue&lt;int&gt;q;
+
+void topsort(){
+
+    for(int i = 1; i &lt;= n; i++)                   //将入度为0的结点放入序列
+        if(!ind[i])
+            q.push(i);
+
+    while(!q.empty())
+    {
+        int x = q.front();
+        q.pop();
+
+        for(int i = head[x]; i; i = e[i].next)    //遍历x能到达的点
+        {
+            int y = e[i].to;
+            ind[y]--;                             //删边
+            if(!ind[y])                               //如果y点入度为0则放入序列
+            	q.push(y);
+        }
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kruskal]]></title>
+        <id>https://zzzcd0x.github.io/post/kruskal/</id>
+        <link href="https://zzzcd0x.github.io/post/kruskal/">
+        </link>
+        <updated>2020-07-14T08:31:25.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="kruskal">kruskal</h1>
+<h2 id="是什么呢">是什么呢</h2>
+<p>是一种求一个图的最小生成树的算法，核心思想是贪心，其实就是个贪心，与prime相比更加适合求边比较稀疏的图的最小生成树</p>
+<p>时间复杂度是<code>O(mlogm)</code></p>
+<h2 id="运行过程">运行过程</h2>
+<p>kruskal里面的边的作用可以理解为只是为了表达两个点的具有长度的连接关系</p>
+<p>首先将所有的边按照边权从小到大排序</p>
+<p>然后枚举每一条边，如果正在枚举的边的两个结点无联通关系，则将该边边权计入答案中、并用并查集标记两点的联通关系</p>
+<p>当生成树联通后即可跳出循环</p>
+<h2 id="模板">模板</h2>
+<pre><code class="language-cpp">void kruskal() {
+
+    for(int i = 1; i &lt;= tot; i++) {
+
+        int x = anc(edge[i].from);
+        int y = anc(edge[i].to);
+
+        if(x != y) {
+
+            ans += edge[i].val;
+            dad[x] = y;
+        }
+    }
+
+}
+</code></pre>
+<h2 id="注意事项">注意事项</h2>
+<p>真正的边权可能并不是输入的边权</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Floyd]]></title>
+        <id>https://zzzcd0x.github.io/post/floyd/</id>
+        <link href="https://zzzcd0x.github.io/post/floyd/">
+        </link>
+        <updated>2020-07-14T08:30:51.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<h1 id="干什么的呢">干什么的呢</h1>
+<p>大多用于求多源图中两点间的最短路，也可以用于判图是否连通</p>
+</li>
+<li>
+<h1 id="写法">写法</h1>
+</li>
+</ul>
+<pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
+        for(int i = 1; i &lt;= n; i++)
+            for(int j = 1; j &lt;= n; j++)
+                dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
+</code></pre>
+<p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
+<ul>
+<li>
+<h1 id="正确性证明">正确性证明</h1>
+<p>Floyd算法核心思想是动态规划<br>
+原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
+状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
+但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
+最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
+因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
+</li>
+<li>
+<h1 id="细节">细节</h1>
+<p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
+一般用Floyd时还要考虑边的权值</p>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dijkstra]]></title>
+        <id>https://zzzcd0x.github.io/post/dijkstra/</id>
+        <link href="https://zzzcd0x.github.io/post/dijkstra/">
+        </link>
+        <updated>2020-07-14T08:30:12.000Z</updated>
+        <content type="html"><![CDATA[<p>Dijkstra算法是一种用于解决无负权边的有向图的单源最短路问题的算法</p>
+<h1 id="大致思想">大致思想</h1>
+<p>初始时将图的源点的最短路设为0<br>
+其他点最短路长度设为INF<br>
+将图中的点分为两类 一类是已经更新过最短路的点称为红点，另一类是未找到确定的最短路的点，称为蓝点<br>
+从源点开始更新能达到的点的最短路，将已经求出最短路的点放入队列<br>
+找出当前最短路最小的蓝点，将该点改为红点，再去更新这个点能达到的点的最短路<br>
+重复上述过程直到队列中没有点</p>
+<h1 id="正确性证明">正确性证明</h1>
+<p>首先源点能够到达的点的最短路一定是与源点相连的边的权值<br>
+可是为什么当前最短路最小的蓝点可以改为红点呢？<br>
+用反证法证明<br>
+假设取出的蓝点为u<br>
+如果取出的蓝点还可以更新最短路，即还不能改为红点，那么能更新该点的最短路的点一定在队列后面，设该点为x<br>
+然而队是按最短路大小从小到大排序的 因此<br>
+<code>$ d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u] $</code><br>
+得证</p>
+<h1 id="朴素写法">朴素写法</h1>
+<p><strong>链式前向星部分已省略</strong></p>
+<pre><code class="language-cpp">int d[1005];
+bool b[1005];
+
+void dijkstra(){
+
+    memset(d,0x3f,sizeof(d));
+    int inf = d[s];
+    d[s] = 0;
+    for(int i = 1; i &lt;= n; i++)
+    {
+        int Min = inf;
+        for(int j = 1; j &lt;= n; j++)
+            if(!b[j])
+                if(Min == inf || d[j]&lt;d[Min])
+                    Min = j;
+        if(Min == inf) return ;
+        b[Min] = true;
+        for(int i = head[Min]; i ;i = edge[i].next)
+        {
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(!b[to])
+                d[to] = d[Min]+val;
+        }
+    }
+}
+</code></pre>
+<p><strong>时间复杂度<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></strong></p>
+<h1 id="堆优化">堆优化</h1>
+<p>朴素写法最大的瓶颈是寻找当前路径最短的蓝点，这个过程可以用优先队列和堆优化</p>
+<pre><code class="language-cpp">int d[1005];
+bool b[1005];
+priority_queue&lt;pair&lt;int,int&gt;,vector&lt;pair&lt;int,int&gt; &gt;, greater&lt;pair&lt;int ,int&gt; &gt; &gt; q;
+
+void dijkstra(){
+
+    d[s] = 0;
+    q.push(make_pair(0,s));
+    while(!q.empty())
+    {
+        int x = q.top().second;
+        q.pop();
+        if(b[x]) continue;
+        b[x] = true;
+        for(int i = head[x]; i ; i = edge[i].next)
+        {
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(d[to]&gt;d[x]+val)
+            {
+                d[to] = d[x]+val;
+                if(!b[x])
+                    q.push(make_pair(d[to],to));
+            }
+        }
+    }
+}
+</code></pre>
+<p>优化后时间复杂度可以降为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>+</mo><mi>m</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlogn+m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mclose">)</span></span></span></span><br>
+<s>其实还有线段树优化 然后我不会T-T</s></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[树状数组]]></title>
+        <id>https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/</id>
+        <link href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
+        </link>
+        <updated>2020-07-14T08:28:50.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<h1 id="树状数组是什么">树状数组是什么</h1>
+<p>设树状数组为C，x的二进制表达形式末尾有k个0，则C[x]表示区间A[<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>−</mo><msup><mn>2</mn><mi>k</mi></msup><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x-2^k+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.932438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>,<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>]的和<br>
+使位运算lowbit(x) = x&amp;-x可求出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">2^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span>的值</p>
+</li>
+</ul>
+<pre><code>大致原理
+假设x=6
+6用二进制表示位110
+-6是求6的补码，即反码+1，位010
+110&amp;010即为最低位1的位置
+</code></pre>
+<p><strong>概念想不明白可以看一下这张图</strong><br>
+<img src="https://img-blog.csdnimg.cn/20200512205527176.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BhUnpWYUw=,size_16,color_FFFFFF,t_70" alt="" loading="lazy"><br>
+<strong>信息可减的情况下，可以差分:</strong></p>
+<ul>
+<li>
+<p>单点加，区间查询</p>
+<p>查询区间[l,r]可差分为前r个数的和减去前l-1个数的和</p>
+</li>
+<li>
+<p>区间加，单点查询</p>
+<p>把区间[l,r]加差分为前缀r加，前缀l-1减，查询单点只需要查询包含这个点的所有前缀修改</p>
+</li>
+<li>
+<p>区间加，区间查询</p>
+<p>查询[l,r]只要用前r个数减去前l-1个数的和即可</p>
+</li>
+<li>
+<h1 id="基本写法">基本写法</h1>
+</li>
+<li>
+<p>构建</p>
+<p>构建方法因题而异</p>
+</li>
+<li>
+<p>查询x的前缀和</p>
+<p>根据定义可得，C[x]存的是A[x-2^k+1,x]的和，因此只需要x-lowbit(x)并且加上C[x]的值就可以得到x的前缀和，直到减到0</p>
+</li>
+</ul>
+<pre><code class="language-cpp"> int aks(int x){
+   int ans = 0;
+   for(int i = x; i ; i-=lowbit(i))
+   ans+=c[i];
+}
+</code></pre>
+<ul>
+<li>修改<br>
+再根据定义，更改A[x]的值，需要改变C中x+lowbit(x)直到大于n的值，迭代解决即可<br>
+第x位的数加k的写法</li>
+</ul>
+<pre><code class="language-cpp">void modify(int x,int k){
+	for(int i = x; i &lt;= n; i+=lowbit(i))
+    c[i]+=k;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[线段树]]></title>
         <id>https://zzzcd0x.github.io/post/SegmentTree/</id>

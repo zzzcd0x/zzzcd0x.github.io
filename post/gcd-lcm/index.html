@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ACM | zzzcd0x &#39;s Blog</title>
+<title>gcd lcm | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,6 +23,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
@@ -71,40 +72,65 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="current-tag">标签: ACM</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
-    </h2>
-    <p class="article-meta">
-      2020-07-14
-      
-        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge ">
-          ACM
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+          <article class="article">
+            <h1>gcd lcm</h1>
+            <p class="article-meta">
+              2020-07-14
+              
+            </p>
+            
+            <div class="post-content">
+              <h2 id="最大公因数gcd">最大公因数(gcd)</h2>
+<h3 id="性质">性质：</h3>
+<ol>
+<li>gcd(1,n) = 1</li>
+<li>设d = gcd(a,b) 则 gcd(a/d,b/d) = 1</li>
+<li>gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)</li>
+</ol>
+<h3 id="辗转相除法求解">辗转相除法求解：</h3>
+<p>由gcd(a,b) = gcd(a-b,b) 得 gcd(a,b) = gcd(a%b,b)</p>
+<p>因此求解过程可写为：</p>
+<ol>
+<li>如果a&lt;b,则交换a,b</li>
+<li>如果b = 0，则返回a</li>
+<li>令a = a%b</li>
+</ol>
+<p>重复上述过程</p>
+<pre><code class="language-cpp">int gcd(int a, int b) {
+    if (a &lt; b) {
+        int t = b;
+        b = a;
+        a = t;
+    }
+    if (b == 0) return a;
+    return gcd(a % b, b);
+}
+</code></pre>
+<h2 id="最小公倍数lcm">最小公倍数(lcm)</h2>
+<pre><code class="language-math">lcm(a,b) = {ab\over gcd(a,b)}
+</code></pre>
+<p><s>怎么求就不用说了吧</s></p>
 
-
+            </div>
+          </article>
         </div>
-        <div class="row flex-edges">
-  
-  
-</div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/su-shu-shai/">
+                <h3 class="post-title">
+                  素数筛
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594715625642" class="no-responsive avatar">
@@ -193,7 +219,7 @@
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge secondary">
           ACM
         </a>
       
@@ -203,6 +229,7 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
+
 
     </div>
 

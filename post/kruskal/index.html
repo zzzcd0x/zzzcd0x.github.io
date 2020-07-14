@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ACM | zzzcd0x &#39;s Blog</title>
+<title>kruskal | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,6 +23,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
@@ -71,40 +72,63 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="current-tag">标签: ACM</h2>
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
-    </h2>
-    <p class="article-meta">
-      2020-07-14
-      
-        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge ">
-          ACM
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://zzzcd0x.github.io/post/SegmentTree/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
+          <article class="article">
+            <h1>kruskal</h1>
+            <p class="article-meta">
+              2020-07-14
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="kruskal">kruskal</h1>
+<h2 id="是什么呢">是什么呢</h2>
+<p>是一种求一个图的最小生成树的算法，核心思想是贪心，其实就是个贪心，与prime相比更加适合求边比较稀疏的图的最小生成树</p>
+<p>时间复杂度是<code>O(mlogm)</code></p>
+<h2 id="运行过程">运行过程</h2>
+<p>kruskal里面的边的作用可以理解为只是为了表达两个点的具有长度的连接关系</p>
+<p>首先将所有的边按照边权从小到大排序</p>
+<p>然后枚举每一条边，如果正在枚举的边的两个结点无联通关系，则将该边边权计入答案中、并用并查集标记两点的联通关系</p>
+<p>当生成树联通后即可跳出循环</p>
+<h2 id="模板">模板</h2>
+<pre><code class="language-cpp">void kruskal() {
 
+    for(int i = 1; i &lt;= tot; i++) {
 
+        int x = anc(edge[i].from);
+        int y = anc(edge[i].to);
+
+        if(x != y) {
+
+            ans += edge[i].val;
+            dad[x] = y;
+        }
+    }
+
+}
+</code></pre>
+<h2 id="注意事项">注意事项</h2>
+<p>真正的边权可能并不是输入的边权</p>
+
+            </div>
+          </article>
         </div>
-        <div class="row flex-edges">
-  
-  
-</div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/floyd/">
+                <h3 class="post-title">
+                  Floyd
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594715625642" class="no-responsive avatar">
@@ -193,7 +217,7 @@
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/ACMBlog/" class="badge ">
           ACM
         </a>
       
@@ -203,6 +227,7 @@
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
+
 
     </div>
 
