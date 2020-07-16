@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-14T09:02:11.696Z</updated>
+    <updated>2020-07-16T10:32:16.048Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -142,7 +142,7 @@ void sieve(){
 
     int to;
     int val;
-    int next = -1;              //每一个点的第一条边的next设为-1
+    int next; 
 }edge[10005];
 int head[10005];                //每一个点的链表的头结点编号
 int tot = 0;                    //用于存储每一个点的头结点
@@ -168,7 +168,7 @@ void add(){
 <pre><code class="language-cpp">void search(){
 
     for(int i = 1; i &lt;= n; i++)
-        for(int j = head[i]; j != -1; j = edge[j].next)
+        for(int j = head[i]; j ; j = edge[j].next)
             printf(&quot;%d %d %d\n&quot;,edge[j].to,edge[j].val,edge[j].next);
 
 }

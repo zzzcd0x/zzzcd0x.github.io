@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>素数筛 | zzzcd0x &#39;s Blog</title>
+<title>ACM-图论 | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,7 +23,6 @@
 
   </head>
   <body>
-  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
@@ -72,112 +71,112 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <article class="article">
-            <h1>素数筛</h1>
-            <p class="article-meta">
-              2020-07-14
-              
-                <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge ">
-                  ACM-数论
-                </a>
-              
-            </p>
-            
-            <div class="post-content">
-              <h1 id="埃氏筛">埃氏筛</h1>
-<ul>
-<li>
-<h2 id="主要过程">主要过程</h2>
-</li>
-<li>
-<p>从2到n枚举，如果该数字没有标记(是素数)</p>
-</li>
-<li>
-<p>枚举范围内的该数字的倍数，将枚举到的数字标记为素数<br>
-这样枚举结束后所有的合数就被打了标记，没打标记的就是素数</p>
-</li>
-</ul>
-<h2 id="实现">实现</h2>
-<p>以找100以内的素数为例</p>
-<pre><code class="language-cpp">int n = 100;
-bool flag[105];
-
-void sieve(){
-    for(int i = 2; i &lt;= n; i++)
-            if(!flag[i])
-            {
-                printf(&quot;%d &quot;,i);
-                for(int j = 2; i*j &lt;= n; j++)
-                    flag[i*j] = true;
-            }
-}
-</code></pre>
-<p>时间复杂度：<code>O(n\log(\log(n)))</code></p>
-<h1 id="欧拉筛">欧拉筛</h1>
-<p>埃氏筛中有一部分数被筛了不止一次，例如6被2筛完又被3筛<br>
-然而一个合数被标记只需要被其最小素因子筛就好了<br>
-这样的筛法就是欧拉筛，也叫线性筛</p>
-<ul>
-<li>
-<h2 id="过程">过程</h2>
-</li>
-<li>
-<p>i从2开始枚举，在枚举的过程中，记录当前已知的素数</p>
-</li>
-<li>
-<p>枚举的每一步都去筛当前已知的所有的素数的i倍</p>
-</li>
-<li>
-<p><strong>当i能被枚举到的素数整除即已经筛到了当前情况下将要被筛的数的最小素因子则跳出循环</strong>应该被筛却没有被筛的数会在i更大的情况下被筛掉</p>
-</li>
-</ul>
-<h2 id="实现-2">实现</h2>
-<p>以找100以内的素数为例</p>
-<pre><code class="language-cpp">int cnt;
-int n = 100;
-int prime[100];
-bool flag[100];
-
-void sieve(){
-
-    for(int i = 2; i &lt;= n; i++)
-        {
-            if(!flag[i])
-            {
-                prime[++cnt] = i;
-                printf(&quot;%d &quot;,i);
-            }
-            for(int j = 1; prime[j] * i &lt;= n &amp;&amp; j &lt;= cnt; j++)
-            {
-                flag[prime[j]*i] = true;
-                if(i % prime[j] == 0) break;
-            }
-        }   
-}
-</code></pre>
-<p>时间复杂度：<code>O(n)</code><br>
-适合处理数据范围巨大的情况</p>
-
-            </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
+          <h2 class="current-tag">标签: ACM-图论</h2>
           
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">
-                <h3 class="post-title">
-                  链式前向星
-                </h3>
-              </a>
-            </div>
-          
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">链式前向星</a>
+    </h2>
+    <p class="article-meta">
+      2020-07-14
+      
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge success">
+          ACM-图论
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      
+    </p>
+    <div class="row">
+      <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">拓扑排序</a>
+    </h2>
+    <p class="article-meta">
+      2020-07-14
+      
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge ">
+          ACM-图论
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      
+    </p>
+    <div class="row">
+      <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://zzzcd0x.github.io/post/floyd/">Floyd</a>
+    </h2>
+    <p class="article-meta">
+      2020-07-14
+      
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge warning">
+          ACM-图论
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      
+    </p>
+    <div class="row">
+      <a href="https://zzzcd0x.github.io/post/floyd/" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+  <article class="article">
+    <h2 class="article-title">
+      <a href="https://zzzcd0x.github.io/post/dijkstra/">Dijkstra</a>
+    </h2>
+    <p class="article-meta">
+      2020-07-14
+      
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
+          ACM-图论
+        </a>
+      
+    </p>
+    <p class="text-lead">
+      
+    </p>
+    <div class="row">
+      <a href="https://zzzcd0x.github.io/post/dijkstra/" class="readmore-link">
+        <button>
+          Read More
+        </button>
+      </a>
+    </div>
+  </article>
+
+
         </div>
-        
+        <div class="row flex-edges">
+  
+  
+</div>
+
       </div>
-
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594895499513" class="no-responsive avatar">
@@ -270,11 +269,11 @@ void sieve(){
           ACM-数论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
           ACM-图论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge ">
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge success">
           ACM-数据结构
         </a>
       
@@ -284,7 +283,6 @@ void sieve(){
     Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
-
 
     </div>
 
