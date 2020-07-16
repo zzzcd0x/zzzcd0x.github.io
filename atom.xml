@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-16T10:32:16.048Z</updated>
+    <updated>2020-07-16T12:45:55.613Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -138,28 +138,41 @@ void sieve(){
         <content type="html"><![CDATA[<h1 id="原理">原理</h1>
 <pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
 </code></pre>
+<h1 id="怎么写呢">怎么写呢</h1>
+<ul>
+<li>结构体写法</li>
+</ul>
 <pre><code class="language-cpp">struct Edge{
-
     int to;
     int val;
-    int next; 
+    int nxt;
+    int from; 
 }edge[10005];
 int head[10005];                //每一个点的链表的头结点编号
 int tot = 0;                    //用于存储每一个点的头结点
 
-void add(){
+void add(int x,int y,int z){
+    edge[++tot].nxt = head[x];
+    head[x] = tot;
+    edge[tot].to = y;
+    edge[tot].from = x;
+    edge[tot].val = z;
+}
+</code></pre>
+<ul>
+<li>数组写法</li>
+</ul>
+<pre><code class="language-cpp">int tot;
+int to[MAXN];
+int from[MAXN];
+int head[MAXN];
+int val[MAXN];
 
-    int n, m;                   //n个点m条边的图
-    scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
-    for(int i = 1; i &lt;= m; i++)
-    {
-        int from, to, val;                //从from到to的边权为val的边
-        scanf(&quot;%d %d %d&quot;,&amp;from,&amp;to,&amp;val);
-        edge[++tot].next = head[from];    //正在存储的这一条边的下一条边是当前链表的头结点
-        edge[tot].to = to;
-        edge[tot].val = val;
-        head[from] = tot;                 //将链表的头结点的编号设为当前存储的边
-    }
+void add(int x,int y) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    from[tot] = x;
 }
 </code></pre>
 <h1 id="遍历">遍历</h1>

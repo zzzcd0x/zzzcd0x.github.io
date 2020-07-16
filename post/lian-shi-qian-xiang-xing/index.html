@@ -7,7 +7,7 @@
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594895499513">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594903546280">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -77,7 +77,7 @@
             <p class="article-meta">
               2020-07-14
               
-                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge warning">
+                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
                   ACM-图论
                 </a>
               
@@ -87,28 +87,41 @@
               <h1 id="原理">原理</h1>
 <pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
 </code></pre>
+<h1 id="怎么写呢">怎么写呢</h1>
+<ul>
+<li>结构体写法</li>
+</ul>
 <pre><code class="language-cpp">struct Edge{
-
     int to;
     int val;
-    int next; 
+    int nxt;
+    int from; 
 }edge[10005];
 int head[10005];                //每一个点的链表的头结点编号
 int tot = 0;                    //用于存储每一个点的头结点
 
-void add(){
+void add(int x,int y,int z){
+    edge[++tot].nxt = head[x];
+    head[x] = tot;
+    edge[tot].to = y;
+    edge[tot].from = x;
+    edge[tot].val = z;
+}
+</code></pre>
+<ul>
+<li>数组写法</li>
+</ul>
+<pre><code class="language-cpp">int tot;
+int to[MAXN];
+int from[MAXN];
+int head[MAXN];
+int val[MAXN];
 
-    int n, m;                   //n个点m条边的图
-    scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
-    for(int i = 1; i &lt;= m; i++)
-    {
-        int from, to, val;                //从from到to的边权为val的边
-        scanf(&quot;%d %d %d&quot;,&amp;from,&amp;to,&amp;val);
-        edge[++tot].next = head[from];    //正在存储的这一条边的下一条边是当前链表的头结点
-        edge[tot].to = to;
-        edge[tot].val = val;
-        head[from] = tot;                 //将链表的头结点的编号设为当前存储的边
-    }
+void add(int x,int y) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    from[tot] = x;
 }
 </code></pre>
 <h1 id="遍历">遍历</h1>
@@ -145,7 +158,7 @@ void add(){
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594895499513" class="no-responsive avatar">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594903546280" class="no-responsive avatar">
     <div class="text-muted">越学越倒退选手</div>
     <div class="social-container">
       
@@ -231,11 +244,11 @@ void add(){
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge secondary">
           ACM-数论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge ">
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
           ACM-图论
         </a>
       
