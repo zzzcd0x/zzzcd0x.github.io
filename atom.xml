@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-17T01:04:13.020Z</updated>
+    <updated>2020-07-17T02:29:50.030Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,81 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[并查集DSU]]></title>
+        <id>https://zzzcd0x.github.io/post/bing-cha-ji-dsu/</id>
+        <link href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">
+        </link>
+        <updated>2020-07-17T02:29:14.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<h1 id="引入">引入</h1>
+<p>假设现在有n个仅知道自己的父亲是谁的人，现在要存储他们每个人之间的关系，并查询其中几个人是否属于同一家族</p>
+</li>
+<li>
+<h2 id="思路">思路</h2>
+<p>首先可以想到每一个家族可以组成一个树，但如果每一个结点都只储存自己的父亲是谁，那这几棵树就会 <s>进化</s> 变成一个森林<br>
+所以在存储两个结点的父子关系时，我们应该认定两个结点的最远古的父结点之间有亲缘关系，从而防止森林的诞生<br>
+对于查询两个结点的是否属于同一家族，我们仅需要查询他们的最远古祖先是否相同，但当某一个结点没有父结点时，这个结点就一定是当前家族的最远古祖先<br>
+思路就是这样了 那么我们用代码来实现一下</p>
+</li>
+<li>
+<h2 id="朴素写法">朴素写法</h2>
+</li>
+</ul>
+<pre><code class="language-cpp">int dad[10005];       //存储每个结点的父结点
+
+int anc(int x){       //查询每个结点的远古祖先
+
+    if(dad[x])
+        return anc(dad[x]);
+    else 
+        return x;     //当该结点没有父结点时当前结点即为最远古祖先
+}
+
+bool ask(int x, int y){   //查询两个结点是否在同一家族
+    return anc(x) == anc(y);
+}
+
+void uni(int x, int y){   //设定亲属关系
+
+    x = anc(x);
+    y = anc(y);
+
+    if(x != y)
+        dad[x] = y;
+}
+</code></pre>
+<p>以上就是并查集的一种朴素写法</p>
+<ul>
+<li>
+<h2 id="路径压缩优化">路径压缩优化</h2>
+<p>分析一下这种写法的复杂度我们就可以发现，<code>ask()</code>和<code>uni()</code>函数都是通过<code>anc()</code>来实现的，但如果碰到了子子孙孙无穷匮也的情况，整棵树就会被退化为一条链，所以每次查找需要消耗O(n)的复杂度<br>
+既然我们只关心某一个结点的最远古祖先，那么我们仅需要存储每个结点的最远古祖先即可，优化写法可以使用一下记忆化搜索的技巧</p>
+</li>
+</ul>
+<pre><code class="language-cpp">int anc(int x){
+
+    if(dad[x] != x)
+        return dad[x] = anc(dad[x]);
+    else 
+        return x;
+}
+</code></pre>
+<p>所以我们可以对<code>anc()</code>函数进行这样的修改，此时每次操作的平均复杂度可以接近O(1)</p>
+<ul>
+<li>
+<h1 id="并查集">并查集</h1>
+<p>这个数据结构就叫是并查集，并查集可以用来维护不相交集合<br>
+支持两种操作：</p>
+</li>
+</ul>
+<ol>
+<li>查询x和y是否在同一个集合</li>
+<li>将x、y所在集合合并</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[gcd lcm]]></title>
         <id>https://zzzcd0x.github.io/post/gcd-lcm/</id>
