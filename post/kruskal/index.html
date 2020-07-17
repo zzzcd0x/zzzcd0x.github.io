@@ -7,7 +7,7 @@
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594952987795">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1594990255071">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -94,20 +94,35 @@
 <p>然后枚举每一条边，如果正在枚举的边的两个结点无联通关系，则将该边边权计入答案中、并用并查集标记两点的联通关系</p>
 <p>当生成树联通后即可跳出循环</p>
 <h2 id="模板">模板</h2>
-<pre><code class="language-cpp">void kruskal() {
+<pre><code class="language-cpp">
+struct Edge {
+
+    int to;
+    int val;
+    int nxt;
+    int from;
+}edge[MAXM];
+
+int dad[MAXN];
+
+bool judge(Edge x,Edge y) {return x.val &lt; y.val;}
+
+void kruskal() {
+
+    for(int i = 1; i &lt;= n; i++)
+        dad[i] = i;
+
+    sort(edge+1,edge+n+1,judge);
 
     for(int i = 1; i &lt;= tot; i++) {
-
         int x = anc(edge[i].from);
         int y = anc(edge[i].to);
 
         if(x != y) {
-
             ans += edge[i].val;
             dad[x] = y;
         }
     }
-
 }
 </code></pre>
 <h2 id="注意事项">注意事项</h2>
@@ -135,7 +150,7 @@
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594952987795" class="no-responsive avatar">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1594990255071" class="no-responsive avatar">
     <div class="text-muted">越学越倒退选手</div>
     <div class="social-container">
       
@@ -227,15 +242,15 @@
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge success">
           ACM-数论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
           ACM-图论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge success">
           ACM-数据结构
         </a>
       
