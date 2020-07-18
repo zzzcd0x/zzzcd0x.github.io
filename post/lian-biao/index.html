@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>链表 | zzzcd0x &#39;s Blog</title>
+<meta name="description" content="越学越倒退选手">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595041312378">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                All
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                分类
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>链表</h1>
+            <p class="article-meta">
+              2020-07-18
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="什么是链表">什么是链表</h1>
+<ul>
+<li>链表是一种物理存储单元上非连续、非顺序的存储结构，数据元素的逻辑顺序通过链表中的指针链接次序实现</li>
+<li>链表最大的特点是不以下标来寻找某一元素，而是通过相邻元素中的联系来寻找，也可以理解为链表不需要每一个元素相邻，只需要他们记住自己<strong>旁边的元素</strong></li>
+<li>链表又分为单向链表、双向链表、循环链表</li>
+<li>一个简单的链表仅需要支持插入、删除、查询三种操作</li>
+</ul>
+<h1 id="单向链表">单向链表</h1>
+<ul>
+<li>单向链表中的每一个元素记住自己前一个或后一个元素的地址，因此在查找元素时只能单向查找，即没有回头的机会<br>
+下面我们来创建一个顺序为1，2，4，3的单向链表</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/20200411112059111.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h2 id="插入结点">插入结点</h2>
+<p>假设我们要将5插入到2的后面</p>
+</li>
+</ul>
+<ol>
+<li>首先从头结点开始找到储存2的结点</li>
+<li>然后将需要插入的结点的指针指向2的下一个结点，也就是4</li>
+<li>最后将2的指针指向5<br>
+也就是这样的一个过程</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://img-blog.csdnimg.cn/20200411115209494.gif" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h2 id="删除结点">删除结点</h2>
+<p>假设我们不喜欢刚刚插入的5想要把他删除</p>
+</li>
+</ul>
+<ol>
+<li>首先我们要找到<strong>下一个结点是5的结点</strong>所在的位置</li>
+<li>然后将这个结点的指针指向5结点的指向的下一个结点的位置</li>
+<li>最后将储存5结点的指针指向NULL</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://img-blog.csdnimg.cn/20200411120008932.gif" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h2 id="查询结点">查询结点</h2>
+<p>如果我们要查询某个结点的位置，我们只需要从头结点开始从搜索，直到找到该结点<br>
+搜索4结点 过程如下</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="4"><img src="https://img-blog.csdnimg.cn/20200411120359139.gif" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h2 id="操作实现">操作实现</h2>
+<p>下面我们使用指针来建立一个单向链表实现上述操作</p>
+</li>
+</ul>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+
+struct point{
+
+    int key;
+    point* next;
+
+    point(int _key, point* _next)
+    {
+        next = _next;
+        key = _key;
+    }
+
+};
+
+point *root;
+
+void init(){           //初始化链表
+
+    root = new point(-1,NULL);    //在链表最开始的位置扔一个伪结点
+}
+
+void ins(int x, int y){           //在x后面插入y
+
+    for(point*p = root; p != NULL; p = p-&gt;next)
+    {
+        if(p-&gt;key == x)          //找到存储x的结点
+        {
+            point *n = new point(y,p-&gt;next);  //新建存储y的结点
+            p-&gt;next = n;         //调整存储x的结点的指针
+            break;
+        }
+    }
+}
+
+void ask(int x){                 //查询是否有存储x的结点
+
+    for(point*p = root-&gt;next; p != NULL; p=p-&gt;next)
+        if(p-&gt;key == x)
+            cout &lt;&lt; p-&gt;next &lt;&lt; endl;
+}
+
+void del(int x){                 //删除存储x的结点
+
+    for(point*p = root; p ; p=p-&gt;next)
+        if(p-&gt;next-&gt;key == x)   //找到存储x的结点的前一个结点
+        {
+            point *n = p-&gt;next;
+            p-&gt;next = p-&gt;next-&gt;next;
+            delete n;
+            break;
+        }
+
+}
+
+void out(){                    //输出链表
+
+    for(point*p = root-&gt;next; p ; p=p-&gt;next)
+    {
+        cout &lt;&lt; p-&gt;key &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+}
+
+int main(){
+
+    init();
+
+    ins(-1,1);
+    ins(1,2);
+    ins(2,4);
+    ins(4,3);
+    out();
+
+    ins(2,5);
+    out();
+
+    del(5);
+    out();
+
+    ask(4);
+    out();
+
+    return 0;
+}
+</code></pre>
+<ul>
+<li>
+<h1 id="双向链表">双向链表</h1>
+</li>
+<li>
+<p>双向链表与单向链表不同的地方就是双向链表的每一个结点存储了他前一个结点和后一个结点的位置<br>
+用双向链表来实现上述的三个步骤的过程为</p>
+</li>
+<li>
+<h2 id="插入结点-2">插入结点</h2>
+<figure data-type="image" tabindex="5"><img src="https://img-blog.csdnimg.cn/20200411143646887.gif" alt="" loading="lazy"></figure>
+</li>
+<li>
+<h2 id="删除结点-2">删除结点</h2>
+<figure data-type="image" tabindex="6"><img src="https://img-blog.csdnimg.cn/20200411144147406.gif" alt="" loading="lazy"></figure>
+</li>
+<li>
+<h2 id="查询结点-2">查询结点</h2>
+<figure data-type="image" tabindex="7"><img src="https://img-blog.csdnimg.cn/20200411144259737.gif" alt="" loading="lazy"></figure>
+</li>
+<li>
+<h2 id="实现">实现</h2>
+</li>
+<li>
+<h3 id="指针写法">指针写法</h3>
+<p>对单向链表进行部分修改即可得到双向链表</p>
+</li>
+</ul>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+
+struct point{
+
+    int key;
+    point* next;
+    point* front;
+
+    point(int _key, point* _next, point* _front)
+    {
+        next = _next;
+        key = _key;
+        front = _front;
+    }
+
+};
+
+point *root;
+
+void init(){           //初始化链表
+
+    root = new point(-1,NULL,NULL);    //在链表最开始的位置扔一个伪结点
+}
+
+void ins(int x, int y){           //在x后面插入y
+
+    for(point*p = root; p != NULL; p = p-&gt;next)
+    {
+        if(p-&gt;key == x)          //找到存储x的结点
+        {
+            point *n = new point(y,p-&gt;next,p);
+            if(p-&gt;next)          //判断p是不是尾结点
+                p-&gt;next-&gt;front = n;
+            p-&gt;next = n;
+        }
+    }
+}
+
+void ask(int x){                 //查询是否有存储x的结点
+
+    for(point*p = root-&gt;next; p != NULL; p=p-&gt;next)
+        if(p-&gt;key == x)
+            cout &lt;&lt; p-&gt;next &lt;&lt; endl;
+}
+
+void del(int x){                 //删除存储x的结点
+
+    for(point*p = root; p ; p=p-&gt;next)
+        if(p-&gt;next-&gt;key == x)   //找到存储x的结点的前一个结点
+        {
+            point *n = p-&gt;next;
+            p-&gt;next = p-&gt;next-&gt;next;
+            delete n;
+            break;
+        }
+
+}
+
+void out(){                    //输出链表
+
+    for(point*p = root-&gt;next; p ; p=p-&gt;next)
+    {
+        cout &lt;&lt; p-&gt;key &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+}
+
+int main(){
+
+    init();
+
+    ins(-1,1);
+    ins(1,2);
+    ins(2,4);
+    ins(4,3);
+    out();
+
+    ins(2,5);
+    out();
+
+    del(5);
+    out();
+
+    ask(4);
+    out();
+
+    return 0;
+}
+</code></pre>
+<ul>
+<li>
+<h3 id="数组写法">数组写法</h3>
+</li>
+</ul>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+
+struct point{
+    int pre = 0;    //默认每一个结点前驱和后继为0
+    int next = 0;
+    int key;
+};
+
+point p[105];
+int root = 0;
+int cnt = 0;
+
+void init(){       //初始化
+
+    p[root].key = -1;
+    p[root].next = 0;
+    p[root].pre = 0;
+}
+
+void ins(int x,int y){
+    
+    int i = root;
+    do
+    {
+        if(p[i].key == x)
+        {
+            p[++cnt].key = y;
+            p[cnt].next = p[i].next;
+            p[cnt].pre = i; 
+            if(p[i].next)
+                p[p[i].next].pre = cnt;
+            p[i].next = cnt;
+            break;
+        }
+        i = p[i].next;
+    }while(i != 0);
+}
+
+void ask(int x){
+
+    int i = root;
+    do
+    {
+        if(p[i].key == x)
+        {
+            cout &lt;&lt; i &lt;&lt; endl;
+            return;
+        }
+        i = p[i].next;
+    }while(i != 0);
+}
+
+void del(int x){
+
+    int le = p[x].pre;
+    int rt = p[x].next;
+    p[le].next = rt;
+    p[rt].pre = le;
+}
+
+void out(){
+
+    for(int i = p[root].next; i != 0; i = p[i].next)
+        cout &lt;&lt; p[i].key &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+}
+
+int main(){
+
+    init();
+
+    ins(-1,1);
+    ins(1,2);
+    ins(2,4);
+    ins(4,3);
+    out();
+
+    ins(2,5);
+    out();
+
+    del(5);
+    out();
+
+    ask(4);
+    out();
+
+    return 0;
+}
+</code></pre>
+<ul>
+<li>
+<h1 id="循环链表">循环链表</h1>
+<p>循环链表与上述两种链表不同的是他的尾结点存储指向头结点的指针，从而可以达到循环的效果</p>
+</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">
+                <h3 class="post-title">
+                  并查集DSU
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595041312378" class="no-responsive avatar">
+    <div class="text-muted">越学越倒退选手</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/lian-biao/">链表</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">并查集DSU</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/gcd-lcm/">gcd lcm</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/su-shu-shai/">素数筛</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">链式前向星</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">拓扑排序</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/kruskal/">kruskal</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/floyd/">Floyd</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/dijkstra/">Dijkstra</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">树状数组</a>
+            </li>
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge secondary">
+          ACM-数论
+        </a>
+      
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge ">
+          ACM-图论
+        </a>
+      
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge secondary">
+          ACM-数据结构
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
