@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-18T03:01:54.719Z</updated>
+    <updated>2020-07-18T03:04:43.122Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -16,25 +16,17 @@
         <link href="https://zzzcd0x.github.io/post/lian-biao/">
         </link>
         <updated>2020-07-18T03:01:32.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="什么是链表">什么是链表</h1>
-<ul>
-<li>链表是一种物理存储单元上非连续、非顺序的存储结构，数据元素的逻辑顺序通过链表中的指针链接次序实现</li>
-<li>链表最大的特点是不以下标来寻找某一元素，而是通过相邻元素中的联系来寻找，也可以理解为链表不需要每一个元素相邻，只需要他们记住自己<strong>旁边的元素</strong></li>
-<li>链表又分为单向链表、双向链表、循环链表</li>
-<li>一个简单的链表仅需要支持插入、删除、查询三种操作</li>
-</ul>
-<h1 id="单向链表">单向链表</h1>
-<ul>
-<li>单向链表中的每一个元素记住自己前一个或后一个元素的地址，因此在查找元素时只能单向查找，即没有回头的机会<br>
-下面我们来创建一个顺序为1，2，4，3的单向链表</li>
-</ul>
+        <content type="html"><![CDATA[<h2 id="什么是链表">什么是链表</h2>
+<p>链表是一种物理存储单元上非连续、非顺序的存储结构，数据元素的逻辑顺序通过链表中的指针链接次序实现<br>
+链表最大的特点是不以下标来寻找某一元素，而是通过相邻元素中的联系来寻找，也可以理解为链表不需要每一个元素相邻，只需要他们记住自己<strong>旁边的元素</strong><br>
+链表又分为单向链表、双向链表、循环链表<br>
+一个简单的链表仅需要支持插入、删除、查询三种操作</p>
+<h2 id="单向链表">单向链表</h2>
+<p>单向链表中的每一个元素记住自己前一个或后一个元素的地址，因此在查找元素时只能单向查找，即没有回头的机会<br>
+下面创建了一个顺序为1，2，4，3的单向链表</p>
 <figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/20200411112059111.png" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h2 id="插入结点">插入结点</h2>
+<h3 id="插入结点">插入结点</h3>
 <p>假设我们要将5插入到2的后面</p>
-</li>
-</ul>
 <ol>
 <li>首先从头结点开始找到储存2的结点</li>
 <li>然后将需要插入的结点的指针指向2的下一个结点，也就是4</li>
@@ -42,32 +34,20 @@
 也就是这样的一个过程</li>
 </ol>
 <figure data-type="image" tabindex="2"><img src="https://img-blog.csdnimg.cn/20200411115209494.gif" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h2 id="删除结点">删除结点</h2>
+<h3 id="删除结点">删除结点</h3>
 <p>假设我们不喜欢刚刚插入的5想要把他删除</p>
-</li>
-</ul>
 <ol>
 <li>首先我们要找到<strong>下一个结点是5的结点</strong>所在的位置</li>
 <li>然后将这个结点的指针指向5结点的指向的下一个结点的位置</li>
 <li>最后将储存5结点的指针指向NULL</li>
 </ol>
 <figure data-type="image" tabindex="3"><img src="https://img-blog.csdnimg.cn/20200411120008932.gif" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h2 id="查询结点">查询结点</h2>
+<h3 id="查询结点">查询结点</h3>
 <p>如果我们要查询某个结点的位置，我们只需要从头结点开始从搜索，直到找到该结点<br>
 搜索4结点 过程如下</p>
-</li>
-</ul>
 <figure data-type="image" tabindex="4"><img src="https://img-blog.csdnimg.cn/20200411120359139.gif" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h2 id="操作实现">操作实现</h2>
+<h3 id="操作实现">操作实现</h3>
 <p>下面我们使用指针来建立一个单向链表实现上述操作</p>
-</li>
-</ul>
 <pre><code class="language-cpp">#include&lt;iostream&gt;
 using namespace std;
 
@@ -155,34 +135,18 @@ int main(){
     return 0;
 }
 </code></pre>
-<ul>
-<li>
-<h1 id="双向链表">双向链表</h1>
-</li>
-<li>
+<h2 id="双向链表">双向链表</h2>
 <p>双向链表与单向链表不同的地方就是双向链表的每一个结点存储了他前一个结点和后一个结点的位置<br>
 用双向链表来实现上述的三个步骤的过程为</p>
-</li>
-<li>
-<h2 id="插入结点-2">插入结点</h2>
+<h3 id="插入结点-2">插入结点</h3>
 <figure data-type="image" tabindex="5"><img src="https://img-blog.csdnimg.cn/20200411143646887.gif" alt="" loading="lazy"></figure>
-</li>
-<li>
-<h2 id="删除结点-2">删除结点</h2>
+<h3 id="删除结点-2">删除结点</h3>
 <figure data-type="image" tabindex="6"><img src="https://img-blog.csdnimg.cn/20200411144147406.gif" alt="" loading="lazy"></figure>
-</li>
-<li>
-<h2 id="查询结点-2">查询结点</h2>
+<h3 id="查询结点-2">查询结点</h3>
 <figure data-type="image" tabindex="7"><img src="https://img-blog.csdnimg.cn/20200411144259737.gif" alt="" loading="lazy"></figure>
-</li>
-<li>
-<h2 id="实现">实现</h2>
-</li>
-<li>
+<h3 id="实现">实现</h3>
 <h3 id="指针写法">指针写法</h3>
 <p>对单向链表进行部分修改即可得到双向链表</p>
-</li>
-</ul>
 <pre><code class="language-cpp">#include&lt;iostream&gt;
 using namespace std;
 
@@ -273,11 +237,7 @@ int main(){
     return 0;
 }
 </code></pre>
-<ul>
-<li>
 <h3 id="数组写法">数组写法</h3>
-</li>
-</ul>
 <pre><code class="language-cpp">#include&lt;iostream&gt;
 using namespace std;
 
@@ -369,12 +329,8 @@ int main(){
     return 0;
 }
 </code></pre>
-<ul>
-<li>
-<h1 id="循环链表">循环链表</h1>
+<h2 id="循环链表">循环链表</h2>
 <p>循环链表与上述两种链表不同的是他的尾结点存储指向头结点的指针，从而可以达到循环的效果</p>
-</li>
-</ul>
 ]]></content>
     </entry>
     <entry>
