@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>拓扑排序 | zzzcd0x &#39;s Blog</title>
+<title>SPFA | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -73,66 +73,181 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>拓扑排序</h1>
+            <h1>SPFA</h1>
             <p class="article-meta">
-              2020-07-14
-              
-                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
-                  ACM-图论
-                </a>
+              2020-07-22
               
             </p>
             
             <div class="post-content">
-              <h1 id="什么是dag">什么是DAG</h1>
-<pre><code>通俗来说DAG就是有向无环图的简称，通过名字就可以看出，DAG的基本特点是边为有向边，且图内无环
-</code></pre>
-<p>这个图虽然看似有环，但因为边都是有向边，所以并没有构成环。<br>
-观察一下上面那个图，不难发现以每一个结点为起点都可以找到对应的一条链，因此许多图论问题都可以抽象为找DAG中的最短链或者最长链。<br>
-然而在一些图论问题中结点之间存在先后关系，这样就不能直接用平常的遍历方式来对图进行遍历，而是需要先对结点按照先后顺序进行排序，转化为一个序列后再进行遍历</p>
-<h1 id="拓扑排序">拓扑排序</h1>
-<pre><code>上述过程应用的排序算法就是拓扑排序，排序后整张图就被转化成了一个序列，然后通过这个序列来解决问题
-</code></pre>
-<h2 id="过程">过程</h2>
-<ol>
-<li>在存图是记录每个结点的入度和出度</li>
-<li>存图结束后将入度为0的点加入序列</li>
-<li>那处序列头部的点x，遍历该点可以到达的所有点y</li>
-<li>删掉x到y的边，即y点的入度减一</li>
-<li>如果y点入度为0则加入序列</li>
-<li>重复2~5直至序列为空</li>
-</ol>
-<pre><code class="language-cpp">struct edge{
-    int to;
-    int val;
-    int next;
-}e[10005];
+              <p>虽然spfa算法赛场上会各种被卡，但还是蛮不错的。</p>
+<h1 id="大致思想">大致思想</h1>
+<ul>
+<li>首先将源点加入队列</li>
+<li>然后更新源点能够到达的点的最短路</li>
+<li>如果被更新的点不在队列中，则加入队列</li>
+<li>重复上述2~3步直到队列为空</li>
+</ul>
+<p>其实思想与dijkstra比较相似，不同的是dijkstra判断点是否进队的依据是该点的最短路有没有被更新过<br>
+而spfa的依据是该点在不在队列中</p>
+<h1 id="实现">实现</h1>
+<p>链式前向星部分已省略</p>
+<pre><code class="language-cpp">int d[MAXN];
+bool b[MAXN];
 
-int n, m;
-int ind[10005];    //入度
-int head[100005];
-
-queue&lt;int&gt;q;
-
-void topsort(){
-
-    for(int i = 1; i &lt;= n; i++)                   //将入度为0的结点放入序列
-        if(!ind[i])
-            q.push(i);
-
+void spfa(int s){
+    memset(d,0x3f,sizeof(d));
+    d[s] = 0;
+    b[s] = true;
+    q.push(s);
     while(!q.empty())
     {
         int x = q.front();
         q.pop();
-
-        for(int i = head[x]; i; i = e[i].next)    //遍历x能到达的点
+        b[x] = false;
+        for(int i = head[x]; i ;i = edge[i].next)
         {
-            int y = e[i].to;
-            ind[y]--;                             //删边
-            if(!ind[y])                               //如果y点入度为0则放入序列
-            	q.push(y);
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(d[to] &gt; d[x] + val)
+            {
+                d[to] = d[x] + val;
+                if(!b[to])
+                {
+                    q.push(to);
+                    b[to] = true;
+                }
+            }
         }
     }
+}
+</code></pre>
+<h2 id="例题">例题</h2>
+<h3 id="判断负环">判断负环</h3>
+<p><a href="http://poj.org/problem?id=3259">题目链接</a><br>
+如果图中出现了负环那么在spfa中负环上的结点会不断的入队，因此只要对入队次数进行计数，如果有一个结点入队次数大于等于总结点数，则图中一定存在负环</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;utility&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 505;
+const int MAXM = 3005;
+
+inline int read() {
+
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+
+    return x;
+}
+
+int tot;
+int n, m, w;
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+ll val[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int from[MAXM&lt;&lt;1];
+
+void add(int x,int y,ll z) {
+
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+    from[tot] = x;
+}
+
+void inp() {
+
+    n = read();
+    m = read();
+    w = read();
+    tot = 0;
+    memset(head,0,sizeof(head));
+    memset(nxt,0,sizeof(0));
+
+    for(int i = 1; i &lt;= m; i++) {
+
+        int x = read();
+        int y = read();
+        ll z = read();
+        add(x,y,z);
+        add(y,x,z);
+    } 
+
+    for(int i = 1; i &lt;= w; i++) {
+
+        int x = read();
+        int y = read();
+        ll z = read();
+        add(x,y,-z);
+    }
+}
+
+ll d[MAXN];
+int temp[MAXN];
+bool vis[MAXN];
+
+bool spfa() {
+
+    queue&lt;int&gt; q;
+
+    memset(d,0x3f,sizeof(d));
+    memset(temp,0,sizeof(temp));
+    memset(vis,false,sizeof(vis));
+
+    q.push(1);
+    temp[1]++;
+    d[1] = 0;
+    vis[1] = true;
+
+    while(!q.empty()) {
+        int x = q.front();
+        vis[x] = false;
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            if(d[to[i]] &gt; d[x] + val[i]) {
+                d[to[i]] = d[x] + val[i];
+                temp[to[i]]++;
+                if(temp[to[i]] &gt;= n)
+                    return true;
+                if(!vis[to[i]]) {
+                    q.push(to[i]);
+                    vis[to[i]] = true;
+                }
+            }
+        }   
+    }
+    return false;
+}
+
+int main() {
+
+    int t = read();
+
+    while(t) {
+
+        inp();
+
+        if(spfa())
+            puts(&quot;YES&quot;);
+        else puts(&quot;NO&quot;);
+
+        t--;
+    }
+
+    return 0;
 }
 </code></pre>
 
@@ -145,9 +260,9 @@ void topsort(){
               <div class="next">
                 下一篇
               </div>
-              <a href="https://zzzcd0x.github.io/post/kruskal/">
+              <a href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">
                 <h3 class="post-title">
-                  kruskal
+                  并查集DSU
                 </h3>
               </a>
             </div>
@@ -252,11 +367,11 @@ void topsort(){
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge secondary">
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge warning">
           ACM-数论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge warning">
           ACM-图论
         </a>
       

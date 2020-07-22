@@ -7,7 +7,7 @@
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595419033701">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595419833728">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -77,7 +77,7 @@
             <p class="article-meta">
               2020-07-14
               
-                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge success">
+                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
                   ACM-图论
                 </a>
               
@@ -285,6 +285,131 @@ int main() {
     return 0;
 }
 </code></pre>
+<h3 id="最短路径">最短路径</h3>
+<p><a href="https://codeforces.com/problemset/problem/20/C">题目链接</a><br>
+dijkstra求最短路时保存每一个结点最后一次被更新最短路的结点即可，最后倒序找出最短路径，然后用栈改为顺序。</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;utility&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAX = 1e5+5;
+typedef long long ll;
+
+int n, m, s, t;
+
+inline int read() {
+
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+
+    return x;
+}
+
+int tot;
+int path[MAX];
+int head[MAX];
+int to[MAX&lt;&lt;1];
+int nxt[MAX&lt;&lt;1];
+int val[MAX&lt;&lt;1];
+int from[MAX&lt;&lt;1];
+
+void add(int x,int y, ll z) {
+
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+    from[tot] = x;
+}
+
+void inp() {
+
+    t = n;
+    s = 1;
+    for(int i = 1; i &lt;= m; i++) {
+        int x = read();
+        int y = read();
+        ll z = (ll) read();
+        add(x,y,z);
+        add(y,x,z);
+    }
+}
+
+ll d[MAX];
+bool vis[MAX];
+
+void dijkstra() {
+
+    priority_queue&lt;pair&lt;int,int&gt; &gt; q;
+    memset(d,0x3f,sizeof(d));
+    memset(path,0,sizeof(path));
+    memset(vis,false,sizeof(vis));
+
+    d[s] = 0;
+    q.push(make_pair(0,s));
+
+    while(!q.empty()) {
+        int x = q.top().second;
+        q.pop();
+        if(vis[x]) continue;
+        vis[x] = true;
+        for(int i = head[x]; i ; i = nxt[i]) {
+            if(d[to[i]] &gt; d[x] + val[i]) {
+                d[to[i]] = d[x] + val[i];
+                if(!vis[to[i]])
+                    q.push(make_pair(-d[to[i]],to[i]));
+                path[to[i]] = x; 
+            }
+        }
+    }
+}
+
+void oup() {
+
+    int t = n;
+    stack&lt;int&gt; temp;
+    bool flag = false;
+
+    while(t) {
+
+        temp.push(t);
+        t = path[t];
+        if(t == 1)
+            flag = true;
+    }
+
+    if(flag)
+        while(!temp.empty()) {
+            printf(&quot;%d &quot;,temp.top());
+            temp.pop();
+        }
+    else printf(&quot;-1&quot;);
+    puts(&quot;&quot;);
+}
+
+int main() {
+
+    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
+
+        inp();
+
+        dijkstra();
+
+        oup();
+    }
+
+    return 0;
+}
+</code></pre>
 
             </div>
           </article>
@@ -308,7 +433,7 @@ int main() {
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595419033701" class="no-responsive avatar">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595419833728" class="no-responsive avatar">
     <div class="text-muted">越学越倒退选手</div>
     <div class="social-container">
       
@@ -330,6 +455,12 @@ int main() {
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/spfa/">SPFA</a>
+            </li>
+          
         
           
             <li>
@@ -386,10 +517,6 @@ int main() {
           
         
           
-            <li>
-              <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
-            </li>
-          
         
       </ul>
     </div>
@@ -400,7 +527,7 @@ int main() {
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge secondary">
           ACM-数论
         </a>
       
@@ -408,7 +535,7 @@ int main() {
           ACM-图论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge success">
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge warning">
           ACM-数据结构
         </a>
       

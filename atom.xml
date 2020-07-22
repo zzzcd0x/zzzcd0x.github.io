@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-22T11:57:16.373Z</updated>
+    <updated>2020-07-22T12:10:37.244Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,184 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[SPFA]]></title>
+        <id>https://zzzcd0x.github.io/post/spfa/</id>
+        <link href="https://zzzcd0x.github.io/post/spfa/">
+        </link>
+        <updated>2020-07-22T12:06:46.000Z</updated>
+        <content type="html"><![CDATA[<p>虽然spfa算法赛场上会各种被卡，但还是蛮不错的。</p>
+<h1 id="大致思想">大致思想</h1>
+<ul>
+<li>首先将源点加入队列</li>
+<li>然后更新源点能够到达的点的最短路</li>
+<li>如果被更新的点不在队列中，则加入队列</li>
+<li>重复上述2~3步直到队列为空</li>
+</ul>
+<p>其实思想与dijkstra比较相似，不同的是dijkstra判断点是否进队的依据是该点的最短路有没有被更新过<br>
+而spfa的依据是该点在不在队列中</p>
+<h1 id="实现">实现</h1>
+<p>链式前向星部分已省略</p>
+<pre><code class="language-cpp">int d[MAXN];
+bool b[MAXN];
+
+void spfa(int s){
+    memset(d,0x3f,sizeof(d));
+    d[s] = 0;
+    b[s] = true;
+    q.push(s);
+    while(!q.empty())
+    {
+        int x = q.front();
+        q.pop();
+        b[x] = false;
+        for(int i = head[x]; i ;i = edge[i].next)
+        {
+            int to = edge[i].to;
+            int val = edge[i].val;
+            if(d[to] &gt; d[x] + val)
+            {
+                d[to] = d[x] + val;
+                if(!b[to])
+                {
+                    q.push(to);
+                    b[to] = true;
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="例题">例题</h2>
+<h3 id="判断负环">判断负环</h3>
+<p><a href="http://poj.org/problem?id=3259">题目链接</a><br>
+如果图中出现了负环那么在spfa中负环上的结点会不断的入队，因此只要对入队次数进行计数，如果有一个结点入队次数大于等于总结点数，则图中一定存在负环</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;utility&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 505;
+const int MAXM = 3005;
+
+inline int read() {
+
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+
+    return x;
+}
+
+int tot;
+int n, m, w;
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+ll val[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int from[MAXM&lt;&lt;1];
+
+void add(int x,int y,ll z) {
+
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+    from[tot] = x;
+}
+
+void inp() {
+
+    n = read();
+    m = read();
+    w = read();
+    tot = 0;
+    memset(head,0,sizeof(head));
+    memset(nxt,0,sizeof(0));
+
+    for(int i = 1; i &lt;= m; i++) {
+
+        int x = read();
+        int y = read();
+        ll z = read();
+        add(x,y,z);
+        add(y,x,z);
+    } 
+
+    for(int i = 1; i &lt;= w; i++) {
+
+        int x = read();
+        int y = read();
+        ll z = read();
+        add(x,y,-z);
+    }
+}
+
+ll d[MAXN];
+int temp[MAXN];
+bool vis[MAXN];
+
+bool spfa() {
+
+    queue&lt;int&gt; q;
+
+    memset(d,0x3f,sizeof(d));
+    memset(temp,0,sizeof(temp));
+    memset(vis,false,sizeof(vis));
+
+    q.push(1);
+    temp[1]++;
+    d[1] = 0;
+    vis[1] = true;
+
+    while(!q.empty()) {
+        int x = q.front();
+        vis[x] = false;
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            if(d[to[i]] &gt; d[x] + val[i]) {
+                d[to[i]] = d[x] + val[i];
+                temp[to[i]]++;
+                if(temp[to[i]] &gt;= n)
+                    return true;
+                if(!vis[to[i]]) {
+                    q.push(to[i]);
+                    vis[to[i]] = true;
+                }
+            }
+        }   
+    }
+    return false;
+}
+
+int main() {
+
+    int t = read();
+
+    while(t) {
+
+        inp();
+
+        if(spfa())
+            puts(&quot;YES&quot;);
+        else puts(&quot;NO&quot;);
+
+        t--;
+    }
+
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[并查集DSU]]></title>
         <id>https://zzzcd0x.github.io/post/bing-cha-ji-dsu/</id>
@@ -380,37 +558,92 @@ void kruskal() {
         <link href="https://zzzcd0x.github.io/post/floyd/">
         </link>
         <updated>2020-07-14T08:30:51.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>
-<h1 id="干什么的呢">干什么的呢</h1>
-<p>大多用于求多源图中两点间的最短路，也可以用于判图是否连通</p>
-</li>
-<li>
-<h1 id="写法">写法</h1>
-</li>
-</ul>
+        <content type="html"><![CDATA[<h2 id="干什么的呢">干什么的呢</h2>
+<p>大多用于求多源图中两点间的最短路，也可以用于传递闭包</p>
+<h2 id="写法">写法</h2>
 <pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
         for(int i = 1; i &lt;= n; i++)
             for(int j = 1; j &lt;= n; j++)
                 dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
 </code></pre>
 <p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
-<ul>
-<li>
-<h1 id="正确性证明">正确性证明</h1>
+<h2 id="正确性证明">正确性证明</h2>
 <p>Floyd算法核心思想是动态规划<br>
 原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
 状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
 但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
 最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
 因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
-</li>
-<li>
-<h1 id="细节">细节</h1>
+<h2 id="细节">细节</h2>
 <p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
 一般用Floyd时还要考虑边的权值</p>
-</li>
-</ul>
+<h2 id="例题">例题</h2>
+<h3 id="传递闭包">传递闭包</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2419">题目链接</a><br>
+其实就是利用连通性可传递性来判断图中两个点之间是否连接<br>
+注意边为单向，但<strong>两个点之间连通是双向的</strong></p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+using namespace std;
+const int MAXN = 105;
+const int MAXM = 4505;
+
+int ans;
+int n, m;
+bool dis[MAXN][MAXN];
+
+void inp() {
+
+    for(int i = 1; i &lt;= m; i++) {
+        int x, y;
+        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
+        dis[x][y] = true;
+    }
+}
+
+void floyd() {
+    for(int k = 1; k &lt;= n; k++)
+        for(int i = 1; i &lt;= n; i++)
+            for(int j = 1; j &lt;= n; j++)
+                    dis[i][j] |= dis[i][k] &amp; dis[k][j];
+}
+
+void judge() {
+
+    int d[MAXN] = {0};
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= n; j++)
+            if(dis[i][j] || dis[j][i])
+                d[i]++;
+    
+    for(int i = 1; i &lt;= n; i++)
+        if(d[i] == n-1)
+            ans++;
+}
+
+void init() {
+
+    ans = 0;
+    memset(dis,0,sizeof(dis));
+}
+
+int main() {
+
+    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
+
+        init();
+        inp();
+
+        floyd();
+
+        judge();
+
+        printf(&quot;%d\n&quot;,ans);
+    }
+
+    return 0;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -620,6 +853,131 @@ int main() {
     return 0;
 }
 </code></pre>
+<h3 id="最短路径">最短路径</h3>
+<p><a href="https://codeforces.com/problemset/problem/20/C">题目链接</a><br>
+dijkstra求最短路时保存每一个结点最后一次被更新最短路的结点即可，最后倒序找出最短路径，然后用栈改为顺序。</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;stack&gt;
+#include&lt;utility&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAX = 1e5+5;
+typedef long long ll;
+
+int n, m, s, t;
+
+inline int read() {
+
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+
+    return x;
+}
+
+int tot;
+int path[MAX];
+int head[MAX];
+int to[MAX&lt;&lt;1];
+int nxt[MAX&lt;&lt;1];
+int val[MAX&lt;&lt;1];
+int from[MAX&lt;&lt;1];
+
+void add(int x,int y, ll z) {
+
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+    from[tot] = x;
+}
+
+void inp() {
+
+    t = n;
+    s = 1;
+    for(int i = 1; i &lt;= m; i++) {
+        int x = read();
+        int y = read();
+        ll z = (ll) read();
+        add(x,y,z);
+        add(y,x,z);
+    }
+}
+
+ll d[MAX];
+bool vis[MAX];
+
+void dijkstra() {
+
+    priority_queue&lt;pair&lt;int,int&gt; &gt; q;
+    memset(d,0x3f,sizeof(d));
+    memset(path,0,sizeof(path));
+    memset(vis,false,sizeof(vis));
+
+    d[s] = 0;
+    q.push(make_pair(0,s));
+
+    while(!q.empty()) {
+        int x = q.top().second;
+        q.pop();
+        if(vis[x]) continue;
+        vis[x] = true;
+        for(int i = head[x]; i ; i = nxt[i]) {
+            if(d[to[i]] &gt; d[x] + val[i]) {
+                d[to[i]] = d[x] + val[i];
+                if(!vis[to[i]])
+                    q.push(make_pair(-d[to[i]],to[i]));
+                path[to[i]] = x; 
+            }
+        }
+    }
+}
+
+void oup() {
+
+    int t = n;
+    stack&lt;int&gt; temp;
+    bool flag = false;
+
+    while(t) {
+
+        temp.push(t);
+        t = path[t];
+        if(t == 1)
+            flag = true;
+    }
+
+    if(flag)
+        while(!temp.empty()) {
+            printf(&quot;%d &quot;,temp.top());
+            temp.pop();
+        }
+    else printf(&quot;-1&quot;);
+    puts(&quot;&quot;);
+}
+
+int main() {
+
+    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
+
+        inp();
+
+        dijkstra();
+
+        oup();
+    }
+
+    return 0;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -683,262 +1041,6 @@ int main() {
 <pre><code class="language-cpp">void modify(int x,int k){
 	for(int i = x; i &lt;= n; i+=lowbit(i))
     c[i]+=k;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[线段树]]></title>
-        <id>https://zzzcd0x.github.io/post/SegmentTree/</id>
-        <link href="https://zzzcd0x.github.io/post/SegmentTree/">
-        </link>
-        <updated>2020-07-14T07:07:16.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="组成">组成</h1>
-<figure data-type="image" tabindex="1"><img src="https://zzzcd0x.github.io/post-images/1594710958639.png" alt="" loading="lazy"></figure>
-<p>1号结点为根结点，存储原数组区间1到6的数的和</p>
-<p>左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和</p>
-<p>右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和</p>
-<p>这里3和4时区间中点和中点+1</p>
-<p>用二进制运算比较快，处理大量数据时常数可以低一点</p>
-<p>其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等</p>
-<h1 id="怎么维护呢">怎么维护呢</h1>
-<h2 id="先从建树开始">先从建树开始</h2>
-<p>从根节点开始递归建树 <strong>开四倍空间</strong></p>
-<p>1.数组写法</p>
-<pre><code class="language-cpp">int a[1005];  //原数组
-int t[4005]; //线段树
-
-void build(int now,int l,int r){
-
-    if(l == r)
-    {
-        t[now] = a[l];
-        return;
-    }
-
-    int mid = (l+r)&gt;&gt;1;
-
-    build(now&lt;&lt;1,l,mid);
-    build(now&lt;&lt;1|1,mid+1,r);
-
-    pushup(now); //回溯的时候更新父亲节点
-}
-</code></pre>
-<p>2.结构体写法</p>
-<pre><code class="language-cpp">struct Node{
-
-    int l,r;
-    int sum;
-}node[4005];
-
-void build(int now,int l,int r){
-
-    node[now].l = l;
-    node[now].r = r;
-
-    if(l == r)
-    {
-        node[now].sum = a[l];
-        return;
-    }
-
-    int mid = (l+r)&gt;&gt;1;
-
-    build(now&lt;&lt;1,l,mid);
-    build(now&lt;&lt;1|1,mid+1,r);
-
-    pushup(now);
-}
-</code></pre>
-<p>好像结构体写法更容易维护</p>
-<h2 id="区间查询">区间查询</h2>
-<ol>
-<li>当前查找到的区间被包含在需要查找的区间内则直接返回</li>
-<li>否则通过中点判断要查找到区间和左右子树哪个有交集</li>
-<li>如果都有则将两边的查找结果进行相应的处理后返回</li>
-<li>思想类似二分查找</li>
-</ol>
-<pre><code class="language-cpp">int find(int now,int L,int R){
-
-    int l = node[now].l;
-    int r = node[now].r;
-    if(L &lt;= l &amp;&amp; R &gt;= r)
-        return node[now].sum;
-    
-    int mid = (l+r)&gt;&gt;1;
-
-    if(mid &gt;= R)
-        return find(now&lt;&lt;1,L,R);
-    else if(mid &lt; l)
-        return find(now&lt;&lt;1|1,L,R);
-    else
-    {
-        int tot = 0;
-        tot += find(now&lt;&lt;1,L,R);
-        tot += find(now&lt;&lt;1|1,L,R);
-        return tot; 
-    }
-}
-</code></pre>
-<h2 id="区间修改">区间修改</h2>
-<ul>
-<li>大体步骤和区间查询类似</li>
-<li><strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息</li>
-</ul>
-<pre><code class="language-cpp">int tag[40005];
-
-void pushdown(int now){
-
-    if(tag[now])
-    {
-        tag[now&lt;&lt;1] += tag[now];
-        tag[now&lt;&lt;1|1] += tag[now];
-        node[now&lt;&lt;1].sum += tag[now]*(node[now&lt;&lt;1].r-node[now&lt;&lt;1]+1);
-        node[now&lt;&lt;1|1].sum += tag[now]*(node[now&lt;&lt;1|1].r-node[now&lt;&lt;1|1]+1);
-        tag[now] = 0;
-    }
-
-}
-
-void modify(int now,int L,int R,int k){
-
-    int l = node[now].l;
-    int r = node[now].r;
-
-    if(L &lt;= l &amp;&amp; R &gt;= r)
-    {
-        tag[now] += k;
-        node[now].sum += k*(r-l+1);
-    }
-
-    pushdown(now);
-
-    int mid = (l+r)&gt;&gt;1;
-    if(mid &gt;= L) modify(now&lt;&lt;1,L,R,k);
-    if(R &gt; mid) modify(now&lt;&lt;1|1,L,R,k);
-
-    pushup(now);
-}
-</code></pre>
-<ul>
-<li>pushup的作用是当某一个结点的子树的值被修改了则去用修改后的子树的信息去更新当前结点的信息</li>
-</ul>
-<pre><code class="language-cpp">void pushup(int now){
-    node[now].sum = node[now&lt;&lt;1].sum + ndoe[now&lt;&lt;1|1].sum;
-}
-</code></pre>
-<h2 id="单点修改">单点修改</h2>
-<pre><code class="language-cpp">void modifyP(int now,int to,int k){
-
-    int l = node[now].l;
-    int r = node[now].r;
-
-    if(l == r)
-    {
-        a[now] += k;
-        t[now] += k;
-        return;
-    }
-
-    int mid = (l+r)&gt;&gt;1;
-
-    if(mid &gt;= to) modifyP(now&lt;&lt;1,to,k);
-    else modifyP(now&lt;&lt;1|1,to,k);
-
-    pushup(now);
-}
-</code></pre>
-<h1 id="维护最大子段和">维护最大子段和</h1>
-<h2 id="什么是最大子段和">什么是最大子段和？</h2>
-<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值</p>
-<p>其他会用到的概念:</p>
-<p>最大左子段和:从区间左端点开始的最大子段和</p>
-<p>最大右子段和:从区间右端点开始的最大子段和</p>
-<h3 id="pushup">pushup</h3>
-<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理</p>
-<p>最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和<br>
-<img src="A20F4AB9F43A4E039EB88E7A82078C7B" alt="image" loading="lazy"><br>
-想不明白的话可以先拿这个图模拟一下</p>
-<pre><code class="language-cpp">void pushup(int now){
-
-    node[now].sum = node[now&lt;&lt;1].sum + node[now&lt;&lt;1|1].sum;
-    ndoe[now].Max = max(max(node[now&lt;&lt;1].Max,node[now&lt;&lt;1|1].Max),node[now&lt;&lt;1].rm+node[now&lt;&lt;1|1].lm);
-    node[now].lm = max(node[now&lt;&lt;1].lm,node[now&lt;&lt;1].sum+node[now&lt;&lt;1|1].lm);
-    node[now].rm = max(node[now&lt;&lt;1|1].rm,node[now&lt;&lt;1].rm+node[now&lt;&lt;1|1].sum);
-}
-</code></pre>
-<p>剩下的其实都和普通的差不多</p>
-<h3 id="建树">建树</h3>
-<pre><code class="language-cpp">void build(int now,int l,int r){
-
-    node[now].l = l;
-    ndoe[now].r = r;
-
-    if(l == r)
-    {
-        node[now].sum = a[l];
-        node[now].lm = a[l];
-        node[now].rm = a[l];
-        node[now].Max = a[l];
-        return;
-    }
-
-    int mid = (l+r)&gt;&gt;1;
-
-    builde(now&lt;&lt;1,l,mid);
-    build(now&lt;&lt;1|1,mid+1,r);
-
-    pushup(now);
-}
-</code></pre>
-<h3 id="区间修改-2">区间修改</h3>
-<p>直接更改某个点的值</p>
-<pre><code class="language-cpp">void modify(int now,int to,int k){
-
-    int l = node[now].l;
-    int r = node[now].r;
-
-    if(l == r)
-    {
-        node[now].sum = k;
-        node[now].Max = k;
-        node[now].lm = k;
-        node[now].rm = k;
-        return;
-    }
-
-    int mid = (l+r)&gt;&gt;1;
-
-    if(to &lt;= mid) modify(now&lt;&lt;1,to,k);
-    else modify(now&lt;&lt;1|1,to,k);
-
-    pushup(now);
-}
-</code></pre>
-<h3 id="区间查找">区间查找</h3>
-<p>因为查找的过程要用到查找到的区间的信息，因此返回值为Node</p>
-<pre><code class="language-cpp">Node ask(int now,int L,int R){
-
-    int l = node[now].l;
-    int r = ndoe[now].r;
-
-    if(L &lt;= l &amp;&amp; R &gt;= r)
-        return node[now];
-    
-    int mid = (l+r)&gt;&gt;1;
-
-    if(mid &gt;= R) return ask(now&lt;&lt;1,L,R);
-    else if(mid&lt;L) return ask(now&lt;&lt;1|1,L,R);
-    else{
-        Node ans;
-        Node left = ask(now&lt;&lt;1,L,R);
-        Node right = ask(now&lt;&lt;1|1,L,R);
-        ans.sum = left.sum + right.sum;
-        ans.lm = max(left.lm,left.sum+right.lm);
-        ans.rm = max(right.rm,right.sum+left.rm);
-        ans.Max = max(left.rm+right.lm,max(left.Max,right.Max));
-        return ans;
-    }
 }
 </code></pre>
 ]]></content>

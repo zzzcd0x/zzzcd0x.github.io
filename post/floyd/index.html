@@ -7,7 +7,7 @@
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595419033701">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595419833728">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -77,44 +77,99 @@
             <p class="article-meta">
               2020-07-14
               
-                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge secondary">
+                <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge ">
                   ACM-图论
                 </a>
               
             </p>
             
             <div class="post-content">
-              <ul>
-<li>
-<h1 id="干什么的呢">干什么的呢</h1>
-<p>大多用于求多源图中两点间的最短路，也可以用于判图是否连通</p>
-</li>
-<li>
-<h1 id="写法">写法</h1>
-</li>
-</ul>
+              <h2 id="干什么的呢">干什么的呢</h2>
+<p>大多用于求多源图中两点间的最短路，也可以用于传递闭包</p>
+<h2 id="写法">写法</h2>
 <pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
         for(int i = 1; i &lt;= n; i++)
             for(int j = 1; j &lt;= n; j++)
                 dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
 </code></pre>
 <p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
-<ul>
-<li>
-<h1 id="正确性证明">正确性证明</h1>
+<h2 id="正确性证明">正确性证明</h2>
 <p>Floyd算法核心思想是动态规划<br>
 原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
 状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
 但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
 最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
 因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
-</li>
-<li>
-<h1 id="细节">细节</h1>
+<h2 id="细节">细节</h2>
 <p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
 一般用Floyd时还要考虑边的权值</p>
-</li>
-</ul>
+<h2 id="例题">例题</h2>
+<h3 id="传递闭包">传递闭包</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2419">题目链接</a><br>
+其实就是利用连通性可传递性来判断图中两个点之间是否连接<br>
+注意边为单向，但<strong>两个点之间连通是双向的</strong></p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+using namespace std;
+const int MAXN = 105;
+const int MAXM = 4505;
+
+int ans;
+int n, m;
+bool dis[MAXN][MAXN];
+
+void inp() {
+
+    for(int i = 1; i &lt;= m; i++) {
+        int x, y;
+        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
+        dis[x][y] = true;
+    }
+}
+
+void floyd() {
+    for(int k = 1; k &lt;= n; k++)
+        for(int i = 1; i &lt;= n; i++)
+            for(int j = 1; j &lt;= n; j++)
+                    dis[i][j] |= dis[i][k] &amp; dis[k][j];
+}
+
+void judge() {
+
+    int d[MAXN] = {0};
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= n; j++)
+            if(dis[i][j] || dis[j][i])
+                d[i]++;
+    
+    for(int i = 1; i &lt;= n; i++)
+        if(d[i] == n-1)
+            ans++;
+}
+
+void init() {
+
+    ans = 0;
+    memset(dis,0,sizeof(dis));
+}
+
+int main() {
+
+    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
+
+        init();
+        inp();
+
+        floyd();
+
+        judge();
+
+        printf(&quot;%d\n&quot;,ans);
+    }
+
+    return 0;
+}
+</code></pre>
 
             </div>
           </article>
@@ -138,7 +193,7 @@
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595419033701" class="no-responsive avatar">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595419833728" class="no-responsive avatar">
     <div class="text-muted">越学越倒退选手</div>
     <div class="social-container">
       
@@ -160,6 +215,12 @@
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/spfa/">SPFA</a>
+            </li>
+          
         
           
             <li>
@@ -216,10 +277,6 @@
           
         
           
-            <li>
-              <a href="https://zzzcd0x.github.io/post/SegmentTree/">线段树</a>
-            </li>
-          
         
       </ul>
     </div>
@@ -238,7 +295,7 @@
           ACM-图论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge ">
           ACM-数据结构
         </a>
       
