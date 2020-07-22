@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-18T10:59:03.922Z</updated>
+    <updated>2020-07-22T11:57:16.373Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -434,7 +434,7 @@ void kruskal() {
 假设取出的蓝点为u<br>
 如果取出的蓝点还可以更新最短路，即还不能改为红点，那么能更新该点的最短路的点一定在队列后面，设该点为x<br>
 然而队是按最短路大小从小到大排序的 因此<br>
-<code>$ d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u] $</code><br>
+$ d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u] $<br>
 得证</p>
 <h2 id="朴素写法">朴素写法</h2>
 <p><strong>链式前向星部分已省略</strong></p>
@@ -497,7 +497,129 @@ void dijkstra(){
 }
 </code></pre>
 <p>优化后时间复杂度可以降为 O(nlogn+m)<br>
-<s>其实还有线段树优化 然后我不会T-T</s></p>
+<s>其实还有线段树优化 然后我不会😭</s></p>
+<h2 id="例题">例题</h2>
+<h3 id="二分最短路">二分+最短路</h3>
+<p><a href="https://www.luogu.com.cn/problem/P1948">题目链接</a><br>
+题面中可以抽象出模型：二分枚举答案，在答案合法的情况下找出第K+1大的边<br>
+**为什么呢？**对于一个合法答案，可以将建设电话线的免费名额花费在前k大的边上，剩下的边中边权最大的一定是第k+1大的边。要求的是第k+1大值最小的情况所以不难想到二分(最大值最小)，跑最短路前我们可以将前k大的边标记为0，其他的边标记为1，这样最终从1到n的最短路长度即为需要连接的电话杆数量。</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;utility&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 1e3+5;
+const int MAXP = 1e4+5;
+
+inline int read() {
+
+    int x = 0;
+    int k = 1;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9') {
+        if(c == '-')
+            k = -1;
+        c = getchar();
+    }
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int tot;
+int n, p, k;
+int dis[MAXN];
+bool vis[MAXN];
+int head[MAXN];
+ll val[MAXP&lt;&lt;1];
+int to[MAXP&lt;&lt;1];
+int nxt[MAXP&lt;&lt;1];
+int flag[MAXP&lt;&lt;1];
+
+void add(int x,int y, ll z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+bool dijkstra(ll mid) {
+    memset(dis,0x3f,sizeof(dis));
+    memset(vis,false,sizeof(vis));
+
+    priority_queue&lt;pair&lt;int,int&gt; &gt; q;
+
+    dis[1] = 0;
+    q.push(make_pair(0,1));
+
+    while(!q.empty()) {
+        int x = q.top().second;
+        q.pop();
+        if(vis[x]) continue;
+        vis[x] = true;
+
+        for(int i = head[x]; i ; i = nxt[i]) {
+            if(dis[to[i]] &gt; dis[x] + flag[i]) {
+                dis[to[i]] = dis[x] + flag[i];
+                if(!vis[to[i]])
+                    q.push(make_pair(-dis[to[i]],to[i]));
+            }
+        }
+    }
+
+    if(dis[n] &gt; k)
+        return false;
+    return true;
+}
+
+void inp() {
+
+    n = read();
+    p = read();
+    k = read();
+
+    for(int i = 1; i &lt;= p; i++) {
+        int x = read();
+        int y = read();
+        ll z = read();
+        add(x,y,z);
+        add(y,x,z);
+    }
+}
+
+int main() {
+
+    inp();
+
+    int l = 0;
+    int r = 1e6;
+    ll ans = -1;
+
+    while(l &lt;= r) {
+        ll mid = (l+r)&gt;&gt;1;
+        
+        for(int i = 1; i &lt;= tot; i++) {
+            if(val[i] &lt;= mid)
+                flag[i] = 0;
+            else flag[i] = 1;
+        }
+
+        if(dijkstra(mid)) {
+            ans = mid;
+            r = mid-1;
+        }
+        else l = mid+1;
+    }
+
+    printf(&quot;%lld\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
