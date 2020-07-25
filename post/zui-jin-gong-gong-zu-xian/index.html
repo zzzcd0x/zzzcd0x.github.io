@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>并查集DSU | zzzcd0x &#39;s Blog</title>
+<title>最近公共祖先 | zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -73,80 +73,124 @@
       <div class="sm-12 md-8 col">
         <div class="paper">
           <article class="article">
-            <h1>并查集DSU</h1>
+            <h1>最近公共祖先</h1>
             <p class="article-meta">
-              2020-07-17
+              2020-07-25
               
             </p>
             
             <div class="post-content">
-              <ul>
-<li>
-<h1 id="引入">引入</h1>
-<p>假设现在有n个仅知道自己的父亲是谁的人，现在要存储他们每个人之间的关系，并查询其中几个人是否属于同一家族</p>
-</li>
-<li>
-<h2 id="思路">思路</h2>
-<p>首先可以想到每一个家族可以组成一个树，但如果每一个结点都只储存自己的父亲是谁，那这几棵树就会 <s>进化</s> 变成一个森林<br>
-所以在存储两个结点的父子关系时，我们应该认定两个结点的最远古的父结点之间有亲缘关系，从而防止森林的诞生<br>
-对于查询两个结点的是否属于同一家族，我们仅需要查询他们的最远古祖先是否相同，但当某一个结点没有父结点时，这个结点就一定是当前家族的最远古祖先<br>
-思路就是这样了 那么我们用代码来实现一下</p>
-</li>
-<li>
-<h2 id="朴素写法">朴素写法</h2>
-</li>
-</ul>
-<pre><code class="language-cpp">int dad[10005];       //存储每个结点的父结点
+              <h2 id="树上倍增法">树上倍增法</h2>
+<h3 id="怎么计算的">怎么计算的？</h3>
+<p>假设要计算树上x和y结点的最近公共祖先，d[x]表示结点x的深度，F[x,k]表示结点x向上跳<code>2</code></p>
+<p>设<code>d[x] &gt;= d[y]</code>否则交换x和y</p>
+<p>将x结点尝试向上走<code>2^{log(n)}...2^{log(0)}</code>步，检查每次到达的结点是否比y深，若是，则令<code>x=F[x,k]</code>，跳出循环</p>
+<p>如果此时<code>x=y</code>则两个结点的LCA就是y</p>
+<p>如果不是，则将x和y同时向上调整，保持两者深度相同但不相等，即将两节点同时向上跳<code>2^{log(n)}...2^{log(0)}</code>步，若此时<code>F[x,k]!=F[y,k]</code>(即深度不相等)，则令<code>x=F[x,k],y=F[y,k]</code></p>
+<p>循环结束后x和y一定差一步到达同一结点，即他们的最近公共祖先为<code>F[x,0]</code>或<code>F[y,0]</code></p>
+<p>单次查询时间复杂度为<code>log(n)</code></p>
+<h3 id="例题">例题</h3>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">模板题</a></p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 4e4+5;
+const int MAXM = 2e2+5;
 
-int anc(int x){       //查询每个结点的远古祖先
+int tot;
+int n, m;
+int dis[MAXN];
+int dep[MAXN];
+int head[MAXN];
+bool vis[MAXN];
+int to[MAXN&lt;&lt;1];
+int fa[MAXN][25];
+int nxt[MAXN&lt;&lt;1];
+int val[MAXN&lt;&lt;1];
 
-    if(dad[x])
-        return anc(dad[x]);
-    else 
-        return x;     //当该结点没有父结点时当前结点即为最远古祖先
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
 }
 
-bool ask(int x, int y){   //查询两个结点是否在同一家族
-    return anc(x) == anc(y);
+void dfs(int now,int dad) {
+    if(vis[now]) return;
+    vis[now] = true;
+    fa[now][0] = dad;
+
+    for(int i = head[now]; i ;i = nxt[i]) {
+        if(to[i] == dad) continue;
+        dis[to[i]] = dis[now] + val[i];
+        dep[to[i]] = dep[now] + 1;
+        dfs(to[i],now);
+    }
 }
 
-void uni(int x, int y){   //设定亲属关系
+int lca(int x,int y) {
+    if(dep[x] &gt; dep[y])
+        swap(x,y);
+    
+    for(int i = 20; i &gt;= 0; i--)
+        if((dep[y] - (1&lt;&lt;i) ) &gt;= dep[x])
+            y = fa[y][i];
+    
+    if(x == y) return x;
 
-    x = anc(x);
-    y = anc(y);
+    for(int i = 20; i &gt;= 0; i--)
+        if(fa[x][i] != fa[y][i]) {
+            x = fa[x][i];
+            y = fa[y][i];
+        }
+    return fa[x][0];
+}
 
-    if(x != y)
-        dad[x] = y;
+int t;
+
+void inp() {
+    for(int i = 1; i &lt; n; i++) {
+        int x, y, z;
+        scanf(&quot;%d %d %d&quot;,&amp;x,&amp;y,&amp;z);
+        add(x,y,z);
+        add(y,x,z);
+    }
+}
+
+void init() {
+    memset(dis,0,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    memset(dep,0,sizeof(dep));
+    memset(head,0,sizeof(head));
+    tot = 0;
+}
+
+int main() {
+
+    scanf(&quot;%d&quot;,&amp;t);
+    while(t) {
+        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+        init();
+        inp();
+
+        dfs(1,1);
+
+        for(int i = 1; i &lt;= 20; i++)
+            for(int j = 1; j &lt;= n; j++)
+                fa[j][i] = fa[fa[j][i-1]][i-1];
+
+        for(int i = 1; i &lt;= m; i++) {
+            int x,y;
+            scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
+            printf(&quot;%d\n&quot;,dis[x] + dis[y] - 2*dis[lca(x,y)]);
+        }
+        t--;
+    }
+
+    return 0;
 }
 </code></pre>
-<p>以上就是并查集的一种朴素写法</p>
-<ul>
-<li>
-<h2 id="路径压缩优化">路径压缩优化</h2>
-<p>分析一下这种写法的复杂度我们就可以发现，<code>ask()</code>和<code>uni()</code>函数都是通过<code>anc()</code>来实现的，但如果碰到了子子孙孙无穷匮也的情况，整棵树就会被退化为一条链，所以每次查找需要消耗O(n)的复杂度<br>
-既然我们只关心某一个结点的最远古祖先，那么我们仅需要存储每个结点的最远古祖先即可，优化写法可以使用一下记忆化搜索的技巧</p>
-</li>
-</ul>
-<pre><code class="language-cpp">int anc(int x){
-
-    if(dad[x] != x)
-        return dad[x] = anc(dad[x]);
-    else 
-        return x;
-}
-</code></pre>
-<p>所以我们可以对<code>anc()</code>函数进行这样的修改，此时每次操作的平均复杂度可以接近O(1)</p>
-<ul>
-<li>
-<h1 id="并查集">并查集</h1>
-<p>这个数据结构就叫是并查集，并查集可以用来维护不相交集合<br>
-支持两种操作：</p>
-</li>
-</ul>
-<ol>
-<li>查询x和y是否在同一个集合</li>
-<li>将x、y所在集合合并</li>
-</ol>
 
             </div>
           </article>
@@ -157,9 +201,9 @@ void uni(int x, int y){   //设定亲属关系
               <div class="next">
                 下一篇
               </div>
-              <a href="https://zzzcd0x.github.io/post/gcd-lcm/">
+              <a href="https://zzzcd0x.github.io/post/spfa/">
                 <h3 class="post-title">
-                  gcd lcm
+                  SPFA
                 </h3>
               </a>
             </div>
@@ -274,11 +318,11 @@ void uni(int x, int y){   //设定亲属关系
           ACM-数论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/8dGaLyyjR/" class="badge ">
           ACM-图论
         </a>
       
-        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge warning">
+        <a href="https://zzzcd0x.github.io/tag/98Br2GGxb/" class="badge success">
           ACM-数据结构
         </a>
       

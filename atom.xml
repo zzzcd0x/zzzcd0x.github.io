@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-07-22T12:45:10.848Z</updated>
+    <updated>2020-07-25T07:49:23.131Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,125 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[最近公共祖先]]></title>
+        <id>https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/</id>
+        <link href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">
+        </link>
+        <updated>2020-07-25T07:45:50.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="树上倍增法">树上倍增法</h2>
+<h3 id="怎么计算的">怎么计算的？</h3>
+<p>假设要计算树上x和y结点的最近公共祖先，d[x]表示结点x的深度，F[x,k]表示结点x向上跳<code>2</code></p>
+<p>设<code>d[x] &gt;= d[y]</code>否则交换x和y</p>
+<p>将x结点尝试向上走<code>2^{log(n)}...2^{log(0)}</code>步，检查每次到达的结点是否比y深，若是，则令<code>x=F[x,k]</code>，跳出循环</p>
+<p>如果此时<code>x=y</code>则两个结点的LCA就是y</p>
+<p>如果不是，则将x和y同时向上调整，保持两者深度相同但不相等，即将两节点同时向上跳<code>2^{log(n)}...2^{log(0)}</code>步，若此时<code>F[x,k]!=F[y,k]</code>(即深度不相等)，则令<code>x=F[x,k],y=F[y,k]</code></p>
+<p>循环结束后x和y一定差一步到达同一结点，即他们的最近公共祖先为<code>F[x,0]</code>或<code>F[y,0]</code></p>
+<p>单次查询时间复杂度为<code>log(n)</code></p>
+<h3 id="例题">例题</h3>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">模板题</a></p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 4e4+5;
+const int MAXM = 2e2+5;
+
+int tot;
+int n, m;
+int dis[MAXN];
+int dep[MAXN];
+int head[MAXN];
+bool vis[MAXN];
+int to[MAXN&lt;&lt;1];
+int fa[MAXN][25];
+int nxt[MAXN&lt;&lt;1];
+int val[MAXN&lt;&lt;1];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+void dfs(int now,int dad) {
+    if(vis[now]) return;
+    vis[now] = true;
+    fa[now][0] = dad;
+
+    for(int i = head[now]; i ;i = nxt[i]) {
+        if(to[i] == dad) continue;
+        dis[to[i]] = dis[now] + val[i];
+        dep[to[i]] = dep[now] + 1;
+        dfs(to[i],now);
+    }
+}
+
+int lca(int x,int y) {
+    if(dep[x] &gt; dep[y])
+        swap(x,y);
+    
+    for(int i = 20; i &gt;= 0; i--)
+        if((dep[y] - (1&lt;&lt;i) ) &gt;= dep[x])
+            y = fa[y][i];
+    
+    if(x == y) return x;
+
+    for(int i = 20; i &gt;= 0; i--)
+        if(fa[x][i] != fa[y][i]) {
+            x = fa[x][i];
+            y = fa[y][i];
+        }
+    return fa[x][0];
+}
+
+int t;
+
+void inp() {
+    for(int i = 1; i &lt; n; i++) {
+        int x, y, z;
+        scanf(&quot;%d %d %d&quot;,&amp;x,&amp;y,&amp;z);
+        add(x,y,z);
+        add(y,x,z);
+    }
+}
+
+void init() {
+    memset(dis,0,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    memset(dep,0,sizeof(dep));
+    memset(head,0,sizeof(head));
+    tot = 0;
+}
+
+int main() {
+
+    scanf(&quot;%d&quot;,&amp;t);
+    while(t) {
+        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+        init();
+        inp();
+
+        dfs(1,1);
+
+        for(int i = 1; i &lt;= 20; i++)
+            for(int j = 1; j &lt;= n; j++)
+                fa[j][i] = fa[fa[j][i-1]][i-1];
+
+        for(int i = 1; i &lt;= m; i++) {
+            int x,y;
+            scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
+            printf(&quot;%d\n&quot;,dis[x] + dis[y] - 2*dis[lca(x,y)]);
+        }
+        t--;
+    }
+
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SPFA]]></title>
         <id>https://zzzcd0x.github.io/post/spfa/</id>
@@ -667,7 +786,7 @@ int main() {
 假设取出的蓝点为u<br>
 如果取出的蓝点还可以更新最短路，即还不能改为红点，那么能更新该点的最短路的点一定在队列后面，设该点为x<br>
 然而队是按最短路大小从小到大排序的 因此<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>[</mo><mi>u</mi><mo>]</mo><mo>&lt;</mo><mi>d</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo separator="true">,</mo><mi>d</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>+</mo><mi>v</mi><mi>a</mi><msub><mi>l</mi><mrow><mi>x</mi><mo>−</mo><mo>&gt;</mo><mi>u</mi></mrow></msub><mo>&gt;</mo><mi>d</mi><mo>[</mo><mi>u</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">u</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">a</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.25833100000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mord mtight">−</span><span class="mrel mtight">&gt;</span><span class="mord mathdefault mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">u</span><span class="mclose">]</span></span></span></span><br>
+<code>d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u]</code><br>
 得证</p>
 <h2 id="朴素写法">朴素写法</h2>
 <p><strong>链式前向星部分已省略</strong></p>
@@ -976,71 +1095,6 @@ int main() {
     }
 
     return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[树状数组]]></title>
-        <id>https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/</id>
-        <link href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
-        </link>
-        <updated>2020-07-14T08:28:50.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>
-<h1 id="树状数组是什么">树状数组是什么</h1>
-<p>设树状数组为C，x的二进制表达形式末尾有k个0，则C[x]表示区间A[<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>−</mo><msup><mn>2</mn><mi>k</mi></msup><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x-2^k+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.932438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>,<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>]的和<br>
-使位运算lowbit(x) = x&amp;-x可求出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">2^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span>的值</p>
-</li>
-</ul>
-<pre><code>大致原理
-假设x=6
-6用二进制表示位110
--6是求6的补码，即反码+1，位010
-110&amp;010即为最低位1的位置
-</code></pre>
-<p><strong>概念想不明白可以看一下这张图</strong><br>
-<img src="https://img-blog.csdnimg.cn/20200512205527176.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BhUnpWYUw=,size_16,color_FFFFFF,t_70" alt="" loading="lazy"><br>
-<strong>信息可减的情况下，可以差分:</strong></p>
-<ul>
-<li>
-<p>单点加，区间查询</p>
-<p>查询区间[l,r]可差分为前r个数的和减去前l-1个数的和</p>
-</li>
-<li>
-<p>区间加，单点查询</p>
-<p>把区间[l,r]加差分为前缀r加，前缀l-1减，查询单点只需要查询包含这个点的所有前缀修改</p>
-</li>
-<li>
-<p>区间加，区间查询</p>
-<p>查询[l,r]只要用前r个数减去前l-1个数的和即可</p>
-</li>
-<li>
-<h1 id="基本写法">基本写法</h1>
-</li>
-<li>
-<p>构建</p>
-<p>构建方法因题而异</p>
-</li>
-<li>
-<p>查询x的前缀和</p>
-<p>根据定义可得，C[x]存的是A[x-2^k+1,x]的和，因此只需要x-lowbit(x)并且加上C[x]的值就可以得到x的前缀和，直到减到0</p>
-</li>
-</ul>
-<pre><code class="language-cpp"> int aks(int x){
-   int ans = 0;
-   for(int i = x; i ; i-=lowbit(i))
-   ans+=c[i];
-}
-</code></pre>
-<ul>
-<li>修改<br>
-再根据定义，更改A[x]的值，需要改变C中x+lowbit(x)直到大于n的值，迭代解决即可<br>
-第x位的数加k的写法</li>
-</ul>
-<pre><code class="language-cpp">void modify(int x,int k){
-	for(int i = x; i &lt;= n; i+=lowbit(i))
-    c[i]+=k;
 }
 </code></pre>
 ]]></content>

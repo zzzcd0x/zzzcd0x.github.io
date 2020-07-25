@@ -7,7 +7,7 @@
 <meta name="description" content="越学越倒退选手">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595421680774">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1595663357501">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -99,7 +99,7 @@
 假设取出的蓝点为u<br>
 如果取出的蓝点还可以更新最短路，即还不能改为红点，那么能更新该点的最短路的点一定在队列后面，设该点为x<br>
 然而队是按最短路大小从小到大排序的 因此<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>[</mo><mi>u</mi><mo>]</mo><mo>&lt;</mo><mi>d</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo separator="true">,</mo><mi>d</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>+</mo><mi>v</mi><mi>a</mi><msub><mi>l</mi><mrow><mi>x</mi><mo>−</mo><mo>&gt;</mo><mi>u</mi></mrow></msub><mo>&gt;</mo><mi>d</mi><mo>[</mo><mi>u</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">u</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">a</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.25833100000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mord mtight">−</span><span class="mrel mtight">&gt;</span><span class="mord mathdefault mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mopen">[</span><span class="mord mathdefault">u</span><span class="mclose">]</span></span></span></span><br>
+<code>d[u] &lt; d[x] ,d[x]+val_{x-&gt;u} &gt; d[u]</code><br>
 得证</p>
 <h2 id="朴素写法">朴素写法</h2>
 <p><strong>链式前向星部分已省略</strong></p>
@@ -433,7 +433,7 @@ int main() {
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595421680774" class="no-responsive avatar">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1595663357501" class="no-responsive avatar">
     <div class="text-muted">越学越倒退选手</div>
     <div class="social-container">
       
@@ -459,6 +459,12 @@ int main() {
     </div>
     <div class="row">
       <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">最近公共祖先</a>
+            </li>
+          
         
           
             <li>
@@ -515,10 +521,6 @@ int main() {
           
         
           
-            <li>
-              <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">树状数组</a>
-            </li>
-          
         
           
         
@@ -531,7 +533,7 @@ int main() {
     </div>
     <div class="row">
       
-        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge ">
+        <a href="https://zzzcd0x.github.io/tag/25XYpO-c3/" class="badge secondary">
           ACM-数论
         </a>
       
