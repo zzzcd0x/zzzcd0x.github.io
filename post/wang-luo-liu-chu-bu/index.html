@@ -1,22 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://zzzcd0x.github.io</id>
-    <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-12T13:00:45.340Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://zzzcd0x.github.io"/>
-    <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
-    <subtitle>越学越倒退选手</subtitle>
-    <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
-    <icon>https://zzzcd0x.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
-    <entry>
-        <title type="html"><![CDATA[网络流初步]]></title>
-        <id>https://zzzcd0x.github.io/post/wang-luo-liu-chu-bu/</id>
-        <link href="https://zzzcd0x.github.io/post/wang-luo-liu-chu-bu/">
-        </link>
-        <updated>2020-08-12T12:59:55.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="是什么">是什么</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>网络流初步 | zzzcd0x &#39;s Blog</title>
+<meta name="description" content="越学越倒退选手">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597237241629">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                All
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                分类
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>网络流初步</h1>
+            <p class="article-meta">
+              2020-08-12
+              
+            </p>
+            
+            <div class="post-content">
+              <h2 id="是什么">是什么</h2>
 <p>网络流的图是一个DAG，满足以下条件</p>
 <ol>
 <li>只有一个入度为0的点，称为源点。</li>
@@ -218,761 +282,165 @@ void inp() {
     }
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最近公共祖先]]></title>
-        <id>https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/</id>
-        <link href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">
-        </link>
-        <updated>2020-07-25T07:45:50.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="树上倍增法">树上倍增法</h2>
-<h3 id="怎么计算的">怎么计算的？</h3>
-<p>假设要计算树上x和y结点的最近公共祖先，d[x]表示结点x的深度，F[x,k]表示结点x向上跳<code>2</code></p>
-<p>设<code>d[x] &gt;= d[y]</code>否则交换x和y</p>
-<p>将x结点尝试向上走<code>2^{log(n)}...2^{log(0)}</code>步，检查每次到达的结点是否比y深，若是，则令<code>x=F[x,k]</code>，跳出循环</p>
-<p>如果此时<code>x=y</code>则两个结点的LCA就是y</p>
-<p>如果不是，则将x和y同时向上调整，保持两者深度相同但不相等，即将两节点同时向上跳<code>2^{log(n)}...2^{log(0)}</code>步，若此时<code>F[x,k]!=F[y,k]</code>(即深度不相等)，则令<code>x=F[x,k],y=F[y,k]</code></p>
-<p>循环结束后x和y一定差一步到达同一结点，即他们的最近公共祖先为<code>F[x,0]</code>或<code>F[y,0]</code></p>
-<p>单次查询时间复杂度为<code>log(n)</code></p>
-<h3 id="例题">例题</h3>
-<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">模板题</a></p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 4e4+5;
-const int MAXM = 2e2+5;
 
-int tot;
-int n, m;
-int dis[MAXN];
-int dep[MAXN];
-int head[MAXN];
-bool vis[MAXN];
-int to[MAXN&lt;&lt;1];
-int fa[MAXN][25];
-int nxt[MAXN&lt;&lt;1];
-int val[MAXN&lt;&lt;1];
-
-void add(int x,int y,int z) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-}
-
-void dfs(int now,int dad) {
-    if(vis[now]) return;
-    vis[now] = true;
-    fa[now][0] = dad;
-
-    for(int i = head[now]; i ;i = nxt[i]) {
-        if(to[i] == dad) continue;
-        dis[to[i]] = dis[now] + val[i];
-        dep[to[i]] = dep[now] + 1;
-        dfs(to[i],now);
-    }
-}
-
-int lca(int x,int y) {
-    if(dep[x] &gt; dep[y])
-        swap(x,y);
-    
-    for(int i = 20; i &gt;= 0; i--)
-        if((dep[y] - (1&lt;&lt;i) ) &gt;= dep[x])
-            y = fa[y][i];
-    
-    if(x == y) return x;
-
-    for(int i = 20; i &gt;= 0; i--)
-        if(fa[x][i] != fa[y][i]) {
-            x = fa[x][i];
-            y = fa[y][i];
-        }
-    return fa[x][0];
-}
-
-int t;
-
-void inp() {
-    for(int i = 1; i &lt; n; i++) {
-        int x, y, z;
-        scanf(&quot;%d %d %d&quot;,&amp;x,&amp;y,&amp;z);
-        add(x,y,z);
-        add(y,x,z);
-    }
-}
-
-void init() {
-    memset(dis,0,sizeof(dis));
-    memset(vis,0,sizeof(vis));
-    memset(dep,0,sizeof(dep));
-    memset(head,0,sizeof(head));
-    tot = 0;
-}
-
-int main() {
-
-    scanf(&quot;%d&quot;,&amp;t);
-    while(t) {
-        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
-        init();
-        inp();
-
-        dfs(1,1);
-
-        for(int i = 1; i &lt;= 20; i++)
-            for(int j = 1; j &lt;= n; j++)
-                fa[j][i] = fa[fa[j][i-1]][i-1];
-
-        for(int i = 1; i &lt;= m; i++) {
-            int x,y;
-            scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-            printf(&quot;%d\n&quot;,dis[x] + dis[y] - 2*dis[lca(x,y)]);
-        }
-        t--;
-    }
-
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SPFA]]></title>
-        <id>https://zzzcd0x.github.io/post/spfa/</id>
-        <link href="https://zzzcd0x.github.io/post/spfa/">
-        </link>
-        <updated>2020-07-22T12:06:46.000Z</updated>
-        <content type="html"><![CDATA[<p>虽然spfa算法赛场上会各种被卡，但还是蛮不错的。</p>
-<h1 id="大致思想">大致思想</h1>
-<ul>
-<li>首先将源点加入队列</li>
-<li>然后更新源点能够到达的点的最短路</li>
-<li>如果被更新的点不在队列中，则加入队列</li>
-<li>重复上述2~3步直到队列为空</li>
-</ul>
-<p>其实思想与dijkstra比较相似，不同的是dijkstra判断点是否进队的依据是该点的最短路有没有被更新过<br>
-而spfa的依据是该点在不在队列中</p>
-<h1 id="实现">实现</h1>
-<p>链式前向星部分已省略</p>
-<pre><code class="language-cpp">int d[MAXN];
-bool b[MAXN];
-
-void spfa(int s){
-    memset(d,0x3f,sizeof(d));
-    d[s] = 0;
-    b[s] = true;
-    q.push(s);
-    while(!q.empty())
-    {
-        int x = q.front();
-        q.pop();
-        b[x] = false;
-        for(int i = head[x]; i ;i = edge[i].next)
-        {
-            int to = edge[i].to;
-            int val = edge[i].val;
-            if(d[to] &gt; d[x] + val)
-            {
-                d[to] = d[x] + val;
-                if(!b[to])
-                {
-                    q.push(to);
-                    b[to] = true;
-                }
-            }
-        }
-    }
-}
-</code></pre>
-<h2 id="例题">例题</h2>
-<h3 id="判断负环">判断负环</h3>
-<p><a href="http://poj.org/problem?id=3259">题目链接</a><br>
-如果图中出现了负环那么在spfa中负环上的结点会不断的入队，因此只要对入队次数进行计数，如果有一个结点入队次数大于等于总结点数，则图中一定存在负环</p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;queue&gt;
-#include&lt;stack&gt;
-#include&lt;utility&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-typedef long long ll;
-const int MAXN = 505;
-const int MAXM = 3005;
-
-inline int read() {
-
-    int x = 0;
-    char c = getchar();
-    while(c &lt; '0' || c &gt; '9')
-        c = getchar();
-    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
-        x = x*10 + c-'0';
-        c = getchar();
-    }
-
-    return x;
-}
-
-int tot;
-int n, m, w;
-int head[MAXN];
-int to[MAXM&lt;&lt;1];
-ll val[MAXM&lt;&lt;1];
-int nxt[MAXM&lt;&lt;1];
-int from[MAXM&lt;&lt;1];
-
-void add(int x,int y,ll z) {
-
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-    from[tot] = x;
-}
-
-void inp() {
-
-    n = read();
-    m = read();
-    w = read();
-    tot = 0;
-    memset(head,0,sizeof(head));
-    memset(nxt,0,sizeof(0));
-
-    for(int i = 1; i &lt;= m; i++) {
-
-        int x = read();
-        int y = read();
-        ll z = read();
-        add(x,y,z);
-        add(y,x,z);
-    } 
-
-    for(int i = 1; i &lt;= w; i++) {
-
-        int x = read();
-        int y = read();
-        ll z = read();
-        add(x,y,-z);
-    }
-}
-
-ll d[MAXN];
-int temp[MAXN];
-bool vis[MAXN];
-
-bool spfa() {
-
-    queue&lt;int&gt; q;
-
-    memset(d,0x3f,sizeof(d));
-    memset(temp,0,sizeof(temp));
-    memset(vis,false,sizeof(vis));
-
-    q.push(1);
-    temp[1]++;
-    d[1] = 0;
-    vis[1] = true;
-
-    while(!q.empty()) {
-        int x = q.front();
-        vis[x] = false;
-        q.pop();
-        for(int i = head[x]; i ; i = nxt[i]) {
-            if(d[to[i]] &gt; d[x] + val[i]) {
-                d[to[i]] = d[x] + val[i];
-                temp[to[i]]++;
-                if(temp[to[i]] &gt;= n)
-                    return true;
-                if(!vis[to[i]]) {
-                    q.push(to[i]);
-                    vis[to[i]] = true;
-                }
-            }
-        }   
-    }
-    return false;
-}
-
-int main() {
-
-    int t = read();
-
-    while(t) {
-
-        inp();
-
-        if(spfa())
-            puts(&quot;YES&quot;);
-        else puts(&quot;NO&quot;);
-
-        t--;
-    }
-
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[并查集DSU]]></title>
-        <id>https://zzzcd0x.github.io/post/bing-cha-ji-dsu/</id>
-        <link href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">
-        </link>
-        <updated>2020-07-17T02:29:14.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>
-<h1 id="引入">引入</h1>
-<p>假设现在有n个仅知道自己的父亲是谁的人，现在要存储他们每个人之间的关系，并查询其中几个人是否属于同一家族</p>
-</li>
-<li>
-<h2 id="思路">思路</h2>
-<p>首先可以想到每一个家族可以组成一个树，但如果每一个结点都只储存自己的父亲是谁，那这几棵树就会 <s>进化</s> 变成一个森林<br>
-所以在存储两个结点的父子关系时，我们应该认定两个结点的最远古的父结点之间有亲缘关系，从而防止森林的诞生<br>
-对于查询两个结点的是否属于同一家族，我们仅需要查询他们的最远古祖先是否相同，但当某一个结点没有父结点时，这个结点就一定是当前家族的最远古祖先<br>
-思路就是这样了 那么我们用代码来实现一下</p>
-</li>
-<li>
-<h2 id="朴素写法">朴素写法</h2>
-</li>
-</ul>
-<pre><code class="language-cpp">int dad[10005];       //存储每个结点的父结点
-
-int anc(int x){       //查询每个结点的远古祖先
-
-    if(dad[x])
-        return anc(dad[x]);
-    else 
-        return x;     //当该结点没有父结点时当前结点即为最远古祖先
-}
-
-bool ask(int x, int y){   //查询两个结点是否在同一家族
-    return anc(x) == anc(y);
-}
-
-void uni(int x, int y){   //设定亲属关系
-
-    x = anc(x);
-    y = anc(y);
-
-    if(x != y)
-        dad[x] = y;
-}
-</code></pre>
-<p>以上就是并查集的一种朴素写法</p>
-<ul>
-<li>
-<h2 id="路径压缩优化">路径压缩优化</h2>
-<p>分析一下这种写法的复杂度我们就可以发现，<code>ask()</code>和<code>uni()</code>函数都是通过<code>anc()</code>来实现的，但如果碰到了子子孙孙无穷匮也的情况，整棵树就会被退化为一条链，所以每次查找需要消耗O(n)的复杂度<br>
-既然我们只关心某一个结点的最远古祖先，那么我们仅需要存储每个结点的最远古祖先即可，优化写法可以使用一下记忆化搜索的技巧</p>
-</li>
-</ul>
-<pre><code class="language-cpp">int anc(int x){
-
-    if(dad[x] != x)
-        return dad[x] = anc(dad[x]);
-    else 
-        return x;
-}
-</code></pre>
-<p>所以我们可以对<code>anc()</code>函数进行这样的修改，此时每次操作的平均复杂度可以接近O(1)</p>
-<ul>
-<li>
-<h1 id="并查集">并查集</h1>
-<p>这个数据结构就叫是并查集，并查集可以用来维护不相交集合<br>
-支持两种操作：</p>
-</li>
-</ul>
-<ol>
-<li>查询x和y是否在同一个集合</li>
-<li>将x、y所在集合合并</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[gcd lcm]]></title>
-        <id>https://zzzcd0x.github.io/post/gcd-lcm/</id>
-        <link href="https://zzzcd0x.github.io/post/gcd-lcm/">
-        </link>
-        <updated>2020-07-14T08:33:34.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="最大公因数gcd">最大公因数(gcd)</h2>
-<h3 id="性质">性质：</h3>
-<ol>
-<li>gcd(1,n) = 1</li>
-<li>设d = gcd(a,b) 则 gcd(a/d,b/d) = 1</li>
-<li>gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)</li>
-</ol>
-<h3 id="辗转相除法求解">辗转相除法求解：</h3>
-<p>由gcd(a,b) = gcd(a-b,b) 得 gcd(a,b) = gcd(a%b,b)</p>
-<p>因此求解过程可写为：</p>
-<ol>
-<li>如果a&lt;b,则交换a,b</li>
-<li>如果b = 0，则返回a</li>
-<li>令a = a%b</li>
-</ol>
-<p>重复上述过程</p>
-<pre><code class="language-cpp">int gcd(int a, int b) {
-    if (a &lt; b) {
-        int t = b;
-        b = a;
-        a = t;
-    }
-    if (b == 0) return a;
-    return gcd(a % b, b);
-}
-</code></pre>
-<h2 id="最小公倍数lcm">最小公倍数(lcm)</h2>
-<pre><code class="language-math">lcm(a,b) = {ab\over gcd(a,b)}
-</code></pre>
-<p><s>怎么求就不用说了吧</s></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[素数筛]]></title>
-        <id>https://zzzcd0x.github.io/post/su-shu-shai/</id>
-        <link href="https://zzzcd0x.github.io/post/su-shu-shai/">
-        </link>
-        <updated>2020-07-14T08:32:57.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="埃氏筛">埃氏筛</h1>
-<ul>
-<li>
-<h2 id="主要过程">主要过程</h2>
-</li>
-<li>
-<p>从2到n枚举，如果该数字没有标记(是素数)</p>
-</li>
-<li>
-<p>枚举范围内的该数字的倍数，将枚举到的数字标记为素数<br>
-这样枚举结束后所有的合数就被打了标记，没打标记的就是素数</p>
-</li>
-</ul>
-<h2 id="实现">实现</h2>
-<p>以找100以内的素数为例</p>
-<pre><code class="language-cpp">int n = 100;
-bool flag[105];
-
-void sieve(){
-    for(int i = 2; i &lt;= n; i++)
-            if(!flag[i])
-            {
-                printf(&quot;%d &quot;,i);
-                for(int j = 2; i*j &lt;= n; j++)
-                    flag[i*j] = true;
-            }
-}
-</code></pre>
-<p>时间复杂度：<code>O(n\log(\log(n)))</code></p>
-<h1 id="欧拉筛">欧拉筛</h1>
-<p>埃氏筛中有一部分数被筛了不止一次，例如6被2筛完又被3筛<br>
-然而一个合数被标记只需要被其最小素因子筛就好了<br>
-这样的筛法就是欧拉筛，也叫线性筛</p>
-<ul>
-<li>
-<h2 id="过程">过程</h2>
-</li>
-<li>
-<p>i从2开始枚举，在枚举的过程中，记录当前已知的素数</p>
-</li>
-<li>
-<p>枚举的每一步都去筛当前已知的所有的素数的i倍</p>
-</li>
-<li>
-<p><strong>当i能被枚举到的素数整除即已经筛到了当前情况下将要被筛的数的最小素因子则跳出循环</strong>应该被筛却没有被筛的数会在i更大的情况下被筛掉</p>
-</li>
-</ul>
-<h2 id="实现-2">实现</h2>
-<p>以找100以内的素数为例</p>
-<pre><code class="language-cpp">int cnt;
-int n = 100;
-int prime[100];
-bool flag[100];
-
-void sieve(){
-
-    for(int i = 2; i &lt;= n; i++)
-        {
-            if(!flag[i])
-            {
-                prime[++cnt] = i;
-                printf(&quot;%d &quot;,i);
-            }
-            for(int j = 1; prime[j] * i &lt;= n &amp;&amp; j &lt;= cnt; j++)
-            {
-                flag[prime[j]*i] = true;
-                if(i % prime[j] == 0) break;
-            }
-        }   
-}
-</code></pre>
-<p>时间复杂度：<code>O(n)</code><br>
-适合处理数据范围巨大的情况</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[链式前向星]]></title>
-        <id>https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/</id>
-        <link href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">
-        </link>
-        <updated>2020-07-14T08:32:26.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="原理">原理</h1>
-<pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
-</code></pre>
-<h1 id="怎么写呢">怎么写呢</h1>
-<ul>
-<li>结构体写法</li>
-</ul>
-<pre><code class="language-cpp">struct Edge{
-    int to;
-    int val;
-    int nxt;
-    int from; 
-}edge[10005];
-int head[10005];                //每一个点的链表的头结点编号
-int tot = 0;                    //用于存储每一个点的头结点
-
-void add(int x,int y,int z){
-    edge[++tot].nxt = head[x];
-    head[x] = tot;
-    edge[tot].to = y;
-    edge[tot].from = x;
-    edge[tot].val = z;
-}
-</code></pre>
-<ul>
-<li>数组写法</li>
-</ul>
-<pre><code class="language-cpp">int tot;
-int to[MAXN];
-int from[MAXN];
-int head[MAXN];
-int val[MAXN];
-
-void add(int x,int y) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    from[tot] = x;
-}
-</code></pre>
-<h1 id="遍历">遍历</h1>
-<pre><code>与每一个点相连的边已经以链表的形式存储，头结点存储在head数组中，因此我们可以使用类似遍历链表的方式遍历与每一个点相连的每一条边
-</code></pre>
-<pre><code class="language-cpp">void search(){
-
-    for(int i = 1; i &lt;= n; i++)
-        for(int j = head[i]; j ; j = edge[j].next)
-            printf(&quot;%d %d %d\n&quot;,edge[j].to,edge[j].val,edge[j].next);
-
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[拓扑排序]]></title>
-        <id>https://zzzcd0x.github.io/post/tuo-bu-pai-xu/</id>
-        <link href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">
-        </link>
-        <updated>2020-07-14T08:31:44.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="什么是dag">什么是DAG</h1>
-<pre><code>通俗来说DAG就是有向无环图的简称，通过名字就可以看出，DAG的基本特点是边为有向边，且图内无环
-</code></pre>
-<p>这个图虽然看似有环，但因为边都是有向边，所以并没有构成环。<br>
-观察一下上面那个图，不难发现以每一个结点为起点都可以找到对应的一条链，因此许多图论问题都可以抽象为找DAG中的最短链或者最长链。<br>
-然而在一些图论问题中结点之间存在先后关系，这样就不能直接用平常的遍历方式来对图进行遍历，而是需要先对结点按照先后顺序进行排序，转化为一个序列后再进行遍历</p>
-<h1 id="拓扑排序">拓扑排序</h1>
-<pre><code>上述过程应用的排序算法就是拓扑排序，排序后整张图就被转化成了一个序列，然后通过这个序列来解决问题
-</code></pre>
-<h2 id="过程">过程</h2>
-<ol>
-<li>在存图是记录每个结点的入度和出度</li>
-<li>存图结束后将入度为0的点加入序列</li>
-<li>那处序列头部的点x，遍历该点可以到达的所有点y</li>
-<li>删掉x到y的边，即y点的入度减一</li>
-<li>如果y点入度为0则加入序列</li>
-<li>重复2~5直至序列为空</li>
-</ol>
-<pre><code class="language-cpp">struct edge{
-    int to;
-    int val;
-    int next;
-}e[10005];
-
-int n, m;
-int ind[10005];    //入度
-int head[100005];
-
-queue&lt;int&gt;q;
-
-void topsort(){
-
-    for(int i = 1; i &lt;= n; i++)                   //将入度为0的结点放入序列
-        if(!ind[i])
-            q.push(i);
-
-    while(!q.empty())
-    {
-        int x = q.front();
-        q.pop();
-
-        for(int i = head[x]; i; i = e[i].next)    //遍历x能到达的点
-        {
-            int y = e[i].to;
-            ind[y]--;                             //删边
-            if(!ind[y])                               //如果y点入度为0则放入序列
-            	q.push(y);
-        }
-    }
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[kruskal]]></title>
-        <id>https://zzzcd0x.github.io/post/kruskal/</id>
-        <link href="https://zzzcd0x.github.io/post/kruskal/">
-        </link>
-        <updated>2020-07-14T08:31:25.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="kruskal">kruskal</h1>
-<h2 id="是什么呢">是什么呢</h2>
-<p>是一种求一个图的最小生成树的算法，核心思想是贪心，其实就是个贪心，与prime相比更加适合求边比较稀疏的图的最小生成树</p>
-<p>时间复杂度是<code>O(mlogm)</code></p>
-<h2 id="运行过程">运行过程</h2>
-<p>kruskal里面的边的作用可以理解为只是为了表达两个点的具有长度的连接关系</p>
-<p>首先将所有的边按照边权从小到大排序</p>
-<p>然后枚举每一条边，如果正在枚举的边的两个结点无联通关系，则将该边边权计入答案中、并用并查集标记两点的联通关系</p>
-<p>当生成树联通后即可跳出循环</p>
-<p><strong>注意建边只要建单向即可</strong></p>
-<h2 id="模板">模板</h2>
-<pre><code class="language-cpp">
-struct Edge {
-
-    int to;
-    int val;
-    int nxt;
-    int from;
-}edge[MAXM];
-
-int dad[MAXN];
-
-bool judge(Edge x,Edge y) {return x.val &lt; y.val;}
-
-void kruskal() {
-
-    for(int i = 1; i &lt;= n; i++)
-        dad[i] = i;
-
-    sort(edge+1,edge+n+1,judge);
-
-    for(int i = 1; i &lt;= tot; i++) {
-        int x = anc(edge[i].from);
-        int y = anc(edge[i].to);
-
-        if(x != y) {
-            ans += edge[i].val;
-            dad[x] = y;
-        }
-    }
-}
-</code></pre>
-<h2 id="注意事项">注意事项</h2>
-<p>真正的边权可能并不是输入的边权</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Floyd]]></title>
-        <id>https://zzzcd0x.github.io/post/floyd/</id>
-        <link href="https://zzzcd0x.github.io/post/floyd/">
-        </link>
-        <updated>2020-07-14T08:30:51.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="干什么的呢">干什么的呢</h2>
-<p>大多用于求多源图中两点间的最短路，也可以用于传递闭包</p>
-<h2 id="写法">写法</h2>
-<pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
-        for(int i = 1; i &lt;= n; i++)
-            for(int j = 1; j &lt;= n; j++)
-                dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
-</code></pre>
-<p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
-<h2 id="正确性证明">正确性证明</h2>
-<p>Floyd算法核心思想是动态规划<br>
-原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
-状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
-但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
-最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
-因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
-<h2 id="细节">细节</h2>
-<p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
-一般用Floyd时还要考虑边的权值</p>
-<h2 id="例题">例题</h2>
-<h3 id="传递闭包">传递闭包</h3>
-<p><a href="https://www.luogu.com.cn/problem/P2419">题目链接</a><br>
-其实就是利用连通性可传递性来判断图中两个点之间是否连接<br>
-注意边为单向，但<strong>两个点之间连通是双向的</strong></p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-using namespace std;
-const int MAXN = 105;
-const int MAXM = 4505;
-
-int ans;
-int n, m;
-bool dis[MAXN][MAXN];
-
-void inp() {
-
-    for(int i = 1; i &lt;= m; i++) {
-        int x, y;
-        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-        dis[x][y] = true;
-    }
-}
-
-void floyd() {
-    for(int k = 1; k &lt;= n; k++)
-        for(int i = 1; i &lt;= n; i++)
-            for(int j = 1; j &lt;= n; j++)
-                    dis[i][j] |= dis[i][k] &amp; dis[k][j];
-}
-
-void judge() {
-
-    int d[MAXN] = {0};
-    for(int i = 1; i &lt;= n; i++)
-        for(int j = 1; j &lt;= n; j++)
-            if(dis[i][j] || dis[j][i])
-                d[i]++;
-    
-    for(int i = 1; i &lt;= n; i++)
-        if(d[i] == n-1)
-            ans++;
-}
-
-void init() {
-
-    ans = 0;
-    memset(dis,0,sizeof(dis));
-}
-
-int main() {
-
-    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
-
-        init();
-        inp();
-
-        floyd();
-
-        judge();
-
-        printf(&quot;%d\n&quot;,ans);
-    }
-
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-</feed>
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">
+                <h3 class="post-title">
+                  最近公共祖先
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://zzzcd0x.github.io/images/avatar.png?v=1597237241629" class="no-responsive avatar">
+    <div class="text-muted">越学越倒退选手</div>
+    <div class="social-container">
+      
+        
+          <a href="https://github.com/zzzcd0x" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      New
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/wang-luo-liu-chu-bu/">网络流初步</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">最近公共祖先</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/spfa/">SPFA</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">并查集DSU</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/gcd-lcm/">gcd lcm</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/su-shu-shai/">素数筛</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">链式前向星</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">拓扑排序</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/kruskal/">kruskal</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://zzzcd0x.github.io/post/floyd/">Floyd</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      全部分类
+    </div>
+    <div class="row">
+      
+        <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="badge secondary">
+          图论
+        </a>
+      
+        <a href="https://zzzcd0x.github.io/tag/nPXiRYhFe/" class="badge secondary">
+          数据结构
+        </a>
+      
+        <a href="https://zzzcd0x.github.io/tag/vr6Cb8Hkz/" class="badge success">
+          数论
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
