@@ -1,13 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>Dijkstra | zzzcd0x &#39;s Blog</title>
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597828059363">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597828681066">
 <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Dijkstra | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
@@ -17,80 +24,75 @@
 其他点最短路长度设为INF
 将图中的点分为两类 一类是已经更新过最短路的点称为红点，另一类是未找到确定的最短路的点，称为蓝点..." />
     <meta name="keywords" content="图论" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://zzzcd0x.github.io">
-  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597828059363" alt="">
-  </a>
-  <h1 class="site-title">
-    zzzcd0x &#39;s Blog
-  </h1>
-  <p class="site-description">
-    越学越倒退选手
-  </p>
-  <div class="menu-container">
-    
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zzzcd0x.github.io">
+        <img src="https://zzzcd0x.github.io/images/avatar.png?v=1597828681066" class="site-logo">
+        <h1 class="site-title">zzzcd0x &#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
       
-        <a href="/" class="menu">
-          首页
-        </a>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
       
-    
+        
+          <a href="/archives" class="site-nav">
+            All
+          </a>
+        
       
-        <a href="/archives" class="menu">
-          All
-        </a>
+        
+          <a href="/tags" class="site-nav">
+            分类
+          </a>
+        
       
-    
-      
-        <a href="/tags" class="menu">
-          分类
-        </a>
-      
-    
+    </div>
   </div>
-  <div class="social-container">
-    
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
+      
+    </div>
+    <div class="site-description">
+      越学越倒退选手
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
   </div>
 </div>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Dijkstra
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-07-14
-              </span>
-              <span>
-                8 min read
-              </span>
-              
-                <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="post-tag">
-                  # 图论
-                </a>
-              
-            </div>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Dijkstra</h2>
+            <div class="post-date">2020-07-14</div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p>Dijkstra算法是一种用于解决无负权边的有向图的单源最短路问题的算法</p>
+            <div class="post-content" v-pre>
+              <p>Dijkstra算法是一种用于解决无负权边的有向图的单源最短路问题的算法</p>
 <h2 id="大致思想">大致思想</h2>
 <p>初始时将图的源点的最短路设为0<br>
 其他点最短路长度设为INF<br>
@@ -417,92 +419,53 @@ int main() {
 }
 </code></pre>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E5%A4%A7%E8%87%B4%E6%80%9D%E6%83%B3">大致思想</a></li>
-<li><a href="#%E6%AD%A3%E7%A1%AE%E6%80%A7%E8%AF%81%E6%98%8E">正确性证明</a></li>
-<li><a href="#%E6%9C%B4%E7%B4%A0%E5%86%99%E6%B3%95">朴素写法</a></li>
-<li><a href="#%E5%A0%86%E4%BC%98%E5%8C%96">堆优化</a></li>
-<li><a href="#%E4%BE%8B%E9%A2%98">例题</a>
-<ul>
-<li><a href="#%E4%BA%8C%E5%88%86%E6%9C%80%E7%9F%AD%E8%B7%AF">二分+最短路</a></li>
-<li><a href="#%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84">最短路径</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
-          </article>
-        </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="tag">
+                    图论
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
+                  <h3 class="post-title">
+                    树状数组
+                  </h3>
+                </a>
+              </div>
+            
 
-        
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
-              <h3 class="post-title">
-                树状数组
-              </h3>
-            </a>
+            
+
           </div>
-        
 
-        
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
+        </div>
       </div>
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+AOS.init();
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+</script>
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
+
+
+
   </body>
 </html>

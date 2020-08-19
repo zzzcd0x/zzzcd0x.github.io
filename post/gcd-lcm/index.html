@@ -1,13 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>gcd lcm | zzzcd0x &#39;s Blog</title>
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597828059363">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597828681066">
 <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="gcd lcm | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
@@ -21,80 +28,75 @@ gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)
 辗转相除法求解：
 由gcd(a,b) =..." />
     <meta name="keywords" content="数论" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://zzzcd0x.github.io">
-  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597828059363" alt="">
-  </a>
-  <h1 class="site-title">
-    zzzcd0x &#39;s Blog
-  </h1>
-  <p class="site-description">
-    越学越倒退选手
-  </p>
-  <div class="menu-container">
-    
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zzzcd0x.github.io">
+        <img src="https://zzzcd0x.github.io/images/avatar.png?v=1597828681066" class="site-logo">
+        <h1 class="site-title">zzzcd0x &#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
       
-        <a href="/" class="menu">
-          首页
-        </a>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
       
-    
+        
+          <a href="/archives" class="site-nav">
+            All
+          </a>
+        
       
-        <a href="/archives" class="menu">
-          All
-        </a>
+        
+          <a href="/tags" class="site-nav">
+            分类
+          </a>
+        
       
-    
-      
-        <a href="/tags" class="menu">
-          分类
-        </a>
-      
-    
+    </div>
   </div>
-  <div class="social-container">
-    
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
+      
+    </div>
+    <div class="site-description">
+      越学越倒退选手
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
   </div>
 </div>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              gcd lcm
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-07-14
-              </span>
-              <span>
-                1 min read
-              </span>
-              
-                <a href="https://zzzcd0x.github.io/tag/vr6Cb8Hkz/" class="post-tag">
-                  # 数论
-                </a>
-              
-            </div>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">gcd lcm</h2>
+            <div class="post-date">2020-07-14</div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h2 id="最大公因数gcd">最大公因数(gcd)</h2>
+            <div class="post-content" v-pre>
+              <h2 id="最大公因数gcd">最大公因数(gcd)</h2>
 <h3 id="性质">性质：</h3>
 <ol>
 <li>gcd(1,n) = 1</li>
@@ -125,89 +127,53 @@ gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)
 </code></pre>
 <p><s>怎么求就不用说了吧</s></p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E6%9C%80%E5%A4%A7%E5%85%AC%E5%9B%A0%E6%95%B0gcd">最大公因数(gcd)</a>
-<ul>
-<li><a href="#%E6%80%A7%E8%B4%A8">性质：</a></li>
-<li><a href="#%E8%BE%97%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95%E6%B1%82%E8%A7%A3">辗转相除法求解：</a></li>
-</ul>
-</li>
-<li><a href="#%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0lcm">最小公倍数(lcm)</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
-          </article>
-        </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zzzcd0x.github.io/tag/vr6Cb8Hkz/" class="tag">
+                    数论
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zzzcd0x.github.io/post/su-shu-shai/">
+                  <h3 class="post-title">
+                    素数筛
+                  </h3>
+                </a>
+              </div>
+            
 
-        
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://zzzcd0x.github.io/post/su-shu-shai/">
-              <h3 class="post-title">
-                素数筛
-              </h3>
-            </a>
+            
+
           </div>
-        
 
-        
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
+        </div>
       </div>
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+AOS.init();
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+</script>
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
+
+
+
   </body>
 </html>
