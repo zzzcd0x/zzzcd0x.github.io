@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>最近公共祖先 | zzzcd0x &#39;s Blog</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597828966399">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597830104013">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="最近公共祖先 | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -24,75 +17,80 @@
 设d[x] &gt;= d[y]否则交换x和y
 将x结点尝试向上走2^{log(n)}...2^{log(0)}步，..." />
     <meta name="keywords" content="图论" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://zzzcd0x.github.io">
-        <img src="https://zzzcd0x.github.io/images/avatar.png?v=1597828966399" class="site-logo">
-        <h1 class="site-title">zzzcd0x &#39;s Blog</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zzzcd0x.github.io">
+  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597830104013" alt="">
+  </a>
+  <h1 class="site-title">
+    zzzcd0x &#39;s Blog
+  </h1>
+  <p class="site-description">
+    越学越倒退选手
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            All
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            分类
-          </a>
-        
+        <a href="/archives" class="menu">
+          All
+        </a>
       
-    </div>
+    
+      
+        <a href="/tags" class="menu">
+          分类
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      越学越倒退选手
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">最近公共祖先</h2>
-            <div class="post-date">2020-07-25</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              最近公共祖先
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-07-25
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="post-tag">
+                  # 图论
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <h2 id="树上倍增法">树上倍增法</h2>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="树上倍增法">树上倍增法</h2>
 <h3 id="怎么计算的">怎么计算的？</h3>
 <p>假设要计算树上x和y结点的最近公共祖先，d[x]表示结点x的深度，F[x,k]表示结点x向上跳<code>2</code></p>
 <p>设<code>d[x] &gt;= d[y]</code>否则交换x和y</p>
@@ -204,53 +202,88 @@ int main() {
 }
 </code></pre>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E6%A0%91%E4%B8%8A%E5%80%8D%E5%A2%9E%E6%B3%95">树上倍增法</a>
+<ul>
+<li><a href="#%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E7%9A%84">怎么计算的？</a></li>
+<li><a href="#%E4%BE%8B%E9%A2%98">例题</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="tag">
-                    图论
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://zzzcd0x.github.io/post/spfa/">
-                  <h3 class="post-title">
-                    SPFA
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zzzcd0x.github.io/post/spfa/">
+              <h3 class="post-title">
+                SPFA
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
-
+    </script>
   </body>
 </html>
