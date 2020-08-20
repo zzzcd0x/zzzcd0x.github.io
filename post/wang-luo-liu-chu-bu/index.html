@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>网络流初步 | zzzcd0x &#39;s Blog</title>
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597830104013">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597928559115">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="网络流初步 | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
@@ -29,7 +29,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://zzzcd0x.github.io">
-  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597830104013" alt="">
+  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597928559115" alt="">
   </a>
   <h1 class="site-title">
     zzzcd0x &#39;s Blog
@@ -83,7 +83,7 @@
                 2020-08-12
               </span>
               <span>
-                17 min read
+                19 min read
               </span>
               
                 <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="post-tag">
@@ -303,6 +303,113 @@ void inp() {
 <p>设 V 是网络流图的一个结点集，满足 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>S</mi><mo>∈</mo><mi>V</mi><mo separator="true">,</mo><mi>T</mi><mo>∈</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">S\in V,T\in V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>，则全部有向边 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>i</mi><mi mathvariant="normal">，</mi><mi>j</mi><mo>)</mo><mo separator="true">,</mo><mi>i</mi><mo>∈</mo><mi>S</mi><mo separator="true">,</mo><mi>j</mi><mo>∈</mo><mover accent="true"><mi>S</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">(i，j),i\in S,j\in\bar{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">i</span><span class="mord cjk_fallback">，</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8201099999999999em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.16666em;">ˉ</span></span></span></span></span></span></span></span></span> 的集合称为原网络流图的一个割，记为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mover accent="true"><mi>V</mi><mo>ˉ</mo></mover><mo>)</mo></mrow><annotation encoding="application/x-tex">(V,\bar{V})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.07011em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˉ</span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，集合中所有边的容量之和称为该割的容量。</p>
 <p>容量最小的割称为原网络流图的最小割。</p>
 <p>一个网络流图的最大流容量 = 最小割容量。</p>
+<h2 id="费用流">费用流</h2>
+<p>给定一个网络，对于每条边除了有容量限制，还有一个给定的<strong>单位费用</strong>，即假设一条边的单位费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> ，则这条边流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 时，需要花费 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∗</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x*y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span>  的费用。</p>
+<p><strong>费用流问题的前提是最大流</strong>，大多数费用流问题都可以抽象为最小费用最大流或最大费用最小流问题。</p>
+<h3 id="ek算法-2">EK算法</h3>
+<p>对于EK算法，将每次寻找路径最少的最短路改为寻找费用和最小的最短路即可。</p>
+<p>这时要用到单源最短路算法，由于可能出现负权边，因此选择使用SPFA而不是Dijkstra~~（诈尸啦！）~~</p>
+<h4 id="模板-3">模板</h4>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 5e5+5;
+const int MAXM = 5e4+5;
+const int INF = 0x3f3f3f3f;
+
+int tot = 1;
+ll Max_cost;
+ll Max_flow;
+int n, m, s, t;
+
+bool v[MAXN];
+ll dis[MAXN];
+ll incf[MAXN];
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+ll val[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+ll cost[MAXM&lt;&lt;1];
+int pre[MAXM&lt;&lt;1];
+
+void add(int x,int y,ll z,ll h) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+    cost[tot] = h;
+}
+
+bool bfs() {
+    for(int i = 1; i &lt;= n; i++) {
+        v[i] = false;
+        dis[i] = INF;
+    }
+    queue&lt;int&gt; q;
+    q.push(s);
+    v[s] = true;
+    dis[s] = 0;
+    incf[s] = INF;
+    bool jud = false;
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        v[x] = false;
+        for(int i = head[x]; i; i = nxt[i]) {
+            int y = to[i];
+            if(val[i] &amp;&amp; dis[y] &gt; dis[x] + cost[i]) {
+                pre[y] = i;
+                dis[y] = dis[x] + cost[i];
+                incf[y] = min(incf[x],val[i]);
+                if(!v[y]) {
+                    q.push(y);
+                    v[y] = true;
+                }
+                if(y == t) jud = true;
+            }
+        }
+    }
+    return jud;
+}
+
+void upd() {
+    int x = t;
+    while(x != s) {
+        int i = pre[x];
+        val[i] -= incf[t];
+        val[i^1] += incf[t];
+        x = to[i^1];
+    }
+    Max_flow += incf[t];
+    Max_cost += incf[t]*dis[t];
+}
+
+void inp() {
+    Max_flow = 0;
+    tot = 1;
+    scanf(&quot;%d %d %d %d&quot;,&amp;n,&amp;m,&amp;s,&amp;t);
+    for(int i = 1; i &lt;= m; i++) {
+        int x,y;
+        ll z,h;
+        scanf(&quot;%d %d %lld %lld&quot;,&amp;x,&amp;y,&amp;z,&amp;h);
+        add(x,y,z,h);
+        add(y,x,0,-h);
+    }
+}
+
+int main() {
+
+    inp();
+
+    while(bfs()) upd();
+    printf(&quot;%lld %lld\n&quot;,Max_flow,Max_cost);
+
+    return 0;
+}
+</code></pre>
 <h3 id="例题">例题</h3>
 <p><strong>二分图最大匹配问题</strong></p>
 <p>解决二分图匹配问题可以使用匈牙利算法，也可以用网络流最大流的模型来解决</p>
@@ -583,6 +690,15 @@ int main() {
 </ul>
 </li>
 <li><a href="#%E6%9C%80%E5%A4%A7%E6%B5%81%E6%9C%80%E5%B0%8F%E5%89%B2%E5%AE%9A%E7%90%86">最大流最小割定理</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B4%B9%E7%94%A8%E6%B5%81">费用流</a>
+<ul>
+<li><a href="#ek%E7%AE%97%E6%B3%95-2">EK算法</a>
+<ul>
+<li><a href="#%E6%A8%A1%E6%9D%BF-3">模板</a></li>
+</ul>
+</li>
 <li><a href="#%E4%BE%8B%E9%A2%98">例题</a></li>
 </ul>
 </li>
