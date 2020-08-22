@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>网络流初步 | zzzcd0x &#39;s Blog</title>
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1597928559115">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598092430049">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="网络流初步 | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
@@ -29,7 +29,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://zzzcd0x.github.io">
-  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1597928559115" alt="">
+  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1598092430049" alt="">
   </a>
   <h1 class="site-title">
     zzzcd0x &#39;s Blog
@@ -83,7 +83,7 @@
                 2020-08-12
               </span>
               <span>
-                19 min read
+                22 min read
               </span>
               
                 <a href="https://zzzcd0x.github.io/tag/UlLnG_SI0/" class="post-tag">
@@ -534,7 +534,8 @@ int main() {
 }
 </code></pre>
 <p><strong>最小路径覆盖问题</strong></p>
-<p>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</p>
+<p><a href="https://www.luogu.com.cn/problem/P2764">题目链接</a></p>
+<p><strong>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</strong></p>
 <p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量</p>
 <p>求解合并的点的个数时可以将点拆成两个，建图时每一条有向边的终点为拆出来的点，此时该问题就转化为了二分图最大匹配问题，建立一个超级源点连接拆点的结点，再建立一个超级汇点连接拆出来的结点，在图上跑最大流即可。</p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
@@ -669,6 +670,122 @@ int main() {
         }
 
     printf(&quot;%d&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<p><strong>魔术球问题</strong></p>
+<p><a href="https://www.luogu.com.cn/problem/P2765">题目链接</a></p>
+<p>题目要求的是 这 n 个柱子上最多能放多少个球，将每个柱子看成一个路径，这个问题就可以转化为计算最多 n 条路径最多可以覆盖多少个结点。</p>
+<p>具体解法是在枚举每个柱子的时候枚举每一个点，<strong>依次将枚举到的点加入到图中然后去跑最大流，如果求出的最大流等于0则认为当前数量的柱子不能放下这么多球，然后增加柱子数量</strong>。</p>
+<p>寻找路径时因为要找出每一个柱子上的结点，所以在搜索时记录好每一个结点的前缀结点，对于每个柱子记录放在上面的第一个结点。</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cmath&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e5+5;
+
+int n;
+int s = 1e5+1;
+int t = 1e5+2;
+int tot = 1;
+int d[MAXN];
+int to[MAXN];
+int pre[MAXN];
+int val[MAXN];
+int nxt[MAXN];
+int top[MAXN];
+int gap[MAXN];
+bool vis[MAXN];
+int head[MAXN];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+bool bfs() {
+    memset(d,-1,sizeof(d));
+    queue&lt;int&gt; q;
+    q.push(s);
+    gap[s] = head[s];
+    d[s] = 1;
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == -1 &amp;&amp; val[i] &gt; 0) {
+                q.push(y);
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+            }
+        }
+    }
+    return d[t] != -1;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k = 0;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        int y = to[i];
+        if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
+            k = dfs(y,min(flow,val[i]));
+            if(k) {
+                flow -= k;
+                res += k;
+                val[i] -= k;
+                val[i^1] += k;
+                if(y != t)
+                    pre[now&gt;&gt;1] = y&gt;&gt;1;
+            }
+        }
+    }
+    return res;
+}
+
+int main() {
+
+    scanf(&quot;%d&quot;,&amp;n);
+
+    int now = 0;
+    int cnt = 0;
+    while(cnt &lt;= n) {
+        now++;
+        add(s,now&lt;&lt;1,1);
+        add(now&lt;&lt;1,s,0);
+        add(t,(now&lt;&lt;1)|1,0);
+        add((now&lt;&lt;1)|1,t,1);
+        for(int i = sqrt(now)+1; i*i &lt; (now&lt;&lt;1); i++) {
+            add((i*i-now)&lt;&lt;1,(now&lt;&lt;1)|1,1);
+            add((now&lt;&lt;1)|1,(i*i-now)&lt;&lt;1,0);
+        }
+        int flow = 0;
+        while(bfs()) {
+            flow += dfs(s,0x3f3f3f3f);
+        }
+        if(!flow) top[++cnt] = now;
+    }
+
+    printf(&quot;%d\n&quot;,now-1);
+
+    for(int i = 1; i &lt;= n; i++) {
+        if(vis[top[i]]) continue;
+        int x = top[i];
+        vis[x] = true;
+        while(x) {
+            printf(&quot;%d &quot;,x);
+            x = pre[x];
+            vis[x] = true;
+        }
+        puts(&quot;&quot;);
+    }
 
     return 0;
 }
