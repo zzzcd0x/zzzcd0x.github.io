@@ -1,168 +1,98 @@
-<!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
-<title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>线段树 | zzzcd0x &#39;s Blog</title>
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598250225563">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="线段树 | zzzcd0x &#39;s Blog - Atom Feed" href="https://zzzcd0x.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="组成
+
+1号结点为根结点，存储原数组区间1到6的数的和
+左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和
+右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和
+这里3和4时区间中点和中点+1
+用二进制运算比较快，..." />
+    <meta name="keywords" content="数据结构" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zzzcd0x.github.io">
+  <img class="avatar" src="https://zzzcd0x.github.io/images/avatar.png?v=1598250225563" alt="">
+  </a>
+  <h1 class="site-title">
     zzzcd0x &#39;s Blog
-</title>
-<!--[if lt IE 9]><script src="//cdn.bootcss.com/html5shiv/r29/html5.js"></script><![endif]-->
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-<meta http-equiv="x-dns-prefetch-control" content="on">
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-<meta name="author" content="">
-<meta name="description" content="">
-<meta name="keywords" content="">
-<script async src="//instant.page/3.0.0" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
-<link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css" />
-<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/1.7.1/jquery.min.js"></script>
-
-        <link rel="stylesheet" href="/assets/media/css/style.min.css" />
-        <script src="/assets/media/script/tocbot.min.js"></script>
-        <script src="/assets/media/script/script.min.js"></script>
-        <script src="/assets/media/script/icon.min.js"></script>
-        
-            <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/Card/prism.min.js"></script>
-            <link rel="stylesheet" href="" />
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css">
-            <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js"></script>
-            
-</head>
-
-<body>
-    <div class="wrapper">
-        <header>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-header header-logo">
-                <a href="https://zzzcd0x.github.io">
-                    zzzcd0x &#39;s Blog
-                </a>
-            </div>
-            <div id="tp-weather-widget"></div>
-            <div class="menu navbar-right">
-                
-                    <a class="menu-item" href="/">
-                        首页
-                    </a>
-                    
-                    <a class="menu-item" href="/archives">
-                        All
-                    </a>
-                    
-                    <a class="menu-item" href="/tags">
-                        分类
-                    </a>
-                    
-                        <input id="switch_default" type="checkbox" class="switch_default">
-                        <label for="switch_default" class="toggleBtn"></label>
-            </div>
-            <form id="gridea-search-form" data-update="1598250121960" action="/search/index.html">
-                <input class="search-input" autocomplete="off" spellcheck="false" name="q" autofocus="true" placeholder="Search...">
-            </form>
-        </div>
-    </nav>
-
+  </h1>
+  <p class="site-description">
+    越学越倒退选手
+  </p>
+  <div class="menu-container">
     
-        <nav class="navbar-mobile" id="nav-mobile">
-            <div class="container">
-                <div class="navbar-header">
-                    <div>
-                        <a href="https://zzzcd0x.github.io">
-                            zzzcd0x &#39;s Blog
-                        </a>
-                        <!--en-->
-                        <a id="mobile-toggle-theme-en" class="a en">&nbsp;Dark</a>
-                        <!--zh-->
-                        <a id="mobile-toggle-theme-zh" class="a zh">&nbsp;&#x6697;&#x9ED1;</a>
-                    </div>
-                    <form id="gridea-search-form" data-update="1598250121960" action="/search/index.html">
-                        <input class="search-input" autocomplete="off" spellcheck="false" name="q" autofocus="true" placeholder="Search...">
-                    </form>
-                    <!--en-->
-                    <div class="menu-toggle" id="menu-toggle-en" onclick="mobileBtn()">&#9776; Menu</div>
-                    <!--zh-->
-                    <div class="menu-toggle" id="menu-toggle-zh" onclick="mobileBtn()">&#9776; &#x83DC;&#x5355;</div>
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          All
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          分类
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
 
-                </div>
-                <div class="menu" id="mobile-menu">
-                    
-                        <a class="menu-item" href="/">
-                            首页
-                        </a>
-                        
-                        <a class="menu-item" href="/archives">
-                            All
-                        </a>
-                        
-                        <a class="menu-item" href="/tags">
-                            分类
-                        </a>
-                        
-                </div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              线段树
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-07-14
+              </span>
+              <span>
+                14 min read
+              </span>
+              
+                <a href="https://zzzcd0x.github.io/tag/nPXiRYhFe/" class="post-tag">
+                  # 数据结构
+                </a>
+              
             </div>
-        </nav>
-</header>
-<script>
-    var mobileBtn = function f() {
-        var toggleMenu = document.getElementById("menu-toggle-en");
-        var toggleMenu_zh = document.getElementById("menu-toggle-zh");
-
-        var mobileMenu = document.getElementById("mobile-menu");
-        if (toggleMenu.display != "none") {
-            if (toggleMenu.classList.contains("active")) {
-                toggleMenu.classList.remove("active")
-                mobileMenu.classList.remove("active")
-            } else {
-                toggleMenu.classList.add("active")
-                mobileMenu.classList.add("active")
-            }
-        } else if (toggleMenu_zh.display != "none") {
-            if (toggleMenu_zh.classList.contains("active")) {
-                toggleMenu_zh.classList.remove("active")
-                mobileMenu.classList.remove("active")
-            } else {
-                toggleMenu_zh.classList.add("active")
-                mobileMenu.classList.add("active")
-            }
-        }
-
-    }
-</script>
-
-            <div class="main">
-                <div class="container">
-                    <article class="post-wrap">
-                        <header class="post-header">
-                            <h1 class="post-title">
-                                线段树
-                            </h1>
-                            
-                                    <!--zh-->
-                                    <div class="post-meta zh">
-                                        &#x4F5C;&#x8005;:
-                                        <a itemprop="author" rel="author" href="/">
-                                            zzzcd0x 's Blog
-                                        </a>
-                                        <span class="post-time">&#x65E5;&#x671F;: <a href="#">2020-07-14</a></span>
-                                        <span class="post-readtime">&#x9605;&#x8BFB;&#x65F6;&#x95F4;:<a
-                                    href="#">13.6
-                                    &#x5206;&#x949F;</a></span>
-                                        <span class="post-words">&#x5B57;&#x6570;:<a href="#">2552</a></span>
-                                        
-                                            <span class="post-category">&#x5206;&#x7C7B;:
-                                
-                                <a href="https://zzzcd0x.github.io/tag/nPXiRYhFe/">数据结构</a>
-                                
-                            </span>
-                                            
-                                    </div>
-                                    
-                        </header>
-                        
-                        <div class="post-content">
-                            <h1 id="组成">组成</h1>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="组成">组成</h1>
 <figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"></figure>
 <p>1号结点为根结点，存储原数组区间1到6的数的和</p>
 <p>左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和</p>
@@ -652,119 +582,96 @@ int main() {
 }
 </code></pre>
 
-                        </div>
-                        
-                                
-                                                    
-                                                                    <!--Share-->
-                                                                    <span style="margin-right:15px">
-                        <i class="post-share"></i>
-                        <span>&#x5206;&#x4EAB;:</span>
-                                                                    <a title="QR 码" target="_blank" href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://zzzcd0x.github.io/post/SegmentTree/"><i class="fa fa-qrcode"></i></a>
-                                                                    <a title="QQ" target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://zzzcd0x.github.io/post/SegmentTree/&sharesource=qzone&title=线段树&pics=https://zzzcd0x.github.io/images/avatar.png?v=1598250121960&summary="><i class="fa fa-qq"></i></a>
-                                                                    <a title="新浪微博" target="_blank" href="https://service.weibo.com/share/share.php?url=https://zzzcd0x.github.io/post/SegmentTree/&sharesource=weibo&title=线段树 + " - " + &pic="https://zzzcd0x.github.io/images/avatar.png?v=1598250121960 "><i class="fa fa-weibo "></i></a>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E7%BB%84%E6%88%90">组成</a></li>
+<li><a href="#%E6%80%8E%E4%B9%88%E7%BB%B4%E6%8A%A4%E5%91%A2">怎么维护呢</a>
+<ul>
+<li><a href="#%E5%85%88%E4%BB%8E%E5%BB%BA%E6%A0%91%E5%BC%80%E5%A7%8B">先从建树开始</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2">区间查询</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E4%BF%AE%E6%94%B9">区间修改</a></li>
+<li><a href="#%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9">单点修改</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BB%B4%E6%8A%A4%E6%9C%80%E5%A4%A7%E5%AD%90%E6%AE%B5%E5%92%8C">维护最大子段和</a>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%AE%B5%E5%92%8C">什么是最大子段和？</a>
+<ul>
+<li><a href="#pushup">pushup</a></li>
+<li><a href="#%E5%BB%BA%E6%A0%91">建树</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E4%BF%AE%E6%94%B9-2">区间修改</a></li>
+<li><a href="#%E5%8C%BA%E9%97%B4%E6%9F%A5%E6%89%BE">区间查找</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BE%8B%E9%A2%98">例题</a>
+<ul>
+<li><a href="#%E6%9C%80%E5%A4%A7%E5%AD%90%E6%AE%B5%E5%92%8C">最大子段和</a></li>
+<li><a href="#%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%8A%B6%E5%8E%8B">线段树+状压</a></li>
+</ul>
+</li>
+</ul>
 
-                                                                    </span>
-                                                                    
-                                                                            <!--zh-->
-                                                                            <section class="post-tags zh ">
-                                                                                <div>
-                                                                                    <span>&#x6807;&#x7B7E;:</span>
-                                                                                    <span class="tag ">
-                        
-                        
-                        <a href="https://zzzcd0x.github.io/tag/nPXiRYhFe/">#
-                    数据结构
-                        </a>
-                        
-                            
-                                </span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <a href="javascript:window.history.back();">
-                        &#x8FD4;&#x56DE;</a>
-                                                                                    <span>&dot;</span>
-                                                                                    <a href="#">&#x4E3B;&#x9875;</a>
-                                                                                </div>
-                                                                            </section>
-
-                                                                            
-                                                                                <!---->
-                                                                                <section class="post-nav">
-                                                                                    
-                                                                                        <a class="prev" rel="prev" href="https://zzzcd0x.github.io/post/shu-zhuang-shu-zu/">
-                                                                                            树状数组
-                                                                                        </a>
-                                                                                        
-                                                                                            
-                                                                                </section>
-                    </article>
-                </div>
-                
-                                            
+              </div>
             </div>
-    </div>
-    </div>
-    </div>
-    
-        <footer id="footer" class="footer">
-            <div class="copyright">
-                
-                        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-                            
-                                    <div style="width:300px;margin:0 auto; padding:0px 0;">
-                                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
-                                            <img src="https://yanxuan.nosdn.127.net/b610ced5ac6a0e25cf6edf5606c69775.png" style="float:left;">
-                                            <p id="icpinfo" style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;"></p>
-                                        </a>
-                                    </div>
-                                    
-                                        <svg viewBox="0 0 1024 1024" style="margin-left: 5px;margin-right: 5px;" version="1.0" width="8" height="8" class="my-face">
-            <path
-                d="M863.597631 513.574282l-271.33965-140.213484L729.783667 81.926656c3.583731-7.87141 7.167462-15.742819 7.167462-25.214109C736.887134 25.226908 708.345275 0.012799 672.635953 0.012799a63.611229 63.611229 0 0 0-39.293053 12.607055c-1.791866 1.59988-3.519736 3.19976-5.311602 3.19976L147.87531 418.925381a55.547834 55.547834 0 0 0-19.646527 47.356448c1.791866 17.278704 14.27093 33.021523 32.125591 42.492813l271.33965 141.749369L292.504463 945.221908c-12.479064 25.214109-1.791866 53.563983 23.166262 69.306802 10.751194 6.335525 23.230258 9.47129 35.709322 9.47129 16.062795 0 32.125591-4.735645 44.604655-15.742819l480.091993-403.297753a55.547834 55.547834 0 0 0 19.646526-47.228458 61.243407 61.243407 0 0 0-32.12559-44.156688z"
-                fill="#93b5cf"></path>
-        </svg>
-                                        zzzcd0x &#39;s Blog &copy;Copyright
-                                            <script>
-                                                var date = new Date();
-                                                document.write("" + date.getFullYear());
-                                            </script>
-                                            | Powered by
-                                            <a href="" target="_blank">
-                                                
-                                            </a>
-            </div>
-            <div id="update" style="display:none;">
-                
-            </div>
-            
-                    <script>
-                        var port = '';
-                        
-                        document.write('<div id="home_path" style="display:none;">' + document.location.protocol + '//' + window.document.location.hostname + port + '</div>')
-                    </script>
-        </footer>
-        
-                <script>
-                    
-                    
-                    
-                    var icp = document.getElementById('icpinfo');
-                    icp.innerText = "";
-                    
-                    getStar();
-                    hljs.initHighlighting();
-                    console.clear();
-                    
-                    var newDate = new Date();
-                    newDate.setTime(1598250121960);
-                    console.log(" Blog Update Time: " + newDate.toLocaleDateString());
-                    console.log("\n %c \u26a1Theme:Chic Author's Blog:https://blog.itjoker.cn  Write By ITJoker  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;");
-                </script>
+          </article>
         </div>
-</body>
-<script>
-    scroll();
-</script>
 
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://zzzcd0x.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
 </html>
