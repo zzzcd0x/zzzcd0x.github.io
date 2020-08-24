@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-22T10:33:53.748Z</updated>
+    <updated>2020-08-24T05:03:23.935Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -16,8 +16,9 @@
         <link href="https://zzzcd0x.github.io/post/wang-luo-liu-chu-bu/">
         </link>
         <updated>2020-08-12T12:59:55.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="是什么">是什么</h2>
-<p>网络流图是一个DAG，满足以下条件</p>
+        <content type="html"><![CDATA[<h2 id="相关定义">相关定义</h2>
+<p><strong>网络流图</strong></p>
+<p>是一个满足以下条件的 DAG</p>
 <ol>
 <li>只有一个入度为0的点，称为源点。</li>
 <li>只有一个出度为0的点，称为汇点。</li>
