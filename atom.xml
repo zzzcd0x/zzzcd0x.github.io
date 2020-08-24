@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-24T06:41:16.605Z</updated>
+    <updated>2020-08-24T09:01:55.703Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,108 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Tarjan]]></title>
+        <id>https://zzzcd0x.github.io/post/tarjan/</id>
+        <link href="https://zzzcd0x.github.io/post/tarjan/">
+        </link>
+        <updated>2020-08-24T09:01:42.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="相关定义">相关定义</h2>
+<p><strong>强联通</strong>：有向图中，两个顶点之前至少存在一条路径。</p>
+<p><strong>强连通图</strong>：每两个顶点都强连通的有向图。</p>
+<p><strong>强连通分量</strong>：有向图的极大强连通子图。</p>
+<p>这里极大的概念和数学中的极大值类似，最大就是众多极大中最大的一个。</p>
+<p><strong>dfs树</strong>：dfs过程中访问到的边构成的树。</p>
+<p><strong>树枝边</strong>：在dfs的过程中指向未访问过的结点的边。</p>
+<p><strong>前向边</strong>：指向dfs树中子树中的结点的边。</p>
+<p><strong>后向边</strong>：指向dfs树中父亲结点的边。</p>
+<p><strong>横叉边</strong>：指向dfs树中非子树的边。</p>
+<p><strong>时间戳</strong>：根据每个结点被访问的顺序对这些结点进行编号，这些结点的编号就是时间戳。</p>
+<p><strong>割点</strong>：在无向连通图中，删掉一个结点以及与他相连的边后，图变为不连通，则该点是一个割点。</p>
+<p><strong>割边</strong>：在无向连通图中，删掉一条边后图不再连通，则这条边是一个割边</p>
+<h2 id="问题模型">问题模型</h2>
+<p>对于一些结点之前存在关系的图，如果是一个DAG可以用拓扑排序求出序列，但如果有环，则每一个环都可以构成一个强连通分量，可以将强连通分量缩成一个结点。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>a</mi><mi>r</mi><mi>j</mi><mi>a</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Tarjan</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span></span></span></span> 可以求出图中结点所属的强连通分量，从而可以达到缩点的目的。</p>
+<h2 id="四种边的判定">四种边的判定</h2>
+<p>首先要引入一个dfs时间戳，用来记录每一个结点第一次被访问的顺序。</p>
+<p>对于树枝边，一条边指向的点没有被访问过，则为一条树枝边。</p>
+<p>对于前向边，一条边指向的点被访问过，且这条边的终点比始点后被访问，则为一条前向边。</p>
+<p>对于后向边，一条边指向的点已经被访问过且不在子树中，且终点在dfs栈中，则为后向边。</p>
+<p>对于横叉边，一条边指向的点被访问过且不在子树中且不在dfs栈中，则为横叉边。</p>
+<h2 id="tarjan"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>a</mi><mi>r</mi><mi>j</mi><mi>a</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Tarjan</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span></span></span></span></h2>
+<h3 id="强连通分量问题">强连通分量问题</h3>
+<p>对于每一个强连通分量中深度最浅的那个点，称他为分割点，所有的分割点可以将dfs树分割为许多棵子树，每一棵子树都是一个强连通分量。</p>
+<p>分割的方法是在dfs时维护一个栈来存放路过的结点，离开分割点时将分割点以及分割点之后入栈的结点全部弹出，这些结点即为这一个强连通分量中的结点。</p>
+<p>在判断分割点时我们需要维护一个追溯值代码中常为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">low</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span> 数组，一个结点的追溯值表示该结点能到达的子树中时间戳最小的结点。</p>
+<p>计算 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">low[x]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span></span></span></span> 时，先令 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>=</mo><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>x</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">low[x] = dfn[x]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span></span></span></span> 其中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>x</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">dfn[x]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span></span></span></span> 为结点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 序。</p>
+<p>对于一条边 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></p>
+<p>若为树枝边，结点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 能够到达的结点，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 也一定能到达，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">low[x]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span></span></span></span> 用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>y</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">low[y]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span></span></span></span> 更新，即 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo separator="true">,</mo><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>y</mi><mo>]</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">low[x] = min(low[x],dfn[y])</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span><span class="mclose">)</span></span></span></span> 。</p>
+<p>若为后向边，此时 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 能到达 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span>，但 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 一定不能到达 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的父亲结点，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">low[x]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span></span></span></span> 用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>y</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">dfn[y]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span></span></span></span> 更新，即为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>y</mi><mo>]</mo><mo separator="true">,</mo><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">low[x] = min(dfn[y],low[x])</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mclose">)</span></span></span></span> 。</p>
+<p>若为前向边，因为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的信息已经通过树枝边完成传递，所以无需更新。</p>
+<p>若为横叉边，指向另一个强连通分量，也无需更新。</p>
+<p>当某一个结点的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>n</mi><mo>=</mo><mi>l</mi><mi>o</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">dfn = low</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span> 时，则该结点是一个分割点。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>a</mi><mi>r</mi><mi>j</mi><mi>a</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Tarjan</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span></span></span></span> 部分代码</p>
+<pre><code class="language-cpp">void tarjan(int now) {
+    dfn[now] = low[now] = ++cnt;
+    s[++stop] = now;
+    ins[now] = true;
+    for(int i = head[now]; i; i = nxt[i]) {
+        int y = to[i];
+        if(!dfn[y]) {
+            tarjan(y);
+            low[now] = min(low[y],low[now]);
+        }
+        else if(ins[y]) {
+            low[now] = min(low[now],dfn[y]);
+        }
+    }
+    if(dfn[now] == low[now]) {
+        ++num;
+        while(s[stop+1] != now) {
+            d[s[stop]] = num;
+            sum[num] += val[s[stop]];
+            ins[s[stop--]] = false;
+        }
+    }
+}
+</code></pre>
+<h3 id="割点问题">割点问题</h3>
+<h4 id="割点判断">割点判断</h4>
+<p>若 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 不是搜索树的根节点或 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 的起点，则当且仅当搜索树中存在一条边 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span>，满足 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>n</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>≤</mo><mi>l</mi><mi>o</mi><mi>w</mi><mo>[</mo><mi>y</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">dfn[x] \leq low[y]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span></span></span></span> 时， <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 为割点。</p>
+<h4 id="怎么求呢">怎么求呢</h4>
+<p>对于根节点，在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 的过程中统计子树的个数，如果子树数量大于等于2则为割点。</p>
+<p>对于非根节点，根据上面的判断方法进行判断即可</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>a</mi><mi>r</mi><mi>j</mi><mi>a</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Tarjan</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span></span></span></span> 部分代码</p>
+<pre><code class="language-cpp">void tarjan(int now,int fa){
+    int chi = 0;
+    low[now] = dfn[now] = ++dfscnt;
+    for(int i = head[now]; i ; i = edge[i].next)
+    {
+        int to = edge[i].to;
+        if(!dfn[to])
+        {
+            tarjan(to,fa);
+            low[now] = min(low[to],low[now]);
+            if(low[to] &gt;= dfn[now] &amp;&amp; now != fa &amp;&amp; !cut[now])
+            {
+                cut[now] = true;
+                sum++;
+            }
+            if(now == fa)
+                chi++;
+        }
+        else low[now] = min(low[now],dfn[to]);
+    }
+
+    if(now == fa &amp;&amp; chi &gt;= 2 &amp;&amp; !cut[now])
+    {
+        sum++;
+        cut[now] = true;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[网络流初步]]></title>
         <id>https://zzzcd0x.github.io/post/wang-luo-liu-chu-bu/</id>
@@ -1374,100 +1476,6 @@ void kruskal() {
 </code></pre>
 <h2 id="注意事项">注意事项</h2>
 <p>真正的边权可能并不是输入的边权</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Floyd]]></title>
-        <id>https://zzzcd0x.github.io/post/floyd/</id>
-        <link href="https://zzzcd0x.github.io/post/floyd/">
-        </link>
-        <updated>2020-07-14T08:30:51.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="干什么的呢">干什么的呢</h2>
-<p>大多用于求多源图中两点间的最短路，也可以用于传递闭包</p>
-<h2 id="写法">写法</h2>
-<pre><code class="language-cpp">for(int k = 1; k &lt;= n; k++)
-        for(int i = 1; i &lt;= n; i++)
-            for(int j = 1; j &lt;= n; j++)
-                dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
-</code></pre>
-<p><strong>时间复杂度 O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>)</strong></p>
-<h2 id="正确性证明">正确性证明</h2>
-<p>Floyd算法核心思想是动态规划<br>
-原dp数组为 dp[k][i][j] 表示经过1~k号节点的情况下i到j的最短路<br>
-状态转移可以写成 dp[k][i][j] = dp[k-1][i][j] + dp[k-1][i][j]<br>
-但是k可以用滚动数组优化掉，来节约一大部分空间复杂度<br>
-最终的dp数组为 dp[i][j] 表示i~j的最短路<br>
-因为i到j经过1到k号节点的最短路是基于i到j经过1到k-1号节点的最短路计算的，所以k的枚举要放在最外层</p>
-<h2 id="细节">细节</h2>
-<p>dp[0][i][j]表示初始权值，未连接的节点用INF表示<br>
-一般用Floyd时还要考虑边的权值</p>
-<h2 id="例题">例题</h2>
-<h3 id="传递闭包">传递闭包</h3>
-<p><a href="https://www.luogu.com.cn/problem/P2419">题目链接</a><br>
-其实就是利用连通性可传递性来判断图中两个点之间是否连接<br>
-注意边为单向，但<strong>两个点之间连通是双向的</strong></p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-using namespace std;
-const int MAXN = 105;
-const int MAXM = 4505;
-
-int ans;
-int n, m;
-bool dis[MAXN][MAXN];
-
-void inp() {
-
-    for(int i = 1; i &lt;= m; i++) {
-        int x, y;
-        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-        dis[x][y] = true;
-    }
-}
-
-void floyd() {
-    for(int k = 1; k &lt;= n; k++)
-        for(int i = 1; i &lt;= n; i++)
-            for(int j = 1; j &lt;= n; j++)
-                    dis[i][j] |= dis[i][k] &amp; dis[k][j];
-}
-
-void judge() {
-
-    int d[MAXN] = {0};
-    for(int i = 1; i &lt;= n; i++)
-        for(int j = 1; j &lt;= n; j++)
-            if(dis[i][j] || dis[j][i])
-                d[i]++;
-    
-    for(int i = 1; i &lt;= n; i++)
-        if(d[i] == n-1)
-            ans++;
-}
-
-void init() {
-
-    ans = 0;
-    memset(dis,0,sizeof(dis));
-}
-
-int main() {
-
-    while(~scanf(&quot;%d %d&quot;,&amp;n,&amp;m)) {
-
-        init();
-        inp();
-
-        floyd();
-
-        judge();
-
-        printf(&quot;%d\n&quot;,ans);
-    }
-
-    return 0;
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>
