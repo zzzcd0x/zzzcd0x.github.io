@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手" />
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598261224190">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598337633188">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://zzzcd0x.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://zzzcd0x.github.io/images/avatar.png?v=1598261224190" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://zzzcd0x.github.io/images/avatar.png?v=1598337633188" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">zzzcd0x &#39;s Blog</h1>
       </div>
@@ -108,17 +108,17 @@
         
         <div class="post-content yue">
           <h1 id="组成">组成</h1>
-<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"></figure>
-<p>1号结点为根结点，存储原数组区间1到6的数的和</p>
-<p>左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和</p>
-<p>右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和</p>
-<p>这里3和4时区间中点和中点+1</p>
-<p>用二进制运算比较快，处理大量数据时常数可以低一点</p>
-<p>其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等</p>
+<p><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"><br>
+1号结点为根结点，存储原数组区间1到6的数的和<br>
+左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和<br>
+右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和<br>
+这里3和4时区间中点和中点+1<br>
+用二进制运算比较快，处理大量数据时常数可以低一点<br>
+其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等</p>
 <h1 id="怎么维护呢">怎么维护呢</h1>
 <h2 id="先从建树开始">先从建树开始</h2>
-<p>从根节点开始递归建树 <strong>开四倍空间</strong></p>
-<p>1.数组写法</p>
+<p>从根节点开始递归建树 <strong>开四倍空间</strong><br>
+1.数组写法</p>
 <pre><code class="language-cpp">int a[1005];  //原数组
 int t[4005]; //线段树
 
@@ -164,7 +164,6 @@ void build(int now,int l,int r){
     pushup(now);
 }
 </code></pre>
-<p>好像结构体写法更容易维护</p>
 <h2 id="区间查询">区间查询</h2>
 <ol>
 <li>当前查找到的区间被包含在需要查找的区间内则直接返回</li>
@@ -195,8 +194,8 @@ void build(int now,int l,int r){
 }
 </code></pre>
 <h2 id="区间修改">区间修改</h2>
-<p>大体步骤和区间查询类似</p>
-<p><strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息</p>
+<p>大体步骤和区间查询类似<br>
+<strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息</p>
 <pre><code class="language-cpp">int tag[40005];
 
 void pushdown(int now){
@@ -262,13 +261,13 @@ void modify(int now,int L,int R,int k){
 </code></pre>
 <h1 id="维护最大子段和">维护最大子段和</h1>
 <h2 id="什么是最大子段和">什么是最大子段和？</h2>
-<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值</p>
-<p>其他会用到的概念:</p>
-<p>最大左子段和:从区间左端点开始的最大子段和</p>
-<p>最大右子段和:从区间右端点开始的最大子段和</p>
+<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值<br>
+其他会用到的概念:<br>
+最大左子段和:从区间左端点开始的最大子段和<br>
+最大右子段和:从区间右端点开始的最大子段和</p>
 <h3 id="pushup">pushup</h3>
-<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理</p>
-<p>最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和</p>
+<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理<br>
+最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和</p>
 <pre><code class="language-cpp">void pushup(int now){
 
     node[now].sum = node[now&lt;&lt;1].sum + node[now&lt;&lt;1|1].sum;
@@ -476,8 +475,8 @@ int main(){
 }
 </code></pre>
 <h2 id="线段树状压">线段树+状压</h2>
-<p><a href="http://poj.org/problem?id=2777">题目链接</a></p>
-<p>本题是给一个木板的不同区间染色，一共有30种颜色，可以考虑用一个二进制数字来储存该区间内的数被染了哪一种颜色，<strong>线段树中第i个结点存储的数字的二进制第j位为1，则该结点被染成了颜色j，若为0则没有染成颜色j</strong>，区间颜色个数统计使用按位与运算，将最终结果进行二进制拆分统计为1的个数即可。</p>
+<p><a href="http://poj.org/problem?id=2777">题目链接</a><br>
+本题是给一个木板的不同区间染色，一共有30种颜色，可以考虑用一个二进制数字来储存该区间内的数被染了哪一种颜色，<strong>线段树中第i个结点存储的数字的二进制第j位为1，则该结点被染成了颜色j，若为0则没有染成颜色j</strong>，区间颜色个数统计使用按位与运算，将最终结果进行二进制拆分统计为1的个数即可。</p>
 <pre><code class="language-cpp">#include&lt;cstdio&gt;
 #include&lt;algorithm&gt;
 using namespace std;
