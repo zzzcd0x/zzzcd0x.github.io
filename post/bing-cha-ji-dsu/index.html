@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>zzzcd0x &#39;s Blog</title>
 <meta name="description" content="越学越倒退选手" />
-<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598337633188">
+<link rel="shortcut icon" href="https://zzzcd0x.github.io/favicon.ico?v=1598530031359">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://zzzcd0x.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://zzzcd0x.github.io/images/avatar.png?v=1598337633188" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://zzzcd0x.github.io/images/avatar.png?v=1598530031359" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">zzzcd0x &#39;s Blog</h1>
       </div>
@@ -34,14 +34,24 @@
           </p>
           <div class="toc-container hidden lg:block">
             <ul class="markdownIt-TOC">
-<li><a href="#%E5%BC%95%E5%85%A5">引入</a>
+<li>
 <ul>
-<li><a href="#%E6%80%9D%E8%B7%AF">思路</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%B9%B6%E6%9F%A5%E9%9B%86">什么是并查集</a>
+<ul>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C">查询操作</a>
+<ul>
 <li><a href="#%E6%9C%B4%E7%B4%A0%E5%86%99%E6%B3%95">朴素写法</a></li>
-<li><a href="#%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9%E4%BC%98%E5%8C%96">路径压缩优化</a></li>
+<li><a href="#%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9">路径压缩</a></li>
 </ul>
 </li>
-<li><a href="#%E5%B9%B6%E6%9F%A5%E9%9B%86">并查集</a></li>
+<li><a href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C">合并操作</a></li>
+<li><a href="#%E7%A7%8D%E7%B1%BB%E5%B9%B6%E6%9F%A5%E9%9B%86">种类并查集</a></li>
+<li><a href="#%E4%BE%8B%E9%A2%98">例题</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
           </div>
@@ -82,79 +92,184 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">并查集DSU</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">并查集</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-07-17 / 3 min read
+          2020-07-17 / 5 min read
         </div>
         
         <div class="post-content yue">
-          <ul>
-<li>
-<h1 id="引入">引入</h1>
-<p>假设现在有n个仅知道自己的父亲是谁的人，现在要存储他们每个人之间的关系，并查询其中几个人是否属于同一家族</p>
-</li>
-<li>
-<h2 id="思路">思路</h2>
-<p>首先可以想到每一个家族可以组成一个树，但如果每一个结点都只储存自己的父亲是谁，那这几棵树就会 <s>进化</s> 变成一个森林<br>
-所以在存储两个结点的父子关系时，我们应该认定两个结点的最远古的父结点之间有亲缘关系，从而防止森林的诞生<br>
-对于查询两个结点的是否属于同一家族，我们仅需要查询他们的最远古祖先是否相同，但当某一个结点没有父结点时，这个结点就一定是当前家族的最远古祖先<br>
-思路就是这样了 那么我们用代码来实现一下</p>
-</li>
-<li>
-<h2 id="朴素写法">朴素写法</h2>
-</li>
-</ul>
-<pre><code class="language-cpp">int dad[10005];       //存储每个结点的父结点
-
-int anc(int x){       //查询每个结点的远古祖先
-
-    if(dad[x])
-        return anc(dad[x]);
-    else 
-        return x;     //当该结点没有父结点时当前结点即为最远古祖先
+          <h2 id="什么是并查集">什么是并查集</h2>
+<p>并查集是一种比较简洁但功能强大的数据结构，主要用于维护一些不相关集合。</p>
+<p>支持合并两个集合、查找一个结点属于哪一个集合两种操作。</p>
+<h3 id="初始化">初始化</h3>
+<p>在开始使用并查集之前认为每一个点都代表一个独立的集合</p>
+<pre><code class="language-cpp">for(int i = 1; i &lt;= n; i++) 
+	dad[i] = i;
+</code></pre>
+<h3 id="查询操作">查询操作</h3>
+<p>将关联两个结点的关系看作图中的边，则查询操作就是不断查找一个结点的父结点，直至找到根节点，即代表该集合的结点。</p>
+<h4 id="朴素写法">朴素写法</h4>
+<pre><code class="language-cpp">int anc(int p) {
+    if(dad[p] == p) return p;
+    else return anc(dad[p]);
 }
-
-bool ask(int x, int y){   //查询两个结点是否在同一家族
-    return anc(x) == anc(y);
+</code></pre>
+<p>这样查找在整个关系构成一条链时时间复杂度会达到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。</p>
+<p>因此诞生了路径压缩优化</p>
+<h4 id="路径压缩">路径压缩</h4>
+<p>在递归找到根节点后，回溯的过程中将子节点的父亲结点设为找到的根节点，这样就可以避免路径的重复访问</p>
+<pre><code class="language-cpp">int anc(int p) {
+    if(dad[p] == p) return p;
+    else return dad[p] = anc(p);
 }
-
-void uni(int x, int y){   //设定亲属关系
-
+</code></pre>
+<p>这样单次查找的时间复杂度就变成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 了，总时间复杂度均摊 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(logn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 。</p>
+<h3 id="合并操作">合并操作</h3>
+<p>并查集中用一个数组用于储存每个集合中的代表元素，因此在合并两个集合时只要将这两个集合的代表元素合并到同一个集合中即可。</p>
+<pre><code class="language-cpp">void uni(int x,int y) {
     x = anc(x);
     y = anc(y);
-
     if(x != y)
         dad[x] = y;
 }
 </code></pre>
-<p>以上就是并查集的一种朴素写法</p>
-<ul>
-<li>
-<h2 id="路径压缩优化">路径压缩优化</h2>
-<p>分析一下这种写法的复杂度我们就可以发现，<code>ask()</code>和<code>uni()</code>函数都是通过<code>anc()</code>来实现的，但如果碰到了子子孙孙无穷匮也的情况，整棵树就会被退化为一条链，所以每次查找需要消耗O(n)的复杂度<br>
-既然我们只关心某一个结点的最远古祖先，那么我们仅需要存储每个结点的最远古祖先即可，优化写法可以使用一下记忆化搜索的技巧</p>
-</li>
-</ul>
-<pre><code class="language-cpp">int anc(int x){
+<h3 id="种类并查集">种类并查集</h3>
+<p>在某些情况下会出现类似<strong>敌人的敌人是朋友</strong>的状态需要维护，这种情况下就需要使用种类并查集进行维护</p>
+<p>种类并查集需要开两倍大小的空间用于维护状态（有的时候不止两倍），其中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>−</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1-n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 用于维护朋友关系，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>+</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">n+1-2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault">n</span></span></span></span> 用于维护敌人关系。</p>
+<p>这样在合并操作时，同一个结点的敌人就会被合并到同一个集合里。</p>
+<p>与前面的并查集不同的是，假设要设定 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 为敌人关系，则合并 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">y+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">x+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 所在集合。</p>
+<h3 id="例题">例题</h3>
+<p><strong>并查集常规操作</strong></p>
+<p><a href="https://www.luogu.com.cn/record/32631894">题目链接</a></p>
+<p>并查集裸题，直接打模板即可</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+using namespace std;
 
-    if(dad[x] != x)
-        return dad[x] = anc(dad[x]);
-    else 
-        return x;
+int n, m, p;
+int dad[5005];
+
+int anc(int x){
+	if(dad[x] == x) return x;
+    return dad[x] = anc(dad[x]);
+}
+
+void uni(int x, int y){
+
+    x = anc(x);
+    y = anc(y);
+    
+    if(x != y)
+        dad[x] = y;
+}
+
+bool ask(int x,int y)
+{
+    return anc(x) == anc(y);
+}
+
+void inp(){
+
+    int x, y;
+    scanf(&quot;%d %d %d&quot;,&amp;n,&amp;m,&amp;p);
+    for(int i = 1; i &lt;= m; i++)
+    {
+        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
+        uni(x,y);
+    }
+}
+
+void getans(){
+
+    int x, y;
+    for(int i = 1; i &lt;= p; i++)
+    {
+        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
+        if(ask(x,y))
+            printf(&quot;Yes\n&quot;);
+        else
+            printf(&quot;No\n&quot;);
+    }
+}
+
+int main()
+{
+    inp();
+
+    getans();
+
+    return 0;
 }
 </code></pre>
-<p>所以我们可以对<code>anc()</code>函数进行这样的修改，此时每次操作的平均复杂度可以接近O(1)</p>
-<ul>
-<li>
-<h1 id="并查集">并查集</h1>
-<p>这个数据结构就叫是并查集，并查集可以用来维护不相交集合<br>
-支持两种操作：</p>
-</li>
-</ul>
-<ol>
-<li>查询x和y是否在同一个集合</li>
-<li>将x、y所在集合合并</li>
-</ol>
+<p><strong>种类并查集</strong></p>
+<p><a href="https://www.luogu.com.cn/problem/P1525">题目链接</a></p>
+<p>本题要求冲突值尽可能小，则先对所有关系进行从大到小排序，优先合并冲突值大的关系，则第一次出现冲突是即为冲突值的最小值</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 2e4+5;
+const int MAXM = 1e5+5;
+
+struct Node{
+    int x;
+    int y;
+    int num;
+}node[MAXM];
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int ans;
+int n, m;
+int dad[MAXN&lt;&lt;1];
+
+int anc(int p) {
+    if(dad[p] == p) return p;
+    return dad[p] = anc(dad[p]);
+}
+
+void uni(int x,int y) { dad[anc(x)] = anc(y);}
+
+bool jud(Node&amp; x,Node&amp; y) {return x.num &gt; y.num;}
+
+int main() {
+    n = read();
+    m = read();
+
+    for(int i = 1; i &lt;= n; i++) {
+        dad[i] = i;
+        dad[i+n] = i+n;
+    }
+
+    for(int i = 0; i &lt; m; i++) {
+        node[i].x = read();
+        node[i].y = read();
+        node[i].num = read();
+    }
+    sort(node,node+m,jud);
+
+    for(int i = 0; i &lt; m; i++) {
+        if(anc(node[i].x) == anc(node[i].y)) {
+            ans = node[i].num;
+            break;
+        }
+        uni(node[i].x,node[i].y+n);
+        uni(node[i].x+n,node[i].y);
+    }
+
+    printf(&quot;%d\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
 
         </div>
 
