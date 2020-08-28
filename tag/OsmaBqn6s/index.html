@@ -30,15 +30,30 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            文章目录
+            越学越倒退选手
           </p>
-          <div class="toc-container hidden lg:block">
-            <ul class="markdownIt-TOC">
-<li><a href="#%E5%8E%9F%E7%90%86">原理</a></li>
-<li><a href="#%E6%80%8E%E4%B9%88%E5%86%99%E5%91%A2">怎么写呢</a></li>
-<li><a href="#%E9%81%8D%E5%8E%86">遍历</a></li>
-</ul>
-
+          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
           </div>
         </div>
       
@@ -76,99 +91,28 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">链式前向星</h1>
-        <div class="text-sm text-gray-700 lg:my-8">
-          2020-07-14 / 2 min read
-        </div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
+        <h2 class="text-lg text-gray-700 mb-8">
+          <i class="ri-bookmark-line"></i> 解题报告
+        </h2>
         
-        <div class="post-content yue">
-          <h1 id="原理">原理</h1>
-<pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
-</code></pre>
-<h1 id="怎么写呢">怎么写呢</h1>
-<ul>
-<li>结构体写法</li>
-</ul>
-<pre><code class="language-cpp">struct Edge{
-    int to;
-    int val;
-    int nxt;
-    int from; 
-}edge[10005];
-int head[10005];                //每一个点的链表的头结点编号
-int tot = 0;                    //用于存储每一个点的头结点
-
-void add(int x,int y,int z){
-    edge[++tot].nxt = head[x];
-    head[x] = tot;
-    edge[tot].to = y;
-    edge[tot].from = x;
-    edge[tot].val = z;
-}
-</code></pre>
-<ul>
-<li>数组写法</li>
-</ul>
-<pre><code class="language-cpp">int tot;
-int to[MAXN];
-int from[MAXN];
-int head[MAXN];
-int val[MAXN];
-
-void add(int x,int y) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    from[tot] = x;
-}
-</code></pre>
-<h1 id="遍历">遍历</h1>
-<pre><code>与每一个点相连的边已经以链表的形式存储，头结点存储在head数组中，因此我们可以使用类似遍历链表的方式遍历与每一个点相连的每一条边
-</code></pre>
-<pre><code class="language-cpp">void search(){
-
-    for(int i = 1; i &lt;= n; i++)
-        for(int j = head[i]; j ; j = edge[j].next)
-            printf(&quot;%d %d %d\n&quot;,edge[j].to,edge[j].val,edge[j].next);
-
-}
-</code></pre>
-
-        </div>
-
+  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
+    
+    <div class="content">
+      <a href="https://zzzcd0x.github.io/post/wang-luo-liu-jie-ti-bao-gao/">
+        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">网络流解题报告</h2>
+      </a>
+      <div class="post-abstract text-gray-700 font-light my-4">
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://zzzcd0x.github.io/tag/UlLnG_SI0/">
-            <span class="flex-auto">图论</span>
-          </a>
-        
+      </div>
+      <div class="text-gray-400 text-sm font-light">2020-08-28 / 13 min read</div>
+    </div>
+  </section>
 
-
-        <div class="flex justify-between py-8">
-          
-            <div class="prev-post">
-              <a href="https://zzzcd0x.github.io/post/su-shu-shai/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  素数筛
-                </h3>
-              </a>
-            </div>
-          
-
-          
-            <div class="next-post">
-              <a href="https://zzzcd0x.github.io/post/tuo-bu-pai-xu/">
-                <h3 class="post-title">
-                  拓扑排序
-                  <i class="ri-arrow-right-line"></i>
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-
-        
+        <div class="pagination-container animated fadeIn">
+  
+  
+</div>
 
       </div>
     </div>

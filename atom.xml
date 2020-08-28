@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-27T12:07:14.169Z</updated>
+    <updated>2020-08-28T08:38:30.820Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,529 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[网络流解题报告]]></title>
+        <id>https://zzzcd0x.github.io/post/wang-luo-liu-jie-ti-bao-gao/</id>
+        <link href="https://zzzcd0x.github.io/post/wang-luo-liu-jie-ti-bao-gao/">
+        </link>
+        <updated>2020-08-28T08:37:02.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="洛谷p3386-二分图最大匹配问题">洛谷P3386 二分图最大匹配问题</h3>
+<p>对于二分图的最大匹配问题可以使用匈牙利算法，更一般的做法是网络流最大流</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/sdjlm6zz.png" alt="" loading="lazy"></figure>
+<p>这是一个二分图</p>
+<p>也可以这样看这张图</p>
+<figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
+<p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
+<p>代码可以这样写</p>
+<p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1005;
+const int MAXM = 1e5+5;
+const int INF = 0x3f3f3f3f;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int s, t;
+int n, m, e;
+int tot = 1;
+int d[MAXN];
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+int val[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int gap[MAXM&lt;&lt;1];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+void inp() {
+    n = read();
+    m = read();
+    e = read();
+    s = n+m+1;
+    t = n+m+2;
+    for(int i = 1; i &lt;= e; i++) {
+        int x = read();
+        int y = read();
+        add(x,y+n,1);
+        add(y+n,x,0);
+    }
+    for(int i = 1; i &lt;= n; i++) {
+        add(s,i,1);
+        add(i,s,0);
+    }
+    for(int i = 1; i &lt;= m; i++) {
+        add(i+n,t,1);
+        add(t,i+n,0);
+    }
+}
+
+bool bfs() {
+    memset(d,0,sizeof(d));
+    queue&lt;int&gt; q;
+    q.push(s);
+    d[s] = 1;
+    gap[s] = head[s];
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                q.push(y);
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+                if(y == t) return true;
+            }
+        }
+    }
+    return false;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k = 0;
+    int res = 0;
+    for(int i = gap[now]; i ; i = nxt[i]) {
+        int y = to[i];
+        if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
+            k = dfs(y,min(val[i],flow));
+            if(!k) d[y] = 0;
+            flow -= k;
+            res += k;
+            val[i] -= k;
+            val[i^1] += k; 
+        }
+    }
+    return res;
+}
+
+int main() {
+
+    inp();
+
+    int ans = 0;
+    while(bfs())
+        ans += dfs(s,INF); 
+
+    printf(&quot;%d\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2764-最小路径覆盖问题">洛谷P2764 最小路径覆盖问题</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2764">题目链接</a></p>
+<p><strong>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</strong></p>
+<p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量</p>
+<p>求解合并的点的个数时可以将点拆成两个，建图时每一条有向边的终点为拆出来的点，此时该问题就转化为了二分图最大匹配问题，建立一个超级源点连接拆点的结点，再建立一个超级汇点连接拆出来的结点，在图上跑最大流即可。</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 155;
+const int MAXM = 6e3+5;
+const int INF = 0x3f3f3f3f;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9') 
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int n, m;
+int s, t;
+int tot = 1;
+int d[MAXN&lt;&lt;1];
+int to[MAXM&lt;&lt;1];
+int gap[MAXN&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int val[MAXM&lt;&lt;1];
+int pre[MAXN&lt;&lt;1];
+int head[MAXN&lt;&lt;1];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+void inp() {
+    n = read();
+    m = read();
+    s = n*2+1;
+    t = n*2+2;
+    for(int i = 1; i &lt;= m; i++) {
+        int x = read();
+        int y = read();
+        add(x,y+n,1);
+        add(y+n,x,0);
+    }
+    for(int i = 1; i &lt;= n; i++) {
+        add(s,i,1);
+        add(i,s,0);
+        add(i+n,t,1);
+        add(t,i+n,0);
+    }
+}
+
+bool bfs() {
+    memset(d,0,sizeof(d));
+    queue&lt;int&gt; q;
+    d[s] = 1;
+    gap[s] = head[s];
+    q.push(s);
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                q.push(y);
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+                if(y == t) return true;
+            }
+        }
+    }
+    return false;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k = 0;
+    int res = 0;
+    for(int i = gap[now] ; i &amp;&amp; flow; i = nxt[i]) {
+        int y = to[i];
+        if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
+            k = dfs(y,min(flow,val[i]));
+            if(!k) {
+                d[y] = 0;
+                continue;
+            }
+            flow -= k;
+            res += k;
+            val[i] -= k;
+            val[i^1] += k;
+            pre[now] = y;
+        }
+    }
+    return res;
+}
+
+bool vis[MAXN&lt;&lt;1];
+
+void find(int now) {
+    printf(&quot;%d &quot;,now);
+    vis[now] = true;
+    for(int i = head[now]; i ; i = nxt[i]) {
+        if(to[i] != t &amp;&amp; to[i] != s)
+            if(val[i] == 0 &amp;&amp; val[i^1] == 1)
+                if(to[i] &gt; n)
+                    find(to[i]-n);
+    }
+}
+
+int main() {
+
+    inp();
+
+    int ans = 0;
+    while(bfs()) {
+        ans += dfs(s,INF);
+    }
+    ans = n-ans;
+
+    for(int i = 1; i &lt;= n; i++)
+        if(!vis[i]) {
+            find(i);
+            puts(&quot;&quot;);
+        }
+
+    printf(&quot;%d&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2765-魔术球问题">洛谷P2765 魔术球问题</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2765">题目链接</a></p>
+<p>题目要求的是 这 n 个柱子上最多能放多少个球，将每个柱子看成一个路径，这个问题就可以转化为计算最多 n 条路径最多可以覆盖多少个结点。</p>
+<p>具体解法是在枚举每个柱子的时候枚举每一个点，<strong>依次将枚举到的点加入到图中然后去跑最大流，如果求出的最大流等于0则认为当前数量的柱子不能放下这么多球，然后增加柱子数量</strong>。</p>
+<p>寻找路径时因为要找出每一个柱子上的结点，所以在搜索时记录好每一个结点的前缀结点，对于每个柱子记录放在上面的第一个结点。</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cmath&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e5+5;
+
+int n;
+int s = 1e5+1;
+int t = 1e5+2;
+int tot = 1;
+int d[MAXN];
+int to[MAXN];
+int pre[MAXN];
+int val[MAXN];
+int nxt[MAXN];
+int top[MAXN];
+int gap[MAXN];
+bool vis[MAXN];
+int head[MAXN];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+bool bfs() {
+    memset(d,-1,sizeof(d));
+    queue&lt;int&gt; q;
+    q.push(s);
+    gap[s] = head[s];
+    d[s] = 1;
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == -1 &amp;&amp; val[i] &gt; 0) {
+                q.push(y);
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+            }
+        }
+    }
+    return d[t] != -1;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k = 0;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        int y = to[i];
+        if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
+            k = dfs(y,min(flow,val[i]));
+            if(k) {
+                flow -= k;
+                res += k;
+                val[i] -= k;
+                val[i^1] += k;
+                if(y != t)
+                    pre[now&gt;&gt;1] = y&gt;&gt;1;
+            }
+        }
+    }
+    return res;
+}
+
+int main() {
+
+    scanf(&quot;%d&quot;,&amp;n);
+
+    int now = 0;
+    int cnt = 0;
+    while(cnt &lt;= n) {
+        now++;
+        add(s,now&lt;&lt;1,1);
+        add(now&lt;&lt;1,s,0);
+        add(t,(now&lt;&lt;1)|1,0);
+        add((now&lt;&lt;1)|1,t,1);
+        for(int i = sqrt(now)+1; i*i &lt; (now&lt;&lt;1); i++) {
+            add((i*i-now)&lt;&lt;1,(now&lt;&lt;1)|1,1);
+            add((now&lt;&lt;1)|1,(i*i-now)&lt;&lt;1,0);
+        }
+        int flow = 0;
+        while(bfs()) {
+            flow += dfs(s,0x3f3f3f3f);
+        }
+        if(!flow) top[++cnt] = now;
+    }
+
+    printf(&quot;%d\n&quot;,now-1);
+
+    for(int i = 1; i &lt;= n; i++) {
+        if(vis[top[i]]) continue;
+        int x = top[i];
+        vis[x] = true;
+        while(x) {
+            printf(&quot;%d &quot;,x);
+            x = pre[x];
+            vis[x] = true;
+        }
+        puts(&quot;&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p1231-教辅的组成">洛谷P1231 教辅的组成</h3>
+<p><a href="https://www.luogu.com.cn/problem/P1231">题目链接</a></p>
+<p>首先对题面进行解析，题目给出书本、练习册、答案的数量，以及可能配套的书本与练习册、书本与答案，要求最多能配成多少套书。</p>
+<p>也就是每本书至少要匹配到一本答案和一本练习册才能完成配套。</p>
+<p>考虑将结点按照题目要求分为三部分进行建图，建图思路为<strong>源点-&gt;练习册-&gt;书-&gt;答案-&gt;汇点</strong>，然后统计最大流即可。</p>
+<p>然后顺手就把图建成了这样。</p>
+<figure data-type="image" tabindex="3"><img src="https://cdn.luogu.com.cn/upload/image_hosting/y75t8set.png" alt="" loading="lazy"></figure>
+<p>但是这样有一个巨大的问题就是每本书可能会被用到很多次，但他们只能被用一次。</p>
+<p>解决这个问题我们可以把每本书拆成两个结点，一个用于连接练习册，另一个用于连接答案，两个结点之间连接一条流量为1的边，这样就可以限制每本书被使用的次数了。</p>
+<p>正确的建图方法如下</p>
+<figure data-type="image" tabindex="4"><img src="https://cdn.luogu.com.cn/upload/image_hosting/y75t8set.png" alt="" loading="lazy"></figure>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 5e4+5;
+const int MAXM = 1e5+5;
+const int INF = 0x3f3f3f3f;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int m1,m2;
+int tot = 1;
+int s = 0;
+int t = 5e4+1;
+int n1, n2, n3;
+int dis[MAXN];
+int gap[MAXN];
+int head[MAXN];
+int val[MAXM&lt;&lt;1];
+int to[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+bool bfs() {
+    memset(dis,0,sizeof(dis));
+    queue&lt;int&gt; q;
+    q.push(s);
+    dis[s] = 1;
+    gap[s] = head[s];
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ;i = nxt[i]) {
+            int y = to[i];
+            if(dis[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                dis[y] = dis[x] + 1;
+                gap[y] = head[y];
+                q.push(y);
+            }
+        }
+    }
+    return dis[t] != 0;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        int y = to[i];
+        if(dis[y] == dis[now] + 1 &amp;&amp; val[i] &gt; 0) {
+            k = dfs(y,min(val[i],flow));
+            if(!k) dis[y] = -1;
+            flow -= k;
+            res += k;
+            val[i] -= k;
+            val[i^1] += k;
+        }
+    }
+    return res;
+}
+
+void build() {
+    n1 = read();
+    n2 = read();
+    n3 = read();
+    m1 = read();
+    int n = n1+n2+n3;
+    for(int i = 1; i &lt;= m1; i++) {
+        int x = read();
+        int y = read();
+        add(y+n1,x,1);
+        add(x,y+n1,0);
+    }
+    m2 = read();
+    for(int i = 1; i &lt;= m2; i++) {
+        int x = read();
+        int y = read();
+        add(x+n,y+n1+n2,1);
+        add(y+n1+n2,x+n,0);
+    }
+    for(int i = 1; i &lt;= n1; i++) {
+        add(i,i+n,1);
+        add(i+n,i,0);
+    }
+    for(int i = 1; i &lt;= n2; i++) {
+        add(s,i+n1,1);
+        add(i+n1,s,0);
+    }
+    for(int i = 1; i &lt;= n3; i++) {
+        add(i+n1+n2,t,1);
+        add(t,i+n1+n2,0);
+    }
+}
+
+int main() {
+    build();
+
+    int ans = 0;
+    while(bfs()) {
+        ans += dfs(s,INF);
+    }
+
+    printf(&quot;%d&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Tarjan]]></title>
         <id>https://zzzcd0x.github.io/post/tarjan/</id>
@@ -431,386 +954,6 @@ int main() {
 
     while(bfs()) upd();
     printf(&quot;%lld %lld\n&quot;,Max_flow,Max_cost);
-
-    return 0;
-}
-</code></pre>
-<h3 id="例题">例题</h3>
-<p><strong>二分图最大匹配问题</strong></p>
-<p>解决二分图匹配问题可以使用匈牙利算法，也可以用网络流最大流的模型来解决</p>
-<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/sdjlm6zz.png" alt="" loading="lazy"></figure>
-<p>这是一个二分图</p>
-<p>也可以这样看这张图</p>
-<figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
-<p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
-<p>代码可以这样写</p>
-<p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
-<pre><code class="language-cpp">#include&lt;queue&gt;
-#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 1005;
-const int MAXM = 1e5+5;
-const int INF = 0x3f3f3f3f;
-
-inline int read() {
-    int x = 0;
-    char c = getchar();
-    while(c &lt; '0' || c &gt; '9')
-        c = getchar();
-    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
-        x = x*10 + c-'0';
-        c = getchar();
-    }
-    return x;
-}
-
-int s, t;
-int n, m, e;
-int tot = 1;
-int d[MAXN];
-int head[MAXN];
-int to[MAXM&lt;&lt;1];
-int val[MAXM&lt;&lt;1];
-int nxt[MAXM&lt;&lt;1];
-int gap[MAXM&lt;&lt;1];
-
-void add(int x,int y,int z) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-}
-
-void inp() {
-    n = read();
-    m = read();
-    e = read();
-    s = n+m+1;
-    t = n+m+2;
-    for(int i = 1; i &lt;= e; i++) {
-        int x = read();
-        int y = read();
-        add(x,y+n,1);
-        add(y+n,x,0);
-    }
-    for(int i = 1; i &lt;= n; i++) {
-        add(s,i,1);
-        add(i,s,0);
-    }
-    for(int i = 1; i &lt;= m; i++) {
-        add(i+n,t,1);
-        add(t,i+n,0);
-    }
-}
-
-bool bfs() {
-    memset(d,0,sizeof(d));
-    queue&lt;int&gt; q;
-    q.push(s);
-    d[s] = 1;
-    gap[s] = head[s];
-    while(!q.empty()) {
-        int x = q.front();
-        q.pop();
-        for(int i = head[x]; i ; i = nxt[i]) {
-            int y = to[i];
-            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
-                q.push(y);
-                d[y] = d[x] + 1;
-                gap[y] = head[y];
-                if(y == t) return true;
-            }
-        }
-    }
-    return false;
-}
-
-int dfs(int now,int flow) {
-    if(now == t) return flow;
-    int k = 0;
-    int res = 0;
-    for(int i = gap[now]; i ; i = nxt[i]) {
-        int y = to[i];
-        if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
-            k = dfs(y,min(val[i],flow));
-            if(!k) d[y] = 0;
-            flow -= k;
-            res += k;
-            val[i] -= k;
-            val[i^1] += k; 
-        }
-    }
-    return res;
-}
-
-int main() {
-
-    inp();
-
-    int ans = 0;
-    while(bfs())
-        ans += dfs(s,INF); 
-
-    printf(&quot;%d\n&quot;,ans);
-
-    return 0;
-}
-</code></pre>
-<p><strong>最小路径覆盖问题</strong></p>
-<p><a href="https://www.luogu.com.cn/problem/P2764">题目链接</a></p>
-<p><strong>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</strong></p>
-<p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量</p>
-<p>求解合并的点的个数时可以将点拆成两个，建图时每一条有向边的终点为拆出来的点，此时该问题就转化为了二分图最大匹配问题，建立一个超级源点连接拆点的结点，再建立一个超级汇点连接拆出来的结点，在图上跑最大流即可。</p>
-<pre><code class="language-cpp">#include&lt;queue&gt;
-#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 155;
-const int MAXM = 6e3+5;
-const int INF = 0x3f3f3f3f;
-
-inline int read() {
-    int x = 0;
-    char c = getchar();
-    while(c &lt; '0' || c &gt; '9') 
-        c = getchar();
-    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
-        x = x*10 + c-'0';
-        c = getchar();
-    }
-    return x;
-}
-
-int n, m;
-int s, t;
-int tot = 1;
-int d[MAXN&lt;&lt;1];
-int to[MAXM&lt;&lt;1];
-int gap[MAXN&lt;&lt;1];
-int nxt[MAXM&lt;&lt;1];
-int val[MAXM&lt;&lt;1];
-int pre[MAXN&lt;&lt;1];
-int head[MAXN&lt;&lt;1];
-
-void add(int x,int y,int z) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-}
-
-void inp() {
-    n = read();
-    m = read();
-    s = n*2+1;
-    t = n*2+2;
-    for(int i = 1; i &lt;= m; i++) {
-        int x = read();
-        int y = read();
-        add(x,y+n,1);
-        add(y+n,x,0);
-    }
-    for(int i = 1; i &lt;= n; i++) {
-        add(s,i,1);
-        add(i,s,0);
-        add(i+n,t,1);
-        add(t,i+n,0);
-    }
-}
-
-bool bfs() {
-    memset(d,0,sizeof(d));
-    queue&lt;int&gt; q;
-    d[s] = 1;
-    gap[s] = head[s];
-    q.push(s);
-    while(!q.empty()) {
-        int x = q.front();
-        q.pop();
-        for(int i = head[x]; i ; i = nxt[i]) {
-            int y = to[i];
-            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
-                q.push(y);
-                d[y] = d[x] + 1;
-                gap[y] = head[y];
-                if(y == t) return true;
-            }
-        }
-    }
-    return false;
-}
-
-int dfs(int now,int flow) {
-    if(now == t) return flow;
-    int k = 0;
-    int res = 0;
-    for(int i = gap[now] ; i &amp;&amp; flow; i = nxt[i]) {
-        int y = to[i];
-        if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
-            k = dfs(y,min(flow,val[i]));
-            if(!k) {
-                d[y] = 0;
-                continue;
-            }
-            flow -= k;
-            res += k;
-            val[i] -= k;
-            val[i^1] += k;
-            pre[now] = y;
-        }
-    }
-    return res;
-}
-
-bool vis[MAXN&lt;&lt;1];
-
-void find(int now) {
-    printf(&quot;%d &quot;,now);
-    vis[now] = true;
-    for(int i = head[now]; i ; i = nxt[i]) {
-        if(to[i] != t &amp;&amp; to[i] != s)
-            if(val[i] == 0 &amp;&amp; val[i^1] == 1)
-                if(to[i] &gt; n)
-                    find(to[i]-n);
-    }
-}
-
-int main() {
-
-    inp();
-
-    int ans = 0;
-    while(bfs()) {
-        ans += dfs(s,INF);
-    }
-    ans = n-ans;
-
-    for(int i = 1; i &lt;= n; i++)
-        if(!vis[i]) {
-            find(i);
-            puts(&quot;&quot;);
-        }
-
-    printf(&quot;%d&quot;,ans);
-
-    return 0;
-}
-</code></pre>
-<p><strong>魔术球问题</strong></p>
-<p><a href="https://www.luogu.com.cn/problem/P2765">题目链接</a></p>
-<p>题目要求的是 这 n 个柱子上最多能放多少个球，将每个柱子看成一个路径，这个问题就可以转化为计算最多 n 条路径最多可以覆盖多少个结点。</p>
-<p>具体解法是在枚举每个柱子的时候枚举每一个点，<strong>依次将枚举到的点加入到图中然后去跑最大流，如果求出的最大流等于0则认为当前数量的柱子不能放下这么多球，然后增加柱子数量</strong>。</p>
-<p>寻找路径时因为要找出每一个柱子上的结点，所以在搜索时记录好每一个结点的前缀结点，对于每个柱子记录放在上面的第一个结点。</p>
-<pre><code class="language-cpp">#include&lt;queue&gt;
-#include&lt;cmath&gt;
-#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 1e5+5;
-
-int n;
-int s = 1e5+1;
-int t = 1e5+2;
-int tot = 1;
-int d[MAXN];
-int to[MAXN];
-int pre[MAXN];
-int val[MAXN];
-int nxt[MAXN];
-int top[MAXN];
-int gap[MAXN];
-bool vis[MAXN];
-int head[MAXN];
-
-void add(int x,int y,int z) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-}
-
-bool bfs() {
-    memset(d,-1,sizeof(d));
-    queue&lt;int&gt; q;
-    q.push(s);
-    gap[s] = head[s];
-    d[s] = 1;
-    while(!q.empty()) {
-        int x = q.front();
-        q.pop();
-        for(int i = head[x]; i ; i = nxt[i]) {
-            int y = to[i];
-            if(d[y] == -1 &amp;&amp; val[i] &gt; 0) {
-                q.push(y);
-                d[y] = d[x] + 1;
-                gap[y] = head[y];
-            }
-        }
-    }
-    return d[t] != -1;
-}
-
-int dfs(int now,int flow) {
-    if(now == t) return flow;
-    int k = 0;
-    int res = 0;
-    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
-        int y = to[i];
-        if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
-            k = dfs(y,min(flow,val[i]));
-            if(k) {
-                flow -= k;
-                res += k;
-                val[i] -= k;
-                val[i^1] += k;
-                if(y != t)
-                    pre[now&gt;&gt;1] = y&gt;&gt;1;
-            }
-        }
-    }
-    return res;
-}
-
-int main() {
-
-    scanf(&quot;%d&quot;,&amp;n);
-
-    int now = 0;
-    int cnt = 0;
-    while(cnt &lt;= n) {
-        now++;
-        add(s,now&lt;&lt;1,1);
-        add(now&lt;&lt;1,s,0);
-        add(t,(now&lt;&lt;1)|1,0);
-        add((now&lt;&lt;1)|1,t,1);
-        for(int i = sqrt(now)+1; i*i &lt; (now&lt;&lt;1); i++) {
-            add((i*i-now)&lt;&lt;1,(now&lt;&lt;1)|1,1);
-            add((now&lt;&lt;1)|1,(i*i-now)&lt;&lt;1,0);
-        }
-        int flow = 0;
-        while(bfs()) {
-            flow += dfs(s,0x3f3f3f3f);
-        }
-        if(!flow) top[++cnt] = now;
-    }
-
-    printf(&quot;%d\n&quot;,now-1);
-
-    for(int i = 1; i &lt;= n; i++) {
-        if(vis[top[i]]) continue;
-        int x = top[i];
-        vis[x] = true;
-        while(x) {
-            printf(&quot;%d &quot;,x);
-            x = pre[x];
-            vis[x] = true;
-        }
-        puts(&quot;&quot;);
-    }
 
     return 0;
 }
@@ -1529,58 +1672,6 @@ void topsort(){
     }
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[kruskal]]></title>
-        <id>https://zzzcd0x.github.io/post/kruskal/</id>
-        <link href="https://zzzcd0x.github.io/post/kruskal/">
-        </link>
-        <updated>2020-07-14T08:31:25.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="kruskal">kruskal</h1>
-<h2 id="是什么呢">是什么呢</h2>
-<p>是一种求一个图的最小生成树的算法，核心思想是贪心，其实就是个贪心，与prime相比更加适合求边比较稀疏的图的最小生成树</p>
-<p>时间复杂度是<code>O(mlogm)</code></p>
-<h2 id="运行过程">运行过程</h2>
-<p>kruskal里面的边的作用可以理解为只是为了表达两个点的具有长度的连接关系</p>
-<p>首先将所有的边按照边权从小到大排序</p>
-<p>然后枚举每一条边，如果正在枚举的边的两个结点无联通关系，则将该边边权计入答案中、并用并查集标记两点的联通关系</p>
-<p>当生成树联通后即可跳出循环</p>
-<p><strong>注意建边只要建单向即可</strong></p>
-<h2 id="模板">模板</h2>
-<pre><code class="language-cpp">
-struct Edge {
-
-    int to;
-    int val;
-    int nxt;
-    int from;
-}edge[MAXM];
-
-int dad[MAXN];
-
-bool judge(Edge x,Edge y) {return x.val &lt; y.val;}
-
-void kruskal() {
-
-    for(int i = 1; i &lt;= n; i++)
-        dad[i] = i;
-
-    sort(edge+1,edge+n+1,judge);
-
-    for(int i = 1; i &lt;= tot; i++) {
-        int x = anc(edge[i].from);
-        int y = anc(edge[i].to);
-
-        if(x != y) {
-            ans += edge[i].val;
-            dad[x] = y;
-        }
-    }
-}
-</code></pre>
-<h2 id="注意事项">注意事项</h2>
-<p>真正的边权可能并不是输入的边权</p>
 ]]></content>
     </entry>
 </feed>
