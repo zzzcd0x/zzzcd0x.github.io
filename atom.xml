@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-29T07:42:28.503Z</updated>
+    <updated>2020-08-29T09:55:42.618Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -22,7 +22,7 @@
 <p>这是一个二分图</p>
 <p>也可以这样看这张图</p>
 <figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
-<p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
+<p>结点0可以看作最大流的超级源点，结点6可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
 <p>代码可以这样写</p>
 <p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
@@ -112,6 +112,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i ; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(val[i],flow));
@@ -227,6 +228,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now] ; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(flow,val[i]));
@@ -337,6 +339,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
             k = dfs(y,min(flow,val[i]));
@@ -469,6 +472,7 @@ int dfs(int now,int flow) {
     int k;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(dis[y] == dis[now] + 1 &amp;&amp; val[i] &gt; 0) {
             k = dfs(y,min(val[i],flow));

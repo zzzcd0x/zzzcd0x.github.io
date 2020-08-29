@@ -57,7 +57,7 @@
 <p>这是一个二分图</p>
 <p>也可以这样看这张图</p>
 <figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
-<p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
+<p>结点0可以看作最大流的超级源点，结点6可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
 <p>代码可以这样写</p>
 <p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
@@ -147,6 +147,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i ; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(val[i],flow));
@@ -262,6 +263,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now] ; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(flow,val[i]));
@@ -372,6 +374,7 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
             k = dfs(y,min(flow,val[i]));
@@ -504,6 +507,7 @@ int dfs(int now,int flow) {
     int k;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
         int y = to[i];
         if(dis[y] == dis[now] + 1 &amp;&amp; val[i] &gt; 0) {
             k = dfs(y,min(val[i],flow));
