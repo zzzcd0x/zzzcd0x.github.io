@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-28T08:51:35.483Z</updated>
+    <updated>2020-08-29T07:42:28.503Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -126,7 +126,6 @@ int dfs(int now,int flow) {
 }
 
 int main() {
-
     inp();
 
     int ans = 0;
@@ -138,7 +137,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p2764-最小路径覆盖问题">洛谷P2764 最小路径覆盖问题</h3>
+<h3 id="洛谷p2764-最小路径覆盖问题拆点">洛谷P2764 最小路径覆盖问题（拆点）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P2764">题目链接</a></p>
 <p><strong>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</strong></p>
 <p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量</p>
@@ -259,7 +258,6 @@ void find(int now) {
 }
 
 int main() {
-
     inp();
 
     int ans = 0;
@@ -279,7 +277,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p2765-魔术球问题">洛谷P2765 魔术球问题</h3>
+<h3 id="洛谷p2765-魔术球问题最大流">洛谷P2765 魔术球问题（最大流）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P2765">题目链接</a></p>
 <p>题目要求的是 这 n 个柱子上最多能放多少个球，将每个柱子看成一个路径，这个问题就可以转化为计算最多 n 条路径最多可以覆盖多少个结点。</p>
 <p>具体解法是在枚举每个柱子的时候枚举每一个点，<strong>依次将枚举到的点加入到图中然后去跑最大流，如果求出的最大流等于0则认为当前数量的柱子不能放下这么多球，然后增加柱子数量</strong>。</p>
@@ -356,7 +354,6 @@ int dfs(int now,int flow) {
 }
 
 int main() {
-
     scanf(&quot;%d&quot;,&amp;n);
 
     int now = 0;
@@ -395,7 +392,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p1231-教辅的组成">洛谷P1231 教辅的组成</h3>
+<h3 id="洛谷p1231-教辅的组成二分图最大匹配">洛谷P1231 教辅的组成（二分图最大匹配）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P1231">题目链接</a></p>
 <p>首先对题面进行解析，题目给出书本、练习册、答案的数量，以及可能配套的书本与练习册、书本与答案，要求最多能配成多少套书。</p>
 <p>也就是每本书至少要匹配到一本答案和一本练习册才能完成配套。</p>
@@ -527,6 +524,138 @@ int main() {
     }
 
     printf(&quot;%d&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2598-狼和羊的故事最小割问题">洛谷P2598 狼和羊的故事（最小割问题）</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2598">题目链接</a></p>
+<p>这道题刚开始我并没有往最小割的方向考虑，这样充分暴露我对最小割理解的不足。</p>
+<p>一开始我以为是最大流，因为每个羊附近最多只能有4只狼，因此从源点开始向每只羊连一条流量为4的边，每只狼向汇点连接一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi><mi>N</mi><mi>F</mi></mrow><annotation encoding="application/x-tex">INF</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span></span></span></span> 的边，每只羊与和他相邻的狼连一条流量为1的边，然后很开心的过了样例，交上去反手爆了个零。<img src="https://cdn.luogu.com.cn/upload/pic/62227.png" alt="/kk" loading="lazy"></p>
+<p>回想一下割的性质：</p>
+<p><strong>割掉一些边后，源点与汇点不再连通</strong>，最小割就是众多割中割掉的边权值和最小的一个，因此源点和割点分别与羊和狼相连的情况下，求出的最小割就是最小篱笆长度。</p>
+<p>正确的建模方式是源点与每一只羊连一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi><mi>N</mi><mi>F</mi></mrow><annotation encoding="application/x-tex">INF</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span></span></span></span> 的边，汇点与每一只狼连一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi><mi>N</mi><mi>F</mi></mrow><annotation encoding="application/x-tex">INF</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span></span></span></span> 的边，所有点与四周的结点连一条边。</p>
+<p>对于0的归属问题，已经在最大流算法的考虑范围内，所以不用刻意去区分。</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e2+5;
+const int MAXM = 1e5+5;
+const int INF = 0x3f3f3f3f;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int n, m;
+int s = 0;
+int tot = 1;
+int d[MAXM];
+int t = 1e5+1;
+int gap[MAXM];
+int head[MAXM];
+int to[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int val[MAXM&lt;&lt;1];
+int Map[MAXN][MAXN];
+
+int kx[4] = {0,0,-1,1};
+int ky[4] = {-1,1,0,0};
+
+inline int getnum(int x,int y) {return (x-1)*m+y;}
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+void inp() {
+    n = read();
+    m = read();
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= m; j++)
+            Map[i][j] = read();
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= m; j++) {
+            for(int k = 0; k &lt; 4; k++) {
+                int x = i + kx[k];
+                int y = j + ky[k];
+                if(x &lt; 1 || y &lt; 1 || x &gt; n || y &gt; m) continue;
+                    add(getnum(i,j),getnum(x,y),1);
+                    add(getnum(x,y),getnum(i,j),0);
+                }
+            if(Map[i][j] == 1) {
+                add(getnum(i,j),t,INF);
+                add(t,getnum(i,j),0);
+            }
+            else if(Map[i][j] == 2) {
+                add(s,getnum(i,j),INF);
+                add(getnum(i,j),s,0);
+            }
+        }
+}
+
+bool bfs() {
+    memset(d,0,sizeof(d));
+    queue&lt;int&gt; q;
+    d[s] = 1;
+    gap[s] = head[s];
+    q.push(s);
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+                q.push(y);
+            }
+        }
+    }
+    return d[t] != 0;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
+        int y = to[i];
+        if(d[y] == d[now] + 1 &amp;&amp; val[i] &gt; 0) {
+            k = dfs(y,min(flow,val[i]));
+            if(!k) d[y] = 0;
+            res += k;
+            flow -= k;
+            val[i] -= k;
+            val[i^1] += k;
+        }
+    }
+    return res;
+}
+
+int main() {
+    inp();
+
+    int ans = 0;
+    while(bfs()) {
+        ans += dfs(s,INF);
+    }
+    
+    printf(&quot;%d\n&quot;,ans);
 
     return 0;
 }
