@@ -50,19 +50,19 @@
                         <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
                                 <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="post-title  mdui-m-b-1">线段树</div>
-                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-07-14 15:07:16">2020-07-14 / 14 min read</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-07-14 15:07:16">2020-07-14 / 8 min read</div>
                                     <div class="mdui-m-b-2 mdui-typo post-neirong"><h1 id="组成">组成</h1>
-<p><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"><br>
-1号结点为根结点，存储原数组区间1到6的数的和<br>
-左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和<br>
-右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和<br>
-这里3和4时区间中点和中点+1<br>
-用二进制运算比较快，处理大量数据时常数可以低一点<br>
-其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"></figure>
+<p>1号结点为根结点，存储原数组区间1到6的数的和。</p>
+<p>左儿子下标为2，求法为1&gt;&gt;1,存储[1,3]的和。</p>
+<p>右儿子下标为3，求法为1&gt;&gt;1|1,存储[4,6]的和。</p>
+<p>这里3和4时区间中点和中点+1。</p>
+<p>用二进制运算比较快，处理大量数据时常数可以低一点。</p>
+<p>其实线段树能维护的东西远不止和，还可以维护区间最大值、最小值、最大子段和等等。</p>
 <h1 id="怎么维护呢">怎么维护呢</h1>
 <h2 id="先从建树开始">先从建树开始</h2>
-<p>从根节点开始递归建树 <strong>开四倍空间</strong><br>
-1.数组写法</p>
+<p>从根节点开始递归建树 <strong>开四倍空间</strong>。</p>
+<p>1.数组写法</p>
 <pre><code class="language-cpp">int a[1005];  //原数组
 int t[4005]; //线段树
 
@@ -108,12 +108,13 @@ void build(int now,int l,int r){
     pushup(now);
 }
 </code></pre>
+<p>好像结构体写法更容易维护。</p>
 <h2 id="区间查询">区间查询</h2>
 <ol>
-<li>当前查找到的区间被包含在需要查找的区间内则直接返回</li>
-<li>否则通过中点判断要查找到区间和左右子树哪个有交集</li>
-<li>如果都有则将两边的查找结果进行相应的处理后返回</li>
-<li>思想类似二分查找</li>
+<li>当前查找到的区间被包含在需要查找的区间内则直接返回。</li>
+<li>否则通过中点判断要查找到区间和左右子树哪个有交集。</li>
+<li>如果都有则将两边的查找结果进行相应的处理后返回。</li>
+<li>思想类似二分查找。</li>
 </ol>
 <pre><code class="language-cpp">int find(int now,int L,int R){
 
@@ -138,8 +139,8 @@ void build(int now,int l,int r){
 }
 </code></pre>
 <h2 id="区间修改">区间修改</h2>
-<p>大体步骤和区间查询类似<br>
-<strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息</p>
+<p>大体步骤和区间查询类似。</p>
+<p><strong>标记下放:</strong> 如果每次修改都去相应的修改涉及到的所有的结点的话会产生较大的复杂度，因此考虑使用标记下放的方法，即当该结点被访问到的时候再将标记下放，使子树得到正确的信息。所以区间修改只更新到需要修改的区间的真子集即可，但在此之前每一个访问到的结点都要进行标记下放，不然需要更新的区间得不到正确的更新信息。</p>
 <pre><code class="language-cpp">int tag[40005];
 
 void pushdown(int now){
@@ -176,7 +177,7 @@ void modify(int now,int L,int R,int k){
 }
 </code></pre>
 <ul>
-<li>pushup的作用是当某一个结点的子树的值被修改了则去用修改后的子树的信息去更新当前结点的信息</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mi>u</mi><mi>s</mi><mi>h</mi><mi>u</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">pushup</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault">u</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">u</span><span class="mord mathdefault">p</span></span></span></span> 的作用是当某一个结点的子树的值被修改了则去用修改后的子树的信息去更新当前结点的信息。</li>
 </ul>
 <pre><code class="language-cpp">void pushup(int now){
     node[now].sum = node[now&lt;&lt;1].sum + ndoe[now&lt;&lt;1|1].sum;
@@ -205,13 +206,13 @@ void modify(int now,int L,int R,int k){
 </code></pre>
 <h1 id="维护最大子段和">维护最大子段和</h1>
 <h2 id="什么是最大子段和">什么是最大子段和？</h2>
-<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值<br>
-其他会用到的概念:<br>
-最大左子段和:从区间左端点开始的最大子段和<br>
-最大右子段和:从区间右端点开始的最大子段和</p>
+<p>其实就是当前线段树区间内，一个任意的连续的序列的和的最大值。</p>
+<p>其他会用到的概念:</p>
+<p>最大左子段和:从区间左端点开始的最大子段和。</p>
+<p>最大右子段和:从区间右端点开始的最大子段和。</p>
 <h3 id="pushup">pushup</h3>
-<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理<br>
-最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和</p>
+<p>最大左子段和可能是左子树的最大左子段和也可能是左子树的区间总和加右子树的最大左子段和，最大右子段和同理。</p>
+<p>最大子段和可能是左子树的最大子段和或右子树的最大子段和或左子树的最大右子段和+右子树的最大左子段和。</p>
 <pre><code class="language-cpp">void pushup(int now){
 
     node[now].sum = node[now&lt;&lt;1].sum + node[now&lt;&lt;1|1].sum;
@@ -244,7 +245,7 @@ void modify(int now,int L,int R,int k){
 }
 </code></pre>
 <h3 id="区间修改-2">区间修改</h3>
-<p>直接更改线段树上某个点的值</p>
+<p>直接更改线段树上某个点的值。</p>
 <pre><code class="language-cpp">void modify(int now,int to,int k){
 
     int l = node[now].l;
@@ -290,253 +291,6 @@ void modify(int now,int L,int R,int k){
         ans.Max = max(left.rm+right.lm,max(left.Max,right.Max));
         return ans;
     }
-}
-</code></pre>
-<h1 id="例题">例题</h1>
-<h2 id="最大子段和">最大子段和</h2>
-<p><a href="https://www.luogu.com.cn/problem/P4513">题目链接</a></p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-
-int n,m;
-int a[500005];
-
-struct Node{
-
-    int l,r;
-    int sum;
-    int Max;
-    int lm,rm;
-}node[2000005];
-
-void pushup(int now){
-
-    node[now].sum = node[now&lt;&lt;1].sum+node[now&lt;&lt;1|1].sum;
-    node[now].lm = max(node[now&lt;&lt;1].lm,node[now&lt;&lt;1].sum+node[now&lt;&lt;1|1].lm);
-    node[now].rm = max(node[now&lt;&lt;1|1].rm,node[now&lt;&lt;1|1].sum+node[now&lt;&lt;1].rm);
-    node[now].Max = max(max(node[now&lt;&lt;1].Max,node[now&lt;&lt;1|1].Max),node[now&lt;&lt;1].rm+node[now&lt;&lt;1|1].lm);
-}
-
-void build(int now,int l,int r){
-
-    node[now].l = l;
-    node[now].r = r;
-
-    if(l == r)
-    {
-        node[now].sum = a[l];
-        node[now].lm = a[l];
-        node[now].rm = a[l];
-        node[now].Max = a[l];
-        return;
-    }
-    int mid = (l+r)&gt;&gt;1;
-
-    build(now&lt;&lt;1,l,mid);
-    build(now&lt;&lt;1|1,mid+1,r);
-
-    pushup(now);
-}
-
-void modify(int now,int to,int k){
-
-    int l = node[now].l;
-    int r = node[now].r;
-
-    if(l == r)
-    {
-        // a[now] = k;
-        node[now].sum = k;
-        node[now].Max = k;        
-        node[now].lm = k;
-        node[now].rm = k;
-
-        return;
-    }
-    int mid = (l+r)&gt;&gt;1;
-
-    if(to &lt;= mid) modify(now&lt;&lt;1,to,k);
-    else modify(now&lt;&lt;1|1,to,k);
-
-    pushup(now);
-}
-
-Node ask(int now,int L,int R){
-
-    int l = node[now].l;
-    int r = node[now].r;
-
-    if(L &lt;= l &amp;&amp; R &gt;= r) return node[now];
-
-    int mid = (l+r)&gt;&gt;1;
-
-    if(mid &gt;= R) return ask(now&lt;&lt;1,L,R);
-    else if(mid &lt; L) return ask(now&lt;&lt;1|1,L,R);
-    else
-    {
-        Node ans;
-        Node left = ask(now&lt;&lt;1,L,R);
-        Node right = ask(now&lt;&lt;1|1,L,R);
-        ans.sum = left.sum + right.sum;
-        ans.lm = max(left.lm,left.sum+right.lm);
-        ans.rm = max(right.rm,right.sum+left.rm);
-        ans.Max = max(left.rm+right.lm,max(left.Max,right.Max));
-        return ans;
-    }
-}
-
-int main(){
-
-    int k,x,y;
-
-    scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
-
-    for(int i = 1; i &lt;= n; i++)
-        scanf(&quot;%d&quot;,&amp;a[i]);
-
-    build(1,1,n);
-    
-    for(int i = 1; i &lt;= m; i++)
-    {
-        scanf(&quot;%d %d %d&quot;,&amp;k,&amp;x,&amp;y);
-        if(k == 1)
-        {
-            if(x &gt; y)
-            {
-                int t = x;
-                x = y;
-                y = t;
-            }
-            Node ans = ask(1,x,y);
-            printf(&quot;%d\n&quot;,ans.Max);
-        }
-        if(k == 2)
-            modify(1,x,y);
-    }
-
-    return 0;
-}
-</code></pre>
-<h2 id="线段树状压">线段树+状压</h2>
-<p><a href="http://poj.org/problem?id=2777">题目链接</a><br>
-本题是给一个木板的不同区间染色，一共有30种颜色，可以考虑用一个二进制数字来储存该区间内的数被染了哪一种颜色，<strong>线段树中第i个结点存储的数字的二进制第j位为1，则该结点被染成了颜色j，若为0则没有染成颜色j</strong>，区间颜色个数统计使用按位与运算，将最终结果进行二进制拆分统计为1的个数即可。</p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-typedef long long ll;
-const int MAXN = 1e5+5;
-
-int n,t,o;
-int le[MAXN&lt;&lt;2];
-int ri[MAXN&lt;&lt;2];
-int tag[MAXN&lt;&lt;2];
-int color[MAXN&lt;&lt;2];
-
-inline int read() {
-    int x = 0;
-    char c = getchar();
-    while(c &lt; '0' || c &gt; '9')
-        c = getchar();
-    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
-        x = x*10 + c-'0';
-        c = getchar();
-    }
-    return x;
-}
-
-int ls(int p) {return p&lt;&lt;1;}
-int rs(int p) {return p&lt;&lt;1|1;}
-void pushup(int p) {color[p] = color[ls(p)] | color[rs(p)];}
-
-void upd(int p,int v) {
-    color[p] = v;
-    tag[p] = v;
-}
-
-void pushdown(int p) {
-    if(tag[p]) {
-        upd(ls(p),tag[p]);
-        upd(rs(p),tag[p]);
-        tag[p] = 0;
-    }
-}
-
-void build(int now,int l,int r) {
-    le[now] = l;
-    ri[now] = r;
-    color[now] = 0;
-    tag[now] = 0;
-    if(l == r) {
-        color[now] = 1;
-        return;
-    }
-    int mid = (l+r)&gt;&gt;1;
-    build(ls(now),l,mid);
-    build(rs(now),mid+1,r);
-    pushup(now);
-}
-
-void modify(int now,int l,int r,int v) {
-    int L = le[now];
-    int R = ri[now];
-    if(r &lt; L || l &gt; R) return;
-    if(l &lt;= L &amp;&amp; r &gt;= R) {
-        tag[now] = 1&lt;&lt;(v-1);
-        color[now] = 1&lt;&lt;(v-1);
-        return;
-    }
-    pushdown(now);
-    int mid = (L+R)&gt;&gt;1;
-    if(l &lt;= mid) modify(ls(now),l,r,v);
-    if(r &gt; mid) modify(rs(now),l,r,v);
-    pushup(now);
-}
-
-int query(int now,int l,int r) {
-    int L = le[now];
-    int R = ri[now];
-    if(r &lt; L || l &gt; R) return 0;
-    if(l &lt;= L &amp;&amp; r &gt;= R) {
-        return color[now];
-    }
-    int ans = 0;
-    int mid = (L+R)&gt;&gt;1;
-    pushdown(now);
-    if(l &lt;= mid) ans |= query(ls(now),l,r);
-    if(r &gt; mid) ans |= query(rs(now),l,r);
-    return ans;
-}
-
-int main() {
-    while(~scanf(&quot;%d %d %d&quot;,&amp;n,&amp;t,&amp;o)) {
-        int x, y, z;
-        char c[2];
-        build(1,1,n);
-        while(o--) {
-            scanf(&quot;%s&quot;,c);
-            if(c[0] == 'C') {
-                scanf(&quot;%d %d %d&quot;,&amp;x,&amp;y,&amp;z);
-                if(x &gt; y)
-                    swap(x,y);
-                modify(1,x,y,z);
-            }
-            else if(c[0] == 'P') {
-                scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-                if(x &gt; y)
-                    swap(x,y);
-                int cnt = 0;
-                int tot = query(1,x,y);
-                while(tot) {
-                    if(tot&amp;1) cnt++;
-                    tot &gt;&gt;= 1;
-                }
-                printf(&quot;%d\n&quot;,cnt);
-            }
-        }
-    }
-
-    return 0;
 }
 </code></pre>
 </div>
