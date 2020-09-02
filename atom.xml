@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-08-29T09:57:05.325Z</updated>
+    <updated>2020-09-02T06:06:50.809Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -16,15 +16,15 @@
         <link href="https://zzzcd0x.github.io/post/wang-luo-liu-jie-ti-bao-gao/">
         </link>
         <updated>2020-08-28T08:37:02.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="洛谷p3386-二分图最大匹配问题">洛谷P3386 二分图最大匹配问题</h3>
-<p>对于二分图的最大匹配问题可以使用匈牙利算法，更一般的做法是网络流最大流</p>
-<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/sdjlm6zz.png" alt="" loading="lazy"></figure>
-<p>这是一个二分图</p>
-<p>也可以这样看这张图</p>
-<figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
-<p>结点0可以看作最大流的超级源点，结点6可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong></p>
-<p>代码可以这样写</p>
+        <content type="html"><![CDATA[<h3 id="洛谷p3386-二分图最大匹配问题多源多汇最大流">洛谷P3386 二分图最大匹配问题（多源多汇最大流）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
+<p>对于二分图的最大匹配问题可以使用匈牙利算法，更一般的做法是网络流最大流。</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/sdjlm6zz.png" alt="" loading="lazy"></figure>
+<p>这是一个二分图。</p>
+<p>也可以这样看这张图。</p>
+<figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
+<p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong>。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码。</p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
 #include&lt;cstdio&gt;
 #include&lt;string.h&gt;
@@ -112,7 +112,6 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i ; i = nxt[i]) {
-        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(val[i],flow));
@@ -141,8 +140,9 @@ int main() {
 <h3 id="洛谷p2764-最小路径覆盖问题拆点">洛谷P2764 最小路径覆盖问题（拆点）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P2764">题目链接</a></p>
 <p><strong>给定一个有向图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mo>(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span> ,设 P 是 G 的一个简单路的集合。如果 V 中每个顶点恰好在 P 的一条路上，则称 P 是 G 的一个路径覆盖。</strong></p>
-<p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量</p>
+<p>首先将每个点看做一条路径，我们需要让路径尽可能的少，所以就需要合并某些路径，合并完成后，最小路径覆盖数 = 结点数 - 合并的点的数量。</p>
 <p>求解合并的点的个数时可以将点拆成两个，建图时每一条有向边的终点为拆出来的点，此时该问题就转化为了二分图最大匹配问题，建立一个超级源点连接拆点的结点，再建立一个超级汇点连接拆出来的结点，在图上跑最大流即可。</p>
+<p>以下为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码。</p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
 #include&lt;cstdio&gt;
 #include&lt;string.h&gt;
@@ -228,7 +228,6 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now] ; i &amp;&amp; flow; i = nxt[i]) {
-        gap[now] = i;
         int y = to[i];
         if(val[i] &gt; 0 &amp;&amp; d[y] == d[now] + 1) {
             k = dfs(y,min(flow,val[i]));
@@ -279,7 +278,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p2765-魔术球问题最大流">洛谷P2765 魔术球问题（最大流）</h3>
+<h3 id="洛谷p2765-魔术球问题动态加点">洛谷P2765 魔术球问题（动态加点）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P2765">题目链接</a></p>
 <p>题目要求的是 这 n 个柱子上最多能放多少个球，将每个柱子看成一个路径，这个问题就可以转化为计算最多 n 条路径最多可以覆盖多少个结点。</p>
 <p>具体解法是在枚举每个柱子的时候枚举每一个点，<strong>依次将枚举到的点加入到图中然后去跑最大流，如果求出的最大流等于0则认为当前数量的柱子不能放下这么多球，然后增加柱子数量</strong>。</p>
@@ -339,7 +338,6 @@ int dfs(int now,int flow) {
     int k = 0;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
-        gap[now] = i;
         int y = to[i];
         if(d[y] == d[now] + 1 &amp;&amp; val[i]) {
             k = dfs(y,min(flow,val[i]));
@@ -395,7 +393,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p1231-教辅的组成二分图最大匹配">洛谷P1231 教辅的组成（二分图最大匹配）</h3>
+<h3 id="洛谷p1231-教辅的组成最大流">洛谷P1231 教辅的组成（最大流）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P1231">题目链接</a></p>
 <p>首先对题面进行解析，题目给出书本、练习册、答案的数量，以及可能配套的书本与练习册、书本与答案，要求最多能配成多少套书。</p>
 <p>也就是每本书至少要匹配到一本答案和一本练习册才能完成配套。</p>
@@ -406,6 +404,7 @@ int main() {
 <p>解决这个问题我们可以把每本书拆成两个结点，一个用于连接练习册，另一个用于连接答案，两个结点之间连接一条流量为1的边，这样就可以限制每本书被使用的次数了。</p>
 <p>正确的建图方法如下</p>
 <figure data-type="image" tabindex="4"><img src="https://cdn.luogu.com.cn/upload/image_hosting/y75t8set.png" alt="" loading="lazy"></figure>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码</p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
 #include&lt;cstdio&gt;
 #include&lt;string.h&gt;
@@ -472,7 +471,6 @@ int dfs(int now,int flow) {
     int k;
     int res = 0;
     for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
-        gap[now] = i;
         int y = to[i];
         if(dis[y] == dis[now] + 1 &amp;&amp; val[i] &gt; 0) {
             k = dfs(y,min(val[i],flow));
@@ -532,7 +530,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<h3 id="洛谷p2598-狼和羊的故事最小割问题">洛谷P2598 狼和羊的故事（最小割问题）</h3>
+<h3 id="洛谷p2598-狼和羊的故事-最小割">洛谷P2598 狼和羊的故事 （最小割）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P2598">题目链接</a></p>
 <p>这道题刚开始我并没有往最小割的方向考虑，这样充分暴露我对最小割理解的不足。</p>
 <p>一开始我以为是最大流，因为每个羊附近最多只能有4只狼，因此从源点开始向每只羊连一条流量为4的边，每只狼向汇点连接一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi><mi>N</mi><mi>F</mi></mrow><annotation encoding="application/x-tex">INF</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span></span></span></span> 的边，每只羊与和他相邻的狼连一条流量为1的边，然后很开心的过了样例，交上去反手爆了个零。<img src="https://cdn.luogu.com.cn/upload/pic/62227.png" alt="/kk" loading="lazy"></p>
@@ -660,6 +658,151 @@ int main() {
     }
     
     printf(&quot;%d\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2774-方格取数问题二分图带权最大独立集">洛谷P2774 方格取数问题（二分图带权最大独立集）</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2774">题目链接</a></p>
+<p>给定一个方格图，从方格中取出一些结点，使任意两个结点之间没有公共边，且取出的数的总和最大。</p>
+<p>将方格内的数做为权值，取出的点看做一个集合，集合内结点权值和最大时即为带权最大独立集。</p>
+<p>对于最大权值的求解，可以将问题转化为取出的数的总和最小，则用所有点的权值和减去取出的数的权值和即为最大独立集的权值和。</p>
+<p>现在问题就转化为了怎么讲方格图转化为二分图。</p>
+<p>可以将方格图看作棋盘（一半为黑格子一半为白格子），根据结点编号的奇偶性分为两组，一组连源点，一组连汇点，连接源点和汇点的边的权值设为结点放的数字的值。</p>
+<p>既然公共边是方格图中一个方格与其四周的方格共有的边，则可以将这些公共边看成结点与其四周的结点所连的边，这些边的权值为正无穷。</p>
+<p>方格编码示例：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo fence="true">∣</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>2</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>5</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>6</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>7</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>8</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>9</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>10</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>11</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>12</mn></mstyle></mtd></mtr></mtable><mo fence="true">∣</mo></mrow><annotation encoding="application/x-tex">\begin{vmatrix}
+1&amp;2&amp;3&amp;4\\
+5&amp;6&amp;7&amp;8\\
+9&amp;10&amp;11&amp;12\\
+\end{vmatrix}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.636em;vertical-align:-1.5500299999999998em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.08597em;"><span style="top:-1.05597em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-1.6619700000000002em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-2.26797em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-2.87397em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-3.47997em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-4.08597em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500299999999998em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">5</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">9</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">6</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">7</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.21em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span><span style="top:-3.0099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">8</span></span></span><span style="top:-1.8099999999999994em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500000000000007em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.08597em;"><span style="top:-1.05597em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-1.6619700000000002em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-2.26797em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-2.87397em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-3.47997em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span><span style="top:-4.08597em;"><span class="pstrut" style="height:2.606em;"></span><span class="delimsizinginner delim-size1"><span>∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5500299999999998em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>这样建图后，方格之间的边容量为正无穷，所以任何一个割中不可能包含这些点，所以求最小割的时候割掉的边就是与源点或汇点连接的边。</p>
+<p>当一个点与源点或汇点连接的边被切断了，则视为这个点已经被取出。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e4+5; //数组又开小了 我弱智...
+const int MAXM = 1e5+5;
+const int INF = 0x3f3f3f3f;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int sum;
+int s, t;
+int n, m;
+int tot = 1;
+int d[MAXN];
+int gap[MAXN];
+bool vis[MAXN];
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+int val[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int dx[4] = {0,0,-1,1};
+int dy[4] = {-1,1,0,0};
+
+inline int Hash(int x,int y) {return m*(x-1)+y;}
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+void inp() {
+    n = read();
+    m = read();
+    s = 0;
+    t = m*n+1;
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= m; j++) {
+            int y = read();
+            sum += y;
+            int x = Hash(i,j);
+            if((i+j)%2 == 0) {
+                add(s,x,y);
+                add(x,s,0);
+                for(int k = 0; k &lt; 4; k++) {
+                    int tx = i + dx[k];
+                    int ty = j + dy[k];
+                    if(tx &lt; 1 || ty &lt; 1 || tx &gt; n || ty &gt; m)
+                        continue;
+                    int T = Hash(tx,ty);
+                    add(x,T,INF);
+                    add(T,x,0);
+                }
+            }
+            else {
+                add(x,t,y);
+                add(t,x,0);
+            }
+        }
+}
+
+bool bfs() {
+    queue&lt;int&gt; q;
+    memset(d,0,sizeof(d));
+    d[s] = 1;
+    gap[s] = head[s];
+    q.push(s);
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                gap[y] = head[y];
+                d[y] = d[x] + 1;
+                q.push(y);
+                if(y == t) return true;
+            }
+        }
+    }
+    return false;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        int y = to[i];
+        gap[now] = i;
+        if(d[y] == d[now] + 1 &amp;&amp; val[i] &gt; 0) {
+            k = dfs(y,min(flow,val[i]));
+            if(!k) d[y] = 0;
+            res += k;
+            flow -= k;
+            val[i] -= k;
+            val[i^1] += k;
+        }
+    }
+    return res;
+}
+
+int main() {
+    inp();
+
+    int ans = 0;
+    while(bfs())
+        ans += dfs(s,INF);
+
+    printf(&quot;%d\n&quot;,sum-ans);
 
     return 0;
 }
