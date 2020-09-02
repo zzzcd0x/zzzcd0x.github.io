@@ -50,7 +50,7 @@
                         <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
                                 <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="post-title  mdui-m-b-1">网络流解题报告</div>
-                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-08-28 16:37:02">2020-08-28 / 22 min read</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-08-28 16:37:02">2020-08-28 / 25 min read</div>
                                     <div class="mdui-m-b-2 mdui-typo post-neirong"><h3 id="洛谷p3386-二分图最大匹配问题多源多汇最大流">洛谷P3386 二分图最大匹配问题（多源多汇最大流）</h3>
 <p><a href="https://www.luogu.com.cn/problem/P3386">题目链接</a></p>
 <p>对于二分图的最大匹配问题可以使用匈牙利算法，更一般的做法是网络流最大流。</p>
@@ -59,7 +59,7 @@
 <p>也可以这样看这张图。</p>
 <figure data-type="image" tabindex="2"><img src="https://cdn.luogu.com.cn/upload/image_hosting/id4l9jvm.png" alt="" loading="lazy"></figure>
 <p>0号结点可以看作最大流的超级源点，6号结点可以看作超级汇点，因为每个结点最多只能匹配一个结点，所以<strong>每一条边的最大流量只能是1</strong>。</p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码。</p>
+<p>以下为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码。</p>
 <pre><code class="language-cpp">#include&lt;queue&gt;
 #include&lt;cstdio&gt;
 #include&lt;string.h&gt;
@@ -837,6 +837,142 @@ int main() {
     while(bfs())
         ans += dfs(s,INF);
 
+    printf(&quot;%d\n&quot;,sum-ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2762-太空飞行计划最大闭合子图">洛谷P2762 太空飞行计划（最大闭合子图）</h3>
+<p><a href="https://www.luogu.com.cn/problem/P2762">题目链接</a></p>
+<p>通过题面可知，若一个实验被选中，则该实验需要用到的仪器必定至少有一个被选，因此选好的结点在原图中一定是一个闭合子图。</p>
+<p>题面中每个实验对应的赞助费为闭合图中的正权，每个器材对应的花费为闭合图中的负权。</p>
+<p>每个实验与源点相连，边的容量为对应的赞助费，每个器材与汇点相连，容量为对应的花费。</p>
+<p>实验与器材相连的边容量记为无限大。</p>
+<p>但是怎么统计答案呢。</p>
+<p>已知，闭合子图的权值为所有与源点相连的点的权值减去不和汇点相连的负权点的权值的绝对值。</p>
+<p>又已知，割的权值和为所有不和源点相连的点的权值加不和汇点相连的负权点的权值的绝对值</p>
+<p>两者相加即为正权值的和。</p>
+<p>所以全部正权值的和减去割的权值和即为答案。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码如下</p>
+<pre><code class="language-cpp">#include&lt;queue&gt;
+#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 105;
+const int MAXM = 1e3+5;
+const int INF = 0x3f3f3f3f;
+
+int sum;
+int s, t;
+int n, m;
+int tot = 1;
+int d[MAXN];
+int gap[MAXN];
+int head[MAXN];
+int to[MAXM&lt;&lt;1];
+int nxt[MAXM&lt;&lt;1];
+int val[MAXM&lt;&lt;1];
+
+void add(int x,int y,int z) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+    val[tot] = z;
+}
+
+char tools[10000];
+
+void inp() {
+    scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
+    s = 0;
+    t = 104;
+    for(int i = 1; i &lt;= n; i++) {
+        int x; 
+        scanf(&quot;%d&quot;,&amp;x);
+        sum += x;
+        add(s,i,x);
+        add(i,s,0);
+        memset(tools,0,sizeof(tools));
+        cin.getline(tools,10000);
+        int tool,ulen = 0;
+        while(sscanf(tools+ulen,&quot;%d&quot;,&amp;tool) == 1) {
+            add(i,tool+n,INF);
+            add(tool+n,i,0);
+            if(tool == 0)
+                ulen++;
+            else {
+                while(tool) {
+                    tool /= 10;
+                    ulen++;
+                }
+            }
+            ulen++;
+        }
+    }
+    for(int i = 1; i &lt;= m; i++) {
+        int x;
+        scanf(&quot;%d&quot;,&amp;x);
+        add(i+n,t,x);
+        add(t,i+n,0);
+    }
+}
+
+queue&lt;int&gt; q;
+bool bfs() {
+    memset(d,0,sizeof(d));
+    d[s] = 1;
+    gap[s] = head[s];
+    q.push(s);
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        for(int i = head[x]; i ; i = nxt[i]) {
+            int y = to[i];
+            if(d[y] == 0 &amp;&amp; val[i] &gt; 0) {
+                d[y] = d[x] + 1;
+                gap[y] = head[y];
+                q.push(y);
+            }
+        }
+    }
+    return d[t] != 0;
+}
+
+int dfs(int now,int flow) {
+    if(now == t) return flow;
+    int k;
+    int res = 0;
+    for(int i = gap[now]; i &amp;&amp; flow; i = nxt[i]) {
+        gap[now] = i;
+        int y = to[i];
+        if(d[y] == d[now] + 1 &amp;&amp; val[i] &gt; 0) {
+            k = dfs(y,min(flow,val[i]));
+            if(!k) d[y] = 0;
+            res += k;
+            flow -= k;
+            val[i] -= k;
+            val[i^1] += k;
+        }
+    }
+    return res;
+}
+
+int main() {
+    inp();
+
+    int ans = 0;
+    while(bfs())
+        ans += dfs(s,INF);
+    for(int i = 1; i &lt;= n; i++)
+        if(d[i])
+            printf(&quot;%d &quot;,i);
+    puts(&quot;&quot;);
+    for(int i = 1; i &lt;= m; i++)
+        if(d[i+n])
+            printf(&quot;%d &quot;,i);
+    puts(&quot;&quot;);
     printf(&quot;%d\n&quot;,sum-ans);
 
     return 0;
