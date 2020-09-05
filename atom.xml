@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-09-05T11:56:56.469Z</updated>
+    <updated>2020-09-05T12:54:32.661Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,243 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Tarjan解题报告]]></title>
+        <id>https://zzzcd0x.github.io/post/tarjan-jie-ti-bao-gao/</id>
+        <link href="https://zzzcd0x.github.io/post/tarjan-jie-ti-bao-gao/">
+        </link>
+        <updated>2020-09-05T12:54:10.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="洛谷p2341-受欢迎的牛">洛谷P2341 受欢迎的牛</h3>
+<p>将题目给定的数据建图后可以发现，图中必然会出现许多强连通分量，对于这些强连通分量，如果他可以指向另一个强连通分量，则必然不会得到指向的强连通分量中的奶牛的爱慕，里面的奶牛也就必然不会成为明星，因此能够成为明星的奶牛只能是唯一一个强连通分量的出度为0中的全部奶牛。如果有多个强连通分量出度为0，则没有可以成为明星的奶牛，因为必然没有一个强连通分量可以得到全部奶牛的爱慕。</p>
+<p>缩点后统计出度即可</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e4+5;
+const int MAXM = 5e4+5;
+
+inline int read() {
+    int x = 0;
+    int k = 1;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9') {
+        if(c == '-') k = -1;
+        c = getchar();
+    }
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int num;
+int tot;
+int top;
+int n, m;
+int dfscnt;
+int s[MAXN];
+int d[MAXN];
+int dp[MAXN];
+int to[MAXM];
+int scc[MAXN];
+int nxt[MAXM];
+int low[MAXN];
+int dfn[MAXN];
+int out[MAXN];
+int head[MAXM];
+bool ins[MAXN];
+
+void add(int x,int y) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+}
+
+void tarjan(int now) {
+    low[now] = dfn[now] = ++dfscnt;
+    s[++top] = now;
+    ins[now] = true;
+    for(int i = head[now]; i ; i = nxt[i]) {
+        int y = to[i];
+        if(!dfn[y]) {
+            tarjan(y);
+            low[now] = min(low[now],low[y]);
+        }
+        else if(ins[y]) {
+            low[now] = min(dfn[y],low[now]);
+        }
+    }
+    if(low[now] == dfn[now]) {
+        num++;
+        while(s[top+1] != now) {
+            d[num]++;          
+            scc[s[top]] = num;
+            ins[s[top--]] = false;
+        }
+    }
+}
+
+void inp() {
+    n = read();
+    m = read();
+    for(int i = 1; i &lt;= m; i++) {
+        int x = read();
+        int y = read();
+        add(x,y);
+    }
+}
+
+int main() {
+    inp();
+
+    for(int i = 1; i &lt;= n; i++)
+        if(!dfn[i])
+            tarjan(i);
+
+    for(int i = 1; i &lt;= n; i++) {
+        int y = scc[i];
+        for(int j = head[i]; j ; j = nxt[j]) {
+            if(y != scc[to[j]])
+                out[y]++;
+        }
+    }
+
+    int ans = 0;
+    int cnt = 0;
+    for(int i = 1; i &lt;= num; i++)
+        if(!out[i]) {
+            ans += d[i];
+            cnt++;
+        }
+
+    if(cnt != 1) printf(&quot;%d\n&quot;,0);
+    else printf(&quot;%d\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+<h3 id="洛谷p2746-校园网">洛谷P2746 校园网</h3>
+<p>对于子任务A，即为图中强连通分量的个数。</p>
+<p>对于子任务B，分别入度或出度为0的强连通分量的个数的较大值，因为如果入度为0则该强连通分量之外的点不可能可以将软件传到该强连通分量之内的任何一个点上，出度为0则他们不会把软件传给任何一个强连通分量之外的点。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>C</mi></mrow><annotation encoding="application/x-tex">AC</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 代码</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e2+5;
+const int MAXM = 1e4+5;
+
+inline int read() {
+    int x = 0;
+    char c = getchar();
+    while(c &lt; '0' || c &gt; '9')
+        c = getchar();
+    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
+        x = x*10 + c-'0';
+        c = getchar();
+    }
+    return x;
+}
+
+int n;
+int num;
+int tot;
+int cnt;
+int stop;
+int dfscnt;
+int d[MAXN];
+int s[MAXN];
+int x[MAXM];
+int y[MAXM];
+int in[MAXN];
+int to[MAXM];
+int low[MAXN];
+int dfn[MAXN];
+int out[MAXM];
+int nxt[MAXM];
+int head[MAXN];
+bool ins[MAXN];
+
+void add(int x,int y) {
+    nxt[++tot] = head[x];
+    head[x] = tot;
+    to[tot] = y;
+}
+
+void inp() {
+    n = read();
+    for(int i = 1; i &lt;= n; i++) {
+        int t = read();
+        while(t != 0) {
+            add(i,t);
+            x[++cnt] = i;
+            y[cnt] = t;
+            t = read();
+        }
+    }
+}
+
+void tarjan(int now) {
+    dfn[now] = low[now] = ++dfscnt;
+    s[++stop] = now;
+    ins[now] = true;
+    for(int i = head[now]; i ; i = nxt[i]) {
+        int y = to[i];
+        if(!dfn[y]) {
+            tarjan(y);
+            low[now] = min(low[now],low[y]);
+        }
+        else if(ins[y]) {
+            low[now] = min(low[now],dfn[y]);
+        }
+    }
+    if(low[now] == dfn[now]) {
+        ++num;
+        while(s[stop+1] != now) {
+            d[s[stop]] = num;
+            ins[s[stop--]] = false;
+        }
+    }
+}
+
+int main() {
+    inp();
+
+    for(int i = 1; i &lt;= n; i++)
+        if(!dfn[i])
+            tarjan(i);
+
+    for(int i = 1; i &lt;= cnt; i++) {
+        if(d[x[i]] != d[y[i]]) {
+            out[d[x[i]]]++;
+            in[d[y[i]]]++;
+        }
+    }
+
+    int In = 0;
+    int Out = 0;
+    for(int i = 1; i &lt;= num; i++) {
+        if(!in[i]) In++;
+        if(!out[i]) Out++;
+    }
+
+    int ans = 0;
+    ans = max(In,Out);
+    
+    if(num == 1)
+        ans = 0;
+
+    printf(&quot;%d\n&quot;,In);
+    printf(&quot;%d\n&quot;,ans);
+
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[线段树解题报告]]></title>
         <id>https://zzzcd0x.github.io/post/xian-duan-shu-jie-ti-bao-gao/</id>
@@ -2220,65 +2457,6 @@ void sieve(){
 </code></pre>
 <p>时间复杂度：<code>O(n)</code><br>
 适合处理数据范围巨大的情况</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[链式前向星]]></title>
-        <id>https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/</id>
-        <link href="https://zzzcd0x.github.io/post/lian-shi-qian-xiang-xing/">
-        </link>
-        <updated>2020-07-14T08:32:26.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="原理">原理</h1>
-<pre><code>链式前向星与邻接表类似，用一个数组存储了一个点可以到达的所有的点，区别是链式前向星使用链表将从每一个点出发的每一条边用链表的形式链在了一起，对边的存储方式是存储指向的顶点，边权，以及一下一条边的编号
-</code></pre>
-<h1 id="怎么写呢">怎么写呢</h1>
-<ul>
-<li>结构体写法</li>
-</ul>
-<pre><code class="language-cpp">struct Edge{
-    int to;
-    int val;
-    int nxt;
-    int from; 
-}edge[10005];
-int head[10005];                //每一个点的链表的头结点编号
-int tot = 0;                    //用于存储每一个点的头结点
-
-void add(int x,int y,int z){
-    edge[++tot].nxt = head[x];
-    head[x] = tot;
-    edge[tot].to = y;
-    edge[tot].from = x;
-    edge[tot].val = z;
-}
-</code></pre>
-<ul>
-<li>数组写法</li>
-</ul>
-<pre><code class="language-cpp">int tot;
-int to[MAXN];
-int from[MAXN];
-int head[MAXN];
-int val[MAXN];
-
-void add(int x,int y) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    from[tot] = x;
-}
-</code></pre>
-<h1 id="遍历">遍历</h1>
-<pre><code>与每一个点相连的边已经以链表的形式存储，头结点存储在head数组中，因此我们可以使用类似遍历链表的方式遍历与每一个点相连的每一条边
-</code></pre>
-<pre><code class="language-cpp">void search(){
-
-    for(int i = 1; i &lt;= n; i++)
-        for(int j = head[i]; j ; j = edge[j].next)
-            printf(&quot;%d %d %d\n&quot;,edge[j].to,edge[j].val,edge[j].next);
-
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>
