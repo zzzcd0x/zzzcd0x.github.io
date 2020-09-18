@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-09-05T12:54:32.661Z</updated>
+    <updated>2020-09-18T03:10:52.267Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -2353,7 +2353,7 @@ int main() {
 <li>设d = gcd(a,b) 则 gcd(a/d,b/d) = 1</li>
 <li>gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)</li>
 </ol>
-<h3 id="辗转相除法求解">辗转相除法求解：</h3>
+<h3 id="更相减损法">更相减损法：</h3>
 <p>由gcd(a,b) = gcd(a-b,b) 得 gcd(a,b) = gcd(a%b,b)</p>
 <p>因此求解过程可写为：</p>
 <ol>
