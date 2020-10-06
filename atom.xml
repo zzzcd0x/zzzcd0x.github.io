@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-10-06T00:04:36.976Z</updated>
+    <updated>2020-10-06T02:47:08.081Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,212 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[前缀和与差分解题报告]]></title>
+        <id>https://zzzcd0x.github.io/post/qian-zhui-he-yu-chai-fen-jie-ti-bao-gao/</id>
+        <link href="https://zzzcd0x.github.io/post/qian-zhui-he-yu-chai-fen-jie-ti-bao-gao/">
+        </link>
+        <updated>2020-10-06T02:45:49.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="最大正方形">最大正方形</h2>
+<p><a href="https://www.luogu.com.cn/problem/P1387">题目链接</a></p>
+<h3 id="题目描述">题目描述</h3>
+<p>给定一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>∗</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">n*m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 的只包含0和1的矩阵，求出矩阵中不包含0的最大正方形</p>
+<h3 id="解题思路">解题思路</h3>
+<p>求出给定矩阵的二维前缀和，枚举每一个可能的顶点和以该顶点做左上角的每一个可能的正方形，差分求出该矩阵中1的个数，如果1的个数等于正方形面积，则为一个合法矩形。</p>
+<h3 id="ac代码">AC代码</h3>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e2+5;
+
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+
+int l;
+int n, m;
+int sum[MAXN][MAXN];
+int Map[MAXN][MAXN];
+
+void inp() {
+    read(n);
+    read(m);
+    l = min(n,m);
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= m; j++) {
+            read(Map[i][j]);
+            sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + Map[i][j];
+        }
+}
+
+int main() {
+    inp();
+    int ans = 1;
+    for(int i = 1; i &lt;= n; i++)
+        for(int j = 1; j &lt;= m; j++) {
+            for(int k = 1; k &lt;= l &amp;&amp; i-k &gt;= 0 &amp;&amp; j-k &gt;= 0; k++) {
+                int tox = i-k;
+                int toy = j-k;
+                int x = sum[tox][toy] - sum[i][toy] - sum[tox][j] + sum[i][j];
+                if(x == k*k &amp;&amp; k &gt; ans)
+                    ans = k;
+            }
+        }
+    printf(&quot;%d\n&quot;,ans);
+    return 0;
+}
+</code></pre>
+<h2 id="tallest-cow-s">Tallest Cow S</h2>
+<p><a href="https://www.luogu.com.cn/problem/P2879">题目链接</a></p>
+<h3 id="题目描述-2">题目描述</h3>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>J</mi></mrow><annotation encoding="application/x-tex">FJ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span></span></span></span> 有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 头奶牛，他们按顺序排成一排，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>J</mi></mrow><annotation encoding="application/x-tex">FJ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span></span></span></span> 只知道这些奶牛中最高的奶牛是第几个，以及这头奶牛的身高，现在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>J</mi></mrow><annotation encoding="application/x-tex">FJ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span></span></span></span> 有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span></span></span></span> 条信息，每条信息有两头奶牛的编号 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> ，表示 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 的身高一定大于等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 的身高，且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 之间的奶牛身高一定低于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>J</mi></mrow><annotation encoding="application/x-tex">FJ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span></span></span></span> 想根据这些信息知道每一头奶牛可能的最大身高。</p>
+<h3 id="解题思路-2">解题思路</h3>
+<p>对于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span></span></span></span> 条信息，将每一条信息中给出的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 之间的奶牛身高减一，最终根据最高的奶牛的身高还原出序列即可。<strong>注意信息判重</strong></p>
+<h3 id="ac代码-2">AC代码</h3>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 1e4+5;
+
+template&lt;class T&gt;inline bool read(T &amp;x) {
+    x = 0;
+    register bool f = false;
+    register char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T,class ...S&gt; inline bool read(T &amp;x,S &amp;...y) {return read(x) &amp;&amp; read(y...);}
+template&lt;class T,class ...S&gt; inline void print(T x,char c) {print(x),putchar(c);}
+
+int n,r,I,h;
+int f[MAXN];
+int num[MAXN];
+bool vis[MAXN][MAXN];
+
+int main() {
+    read(n,I,h,r);
+    num[I] = h;
+
+    for(register int i = 1; i &lt;= r; i++) {
+        int x, y;
+        read(x,y);
+        if(x &gt; y) swap(x,y);
+        if(vis[x][y]) continue;
+        vis[x][y] = true;
+        f[x+1]--;
+        f[y]++;
+    }
+    for(register int i = I+1; i &lt;= n; i++) {
+        num[i] = num[i-1] + f[i];
+    }
+    for(register int i = I; i &gt;= 1; i--) {
+        num[i-1] = num[i] - f[i];
+    }
+    for(register int i = 1; i &lt;= n; i++)
+        print(num[i],'\n');
+
+    return 0;
+}
+</code></pre>
+<h2 id="incdec-sequence">IncDec Sequence</h2>
+<p><a href="https://www.luogu.com.cn/problem/P4552">题目链接</a></p>
+<h3 id="题目描述-3">题目描述</h3>
+<p>给定一个长度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 的数列 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>a</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">{a_1,a_2,\cdots,a_n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> ，每次可以选择一个区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> ，使这个区间内的数都加 1 或者都减 1。</p>
+<p>请问至少需要多少次操作才能使数列中的所有数都一样，并求出在保证最少次数的前提下，最终得到的数列有多少种。</p>
+<h3 id="解题思路-3">解题思路</h3>
+<p>用差分考虑这道题，数列中所有的数都一样即差分数组中除第一个数外，其他数都为0。操作时可以选一个数加一或者减一，这样的话差分数组中的正数和负数就可以互相消，如果找不到可以一起消的数就和 1 或 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 消，这样不影响差分数组中其他数的值。可以看出，最少的操作次数一定是原始差分数组中最大的正数或最小的负数。</p>
+<p>对于第二个子任务，消数时的目标是将其他数消到等于数列的第一个数，因此第一个数可能的数即为答案，当整个差分数组中只剩下正数或负数时，这些数只能和第一个数消，也可以选择跟第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个数消，答案也就是这些数跟第一个数消的时候产生的。所以答案为差分数组中最大的正数与最小的负数的绝对值的差加一。</p>
+<h3 id="ac代码-3">AC代码</h3>
+<pre><code class="language-cpp">#include&lt;cmath&gt;
+#include&lt;cstdio&gt;
+#include&lt;ctype.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 1e5+5;
+
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    register bool f = false;
+    register char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T,class ...S&gt; inline bool read(T &amp;x,S &amp;...y) {return read(x) &amp;&amp; read(y...);}
+template&lt;class T,class ...S&gt; inline void print(T x,char c) {print(x),putchar(c);}
+
+int n;
+ll a,b;
+ll x[MAXN];
+ll num[MAXN];
+
+int main() {
+    read(n);
+    for(register int i = 1; i &lt;= n; i++) {
+        read(num[i]);
+        x[i] = num[i]-num[i-1];
+        if(i &gt;= 2) {
+            if(x[i] &gt; 0) a += x[i];
+            else b += x[i];
+        }
+    }
+    b = -b;
+    print(max(a,b),'\n');
+    print(1+abs(a-b));
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[前缀和与差分]]></title>
         <id>https://zzzcd0x.github.io/post/qian-zhui-he-yu-chai-fen/</id>
@@ -2364,44 +2570,6 @@ int main() {
     return 0;
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[gcd lcm]]></title>
-        <id>https://zzzcd0x.github.io/post/gcd-lcm/</id>
-        <link href="https://zzzcd0x.github.io/post/gcd-lcm/">
-        </link>
-        <updated>2020-07-14T08:33:34.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="最大公因数gcd">最大公因数(gcd)</h2>
-<h3 id="性质">性质：</h3>
-<ol>
-<li>gcd(1,n) = 1</li>
-<li>设d = gcd(a,b) 则 gcd(a/d,b/d) = 1</li>
-<li>gcd(a,b) = gcd(a+-b,b) = gcd(a,b+-a)</li>
-</ol>
-<h3 id="更相减损法">更相减损法：</h3>
-<p>由gcd(a,b) = gcd(a-b,b) 得 gcd(a,b) = gcd(a%b,b)</p>
-<p>因此求解过程可写为：</p>
-<ol>
-<li>如果a&lt;b,则交换a,b</li>
-<li>如果b = 0，则返回a</li>
-<li>令a = a%b</li>
-</ol>
-<p>重复上述过程</p>
-<pre><code class="language-cpp">int gcd(int a, int b) {
-    if (a &lt; b) {
-        int t = b;
-        b = a;
-        a = t;
-    }
-    if (b == 0) return a;
-    return gcd(a % b, b);
-}
-</code></pre>
-<h2 id="最小公倍数lcm">最小公倍数(lcm)</h2>
-<pre><code class="language-math">lcm(a,b) = {ab\over gcd(a,b)}
-</code></pre>
-<p><s>怎么求就不用说了吧</s></p>
 ]]></content>
     </entry>
 </feed>
