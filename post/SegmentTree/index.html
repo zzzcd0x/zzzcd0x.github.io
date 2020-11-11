@@ -50,7 +50,7 @@
                         <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
                                 <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
                                     <div class="post-title  mdui-m-b-1">线段树</div>
-                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-07-14 15:07:16">2020-07-14 / 8 min read</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-07-14 15:07:16">2020-07-14 / 13 min read</div>
                                     <div class="mdui-m-b-2 mdui-typo post-neirong"><h1 id="组成">组成</h1>
 <figure data-type="image" tabindex="1"><img src="https://cdn.luogu.com.cn/upload/image_hosting/pcbn4nsv.png" alt="" loading="lazy"></figure>
 <p>1号结点为根结点，存储原数组区间1到6的数的和。</p>
@@ -291,6 +291,126 @@ void modify(int now,int L,int R,int k){
         ans.Max = max(left.rm+right.lm,max(left.Max,right.Max));
         return ans;
     }
+}
+</code></pre>
+<h2 id="扫描线">扫描线</h2>
+<p>扫描线是一个用来求面积并和周长并的算法，常与线段树搭配。</p>
+<p>假设扫描线从下到上扫描整个图像，分析扫描线与图像中的矩形的相交情况可求得面积并。</p>
+<p>假设要处理下图</p>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1756742/201908/1756742-20190823173706224-734349173.png" alt="" loading="lazy"></figure>
+<p>处理时扫描线从 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 轴开始向上扫描整个图形，则会与图中的四条水平线段重合，如下图。</p>
+<figure data-type="image" tabindex="3"><img src="https://img2018.cnblogs.com/blog/1756742/201908/1756742-20190823173926247-1222228654.png" alt="" loading="lazy"></figure>
+<p>每次与线段重合时更新扫描线在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 轴方向的有效重合线段长度。</p>
+<p>完成扫描后，能够覆盖的线段可以分为三段</p>
+<figure data-type="image" tabindex="4"><img src="https://cdn.luogu.com.cn/upload/image_hosting/v1c0l00u.png" alt="" loading="lazy"></figure>
+<p>也可以这样看这张图</p>
+<figure data-type="image" tabindex="5"><img src="https://img2018.cnblogs.com/blog/1756742/201908/1756742-20190823180008071-971631783.png" alt="" loading="lazy"></figure>
+<p>扫描线每扫到一条有效线段则更新线段树中相应的节点，如扫描第一条线段时，1，2，4，5节点维护的有效覆盖长度就会被更新。</p>
+<p><strong>但是怎么维护有效覆盖长度呢？</strong></p>
+<p>一个矩形的两条水平边可以分为上底和下底，扫描时每一个区间维护一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>l</mi><mi>a</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">flag</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span></span></span></span> ,扫描时碰到下底则 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>l</mi><mi>a</mi><mi>g</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">flag+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> ,碰到上底则 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>l</mi><mi>a</mi><mi>g</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">flag-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> ，这样 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>l</mi><mi>a</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">flag</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span></span></span></span> 为 0 则表示该区间没有被覆盖，不为 0 则表示该区间被覆盖。</p>
+<p><strong>怎么维护整个图像的面积并呢？</strong></p>
+<p>扫描时维护线段树的 1 号节点为整个图像中有效线段的长度，则每次面积更新值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>e</mi><mi>n</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>∗</mo><mo>(</mo><mi mathvariant="normal">下</mi><mi mathvariant="normal">一</mi><mi mathvariant="normal">条</mi><mi mathvariant="normal">扫</mi><mi mathvariant="normal">描</mi><mi mathvariant="normal">线</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">高</mi><mi mathvariant="normal">度</mi><mo>−</mo><mi mathvariant="normal">当</mi><mi mathvariant="normal">前</mi><mi mathvariant="normal">扫</mi><mi mathvariant="normal">描</mi><mi mathvariant="normal">线</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">高</mi><mi mathvariant="normal">度</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">len[i]*(下一条扫描线的高度-当前扫描线的高度)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord cjk_fallback">下</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">条</span><span class="mord cjk_fallback">扫</span><span class="mord cjk_fallback">描</span><span class="mord cjk_fallback">线</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">高</span><span class="mord cjk_fallback">度</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">当</span><span class="mord cjk_fallback">前</span><span class="mord cjk_fallback">扫</span><span class="mord cjk_fallback">描</span><span class="mord cjk_fallback">线</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">高</span><span class="mord cjk_fallback">度</span><span class="mclose">)</span></span></span></span> 因此在扫描时不需要考虑最上面的一条扫描线。</p>
+<p>扫描时由于要从下到上扫描图像，因此需要将线段按 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 坐标排序，然后从小到大扫描，在扫描前需要将线段的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 坐标离散化，需要计算时再用对应结点的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 坐标。</p>
+<p><strong>模板</strong></p>
+<p><a href="https://www.luogu.com.cn/problem/P5490">洛谷模板题</a></p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 1e5+5;
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T,class ...S&gt; inline void print(T x,char c) {print(x),putchar(c);}
+template&lt;class T,class ...S&gt; inline bool read(T &amp;x,S &amp;...y) {return read(x) &amp;&amp; read(y...);}
+int n;
+ll ans;
+ll seg[MAXN&lt;&lt;3];    //线段的边界
+ll len[MAXN&lt;&lt;3];    //线段长度
+//  线段树
+int le[MAXN&lt;&lt;3];
+int ri[MAXN&lt;&lt;3];
+int sum[MAXN&lt;&lt;3];
+//  扫描线
+struct scanline{
+    ll l,r,h;
+    int val;
+}line[MAXN&lt;&lt;3];
+inline int ls(int p) {return p&lt;&lt;1;}
+inline int rs(int p) {return p&lt;&lt;1|1;}
+bool cmp(scanline x,scanline y) {return x.h&lt;y.h;}
+void pushup(int p) {
+    int l = le[p];
+    int r = ri[p];
+    if(sum[p]) len[p] = seg[r+1]-seg[l];    //被扫过，长度为线段长度
+    else {
+        if(l==r) len[p] = 0;                //特判叶子节点
+        else len[p] = len[ls(p)]+len[rs(p)];//没被扫过
+    }
+}
+void build(int now,int L,int R) {           //建树
+    le[now] = L;
+    ri[now] = R;
+    if(L==R) return;
+    int mid = (L+R)&gt;&gt;1;
+    build(ls(now),L,mid);
+    build(rs(now),mid+1,R);
+}
+void upd(int now,ll L,ll R,int val) {       //扫描
+    int l = le[now];
+    int r = ri[now];
+    if(L&gt;=seg[r+1] || R&lt;=seg[l]) return;
+    if(seg[l]&gt;=L &amp;&amp; seg[r+1]&lt;=R) {
+        sum[now] += val;
+        pushup(now);
+        return;
+    }
+    upd(ls(now),L,R,val);
+    upd(rs(now),L,R,val);
+    pushup(now);
+}
+int main() {
+    read(n);
+    for(int i = 1; i &lt;= n; i++) {
+        ll x,y,X,Y;
+        read(x,y,X,Y);
+        seg[(i&lt;&lt;1)] = X;
+        seg[(i&lt;&lt;1)-1] = x;
+        line[i&lt;&lt;1] = scanline {x,X,Y,-1};
+        line[(i&lt;&lt;1)-1] = scanline {x,X,y,1};
+    }
+    n = n&lt;&lt;1;
+    //离散化
+    sort(seg+1,seg+n+1);
+    sort(line+1,line+n+1,cmp);
+    int cnt = unique(seg+1,seg+n+1)-seg-1;
+    build(1,1,cnt-1);
+    for(int i = 1; i &lt; n; i++) {    //最后一条边不需要扫
+        upd(1,line[i].l,line[i].r,line[i].val);
+        ans += len[1]*(line[i+1].h-line[i].h);
+    }
+    print(ans,'\n');
+    return 0;
 }
 </code></pre>
 </div>
