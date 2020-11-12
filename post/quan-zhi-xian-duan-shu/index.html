@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+        <head>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+        <meta charset="utf-8">
+        <title>权值线段树 | zzzcd0x &#39;s Blog</title>
+        <link rel="stylesheet" href="https://zzzcd0x.github.io/styles/main.css">
+        <link rel="stylesheet" href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css">
+        <link href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+         <script >hljs.initHighlightingOnLoad();</script>
+
+    </head>
+    <body>
+              <header class="header mdui-m-b-5">      
+            <div class="container  ">
+                <div class="index-title animated fadeInDown mdui-text-center mdui-text-color-white mdui-m-b-2" style="animation-delay: 0.2s"><a href="https://zzzcd0x.github.io">zzzcd0x &#39;s Blog</a></div>
+                <div class="mdui-text-color-white animated fadeInDown mdui-text-center  mdui-m-b-3" style="animation-delay: 0.4s">越学越倒退选手</div>
+           
+            <nav id="nav" class="mdui-text-center animated fadeInDown" style="animation-delay: 0.6s">
+                   
+                            <li><a href="/">首页</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/archives">All</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                            <li><a href="/tags">分类</a>
+                                <span class="nav-style top"></span>
+                                <span class="nav-style bottom"></span>
+                                <span class="nav-style left"></span>
+                                <span class="nav-style right"></span>
+                                </li>
+                    
+                  </nav>
+                </div>
+        </header>
+        <div class="mdui-container ">
+                <div class="mdui-row">
+                        <div class="mdui-col-md-8 mdui-col-offset-md-2 ">
+                                <article class="mdui-p-a-2 post animated fadeIn" style="animation-delay: 0.8s;animation-duration: 2s">
+                                    <div class="post-title  mdui-m-b-1">权值线段树</div>
+                                    <div class="mdui-typo-body-2 mdui-m-b-2" datetime="2020-11-12 12:23:38">2020-11-12 / 6 min read</div>
+                                    <div class="mdui-m-b-2 mdui-typo post-neirong"><h2 id="是什么呢">是什么呢</h2>
+<p>算是线段树的一种拓展数据结构吧，基于线段树但与线段树不同。</p>
+<p>线段树可以维护一系列具有区间可加性的信息，而权值线段树可以维护一个序列中每个数字出现的次数。</p>
+<p>因此权值线段树要开的空间依据值域的大小，线段树依据定义域的大小。</p>
+<p>值域很大时可以考虑离散化或动态开点。</p>
+<p>基于这些特性，权值线段树的功能有：查询序列中第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大或者 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小的数，查询某个数的排名，查询某个数的前驱和后继等等。</p>
+<h2 id="基本操作">基本操作</h2>
+<p><strong>单点修改</strong></p>
+<p>也就是更新一个数字出现的次数。</p>
+<pre><code class="language-cpp">void modify(int now,int pos,int l,int r) {
+    if(l==r) {
+        sum[now]++;
+        return;
+    }
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=pos) modify(ls(now),pos,l,mid);
+    if(mid&lt;pos) modify(rs(now),pos,mid+1,r);
+    pushup(now);
+}
+</code></pre>
+<p><strong>区间查询</strong></p>
+<p>查询一个值域区间总共出现次数</p>
+<pre><code class="language-cpp">int query(int now,int L,int R,int l,int r) {
+    if(l&gt;=L &amp;&amp; R&gt;=r) return sum[now];
+    int ans = 0;
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=L) ans += query(ls(now),L,R,l,mid);
+    if(mid&lt;R) ans += query(rs(now),L,R,mid+1,r);
+    return ans;
+}
+</code></pre>
+<p><strong>单点查询</strong></p>
+<pre><code class="language-cpp">int query(int now,int pos,int l,int r) {
+    if(l==r) return sum[now];
+    int mid = (l+r)&gt;&gt;1;
+    if(mid &gt;= pos) return query(ls(now),pos,l,mid);
+    else return query(rs(now),pos,mid+1,r);
+}
+</code></pre>
+<p><strong>查询第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大</strong></p>
+<p>在每个节点，如果右子树的维护的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">sum</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span></span></span></span> 值大于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> ，则第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大出现在右子树中，否则在左子树中。</p>
+<p><strong>去左子树的时候要将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 值减去右子树的大小。</strong></p>
+<pre><code class="language-cpp">int queryK(int now,int l,int r,int k) {
+    if(l==r) return l;
+    int mid = (l+r)&gt;&gt;1;
+    if(sum[rs(now)]&gt;=k) return queryK(rs(now),mid+1,r,k);
+    else return queryK(ls(now),l,mid,sum[rs(now)]);
+}
+</code></pre>
+<h2 id="模板">模板</h2>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1394">HDU1394</a></p>
+<p><strong>题目大意</strong></p>
+<p>给定一个序列，从左向右将序列中的元素移到最右边，问每次移动后最小的逆序对个数是多少？</p>
+<p><strong>思路</strong></p>
+<p><s>其实可以暴力</s></p>
+<p>顺序读入每一个数字，读入每个数字时查询已经读入的数字中比他大的数字的个数即为当前逆序对的个数。</p>
+<p>完成输入后即可得出整个区间的逆序对个数。</p>
+<p>假设将数字 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 移到序列最右边，此时原来的逆序对变为顺序对，顺序对边为逆序对，而且移动之前 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的顺序对个数一定为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">n-x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> ，逆序对个数一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 。</p>
+<p>所以移动后 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 对答案的贡献为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mi>x</mi><mo>−</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">n-x-(x-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 。</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;ctype.h&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 5e3+5;
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T&gt;inline void print(T x,char c) {print(x),putchar(c);}
+template&lt;class T&gt;inline bool read(T &amp;x,T &amp;y) {return read(x)&amp;&amp;read(y);}
+int n;
+int num[MAXN];
+int sum[MAXN&lt;&lt;2];
+inline int ls(int p) {return p&lt;&lt;1;}
+inline int rs(int p) {return p&lt;&lt;1|1;}
+void pushup(int p) { sum[p] = sum[ls(p)] + sum[rs(p)];}
+void modify(int now,int pos,int l,int r) {
+    if(l==r) {
+        sum[now]++;
+        return;
+    }
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=pos) modify(ls(now),pos,l,mid);
+    if(mid&lt;pos) modify(rs(now),pos,mid+1,r);
+    pushup(now);
+}
+int query(int now,int L,int R,int l,int r) {
+    if(l&gt;=L &amp;&amp; R&gt;=r) return sum[now];
+    int ans = 0;
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=L) ans += query(ls(now),L,R,l,mid);
+    if(mid&lt;R) ans += query(rs(now),L,R,mid+1,r);
+    return ans;
+}
+int main() {
+    while(~scanf(&quot;%d&quot;,&amp;n)) {
+        int cnt = 0;
+        memset(sum,0,sizeof(sum));
+        for(int i = 1; i &lt;= n; i++) {
+            read(num[i]);
+            num[i];
+            cnt += query(1,num[i]+1,n,1,n);
+            modify(1,num[i]+1,1,n);
+        }
+        int ans = cnt;
+        for(int i = 1; i &lt;= n; i++) {
+            cnt += n-2*num[i]-1;
+            ans = min(ans,cnt);
+        }
+        print(ans,'\n');
+    }
+    return 0;
+}
+</code></pre>
+</div>
+                                    <div class="mdui-divider mdui-m-b-2"></div>
+                                    <div class="mdui-row-xs-2 post-fenye">
+                                       
+                                        <div class="mdui-col"> </div>
+                                        
+
+                                        
+                                        <div class="mdui-col"><div class="mdui-text-right "><a href="https://zzzcd0x.github.io/post/qian-zhui-he-yu-chai-fen-jie-ti-bao-gao/">前缀和与差分解题报告</a></div> </div>
+                                       
+                                      </div>
+                                   
+                                    <div class="mdui-divider mdui-m-t-2 mdui-m-b-2"></div>
+                                    
+                                     <script src="https://zzzcd0x.github.io/media/scripts/Valine.min.js"></script>
+ <div class="comment"></div>
+
+<script>
+      new Valine({
+            el: '.comment',
+
+
+
+            path: window.location.pathname,
+            pageSize: 30,
+            avatar:'mm', 
+       })
+    </script> 
+<script>
+    if(window.location.hash){
+        var checkExist = setInterval(function() {
+           if ($(window.location.hash).length) {
+              $('html, body').animate({scrollTop: $(window.location.hash).offset().top-90}, 1000);
+              clearInterval(checkExist);
+           }
+        }, 100);
+    }
+</script>
+                                </article>
+
+                                    
+                        </div>
+                      </div>
+    
+                
+
+              </div>
+                    <footer class="footer mdui-m-t-5 mdui-text-center">
+               <nav class="social-links">
+                      <ul>
+                      
+                      
+                           
+                      
+                           
+                      	
+                        <li class="social-link"><a href="https://github.com/zzzcd0x" target="_blank"><i class="iconfont icon-github"></i></a></li>
+                          
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      
+                           
+                      </ul>
+                    </nav>
+                    <div class="copyright">
+                      <p>Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> <br/> Theme <a href="https://github.com/alterfang/gridea-theme-song/" target="_blank"  title="宋"  >Song</a> by <a href="https://shanbu.fun/" target="_blank"  title="山卜方" >shanbufun</a> </p>
+                  </div>
+                  
+              </footer>
+    </body>
+</html>

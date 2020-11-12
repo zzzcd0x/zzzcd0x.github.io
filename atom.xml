@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-11-11T12:07:42.578Z</updated>
+    <updated>2020-11-12T04:24:04.041Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,149 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[权值线段树]]></title>
+        <id>https://zzzcd0x.github.io/post/quan-zhi-xian-duan-shu/</id>
+        <link href="https://zzzcd0x.github.io/post/quan-zhi-xian-duan-shu/">
+        </link>
+        <updated>2020-11-12T04:23:38.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="是什么呢">是什么呢</h2>
+<p>算是线段树的一种拓展数据结构吧，基于线段树但与线段树不同。</p>
+<p>线段树可以维护一系列具有区间可加性的信息，而权值线段树可以维护一个序列中每个数字出现的次数。</p>
+<p>因此权值线段树要开的空间依据值域的大小，线段树依据定义域的大小。</p>
+<p>值域很大时可以考虑离散化或动态开点。</p>
+<p>基于这些特性，权值线段树的功能有：查询序列中第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大或者 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小的数，查询某个数的排名，查询某个数的前驱和后继等等。</p>
+<h2 id="基本操作">基本操作</h2>
+<p><strong>单点修改</strong></p>
+<p>也就是更新一个数字出现的次数。</p>
+<pre><code class="language-cpp">void modify(int now,int pos,int l,int r) {
+    if(l==r) {
+        sum[now]++;
+        return;
+    }
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=pos) modify(ls(now),pos,l,mid);
+    if(mid&lt;pos) modify(rs(now),pos,mid+1,r);
+    pushup(now);
+}
+</code></pre>
+<p><strong>区间查询</strong></p>
+<p>查询一个值域区间总共出现次数</p>
+<pre><code class="language-cpp">int query(int now,int L,int R,int l,int r) {
+    if(l&gt;=L &amp;&amp; R&gt;=r) return sum[now];
+    int ans = 0;
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=L) ans += query(ls(now),L,R,l,mid);
+    if(mid&lt;R) ans += query(rs(now),L,R,mid+1,r);
+    return ans;
+}
+</code></pre>
+<p><strong>单点查询</strong></p>
+<pre><code class="language-cpp">int query(int now,int pos,int l,int r) {
+    if(l==r) return sum[now];
+    int mid = (l+r)&gt;&gt;1;
+    if(mid &gt;= pos) return query(ls(now),pos,l,mid);
+    else return query(rs(now),pos,mid+1,r);
+}
+</code></pre>
+<p><strong>查询第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大</strong></p>
+<p>在每个节点，如果右子树的维护的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">sum</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span></span></span></span> 值大于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> ，则第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大出现在右子树中，否则在左子树中。</p>
+<p><strong>去左子树的时候要将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 值减去右子树的大小。</strong></p>
+<pre><code class="language-cpp">int queryK(int now,int l,int r,int k) {
+    if(l==r) return l;
+    int mid = (l+r)&gt;&gt;1;
+    if(sum[rs(now)]&gt;=k) return queryK(rs(now),mid+1,r,k);
+    else return queryK(ls(now),l,mid,sum[rs(now)]);
+}
+</code></pre>
+<h2 id="模板">模板</h2>
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1394">HDU1394</a></p>
+<p><strong>题目大意</strong></p>
+<p>给定一个序列，从左向右将序列中的元素移到最右边，问每次移动后最小的逆序对个数是多少？</p>
+<p><strong>思路</strong></p>
+<p><s>其实可以暴力</s></p>
+<p>顺序读入每一个数字，读入每个数字时查询已经读入的数字中比他大的数字的个数即为当前逆序对的个数。</p>
+<p>完成输入后即可得出整个区间的逆序对个数。</p>
+<p>假设将数字 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 移到序列最右边，此时原来的逆序对变为顺序对，顺序对边为逆序对，而且移动之前 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的顺序对个数一定为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">n-x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> ，逆序对个数一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 。</p>
+<p>所以移动后 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 对答案的贡献为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mi>x</mi><mo>−</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">n-x-(x-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 。</p>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;ctype.h&gt;
+#include&lt;string.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int MAXN = 5e3+5;
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T&gt;inline void print(T x,char c) {print(x),putchar(c);}
+template&lt;class T&gt;inline bool read(T &amp;x,T &amp;y) {return read(x)&amp;&amp;read(y);}
+int n;
+int num[MAXN];
+int sum[MAXN&lt;&lt;2];
+inline int ls(int p) {return p&lt;&lt;1;}
+inline int rs(int p) {return p&lt;&lt;1|1;}
+void pushup(int p) { sum[p] = sum[ls(p)] + sum[rs(p)];}
+void modify(int now,int pos,int l,int r) {
+    if(l==r) {
+        sum[now]++;
+        return;
+    }
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=pos) modify(ls(now),pos,l,mid);
+    if(mid&lt;pos) modify(rs(now),pos,mid+1,r);
+    pushup(now);
+}
+int query(int now,int L,int R,int l,int r) {
+    if(l&gt;=L &amp;&amp; R&gt;=r) return sum[now];
+    int ans = 0;
+    int mid = (l+r)&gt;&gt;1;
+    if(mid&gt;=L) ans += query(ls(now),L,R,l,mid);
+    if(mid&lt;R) ans += query(rs(now),L,R,mid+1,r);
+    return ans;
+}
+int main() {
+    while(~scanf(&quot;%d&quot;,&amp;n)) {
+        int cnt = 0;
+        memset(sum,0,sizeof(sum));
+        for(int i = 1; i &lt;= n; i++) {
+            read(num[i]);
+            num[i];
+            cnt += query(1,num[i]+1,n,1,n);
+            modify(1,num[i]+1,1,n);
+        }
+        int ans = cnt;
+        for(int i = 1; i &lt;= n; i++) {
+            cnt += n-2*num[i]-1;
+            ans = min(ans,cnt);
+        }
+        print(ans,'\n');
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[前缀和与差分解题报告]]></title>
         <id>https://zzzcd0x.github.io/post/qian-zhui-he-yu-chai-fen-jie-ti-bao-gao/</id>
@@ -2386,186 +2529,6 @@ int main() {
 
         t--;
     }
-
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[并查集]]></title>
-        <id>https://zzzcd0x.github.io/post/bing-cha-ji-dsu/</id>
-        <link href="https://zzzcd0x.github.io/post/bing-cha-ji-dsu/">
-        </link>
-        <updated>2020-07-17T02:29:14.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="什么是并查集">什么是并查集</h2>
-<p>并查集是一种比较简洁但功能强大的数据结构，主要用于维护一些不相关集合。</p>
-<p>支持合并两个集合、查找一个结点属于哪一个集合两种操作。</p>
-<h3 id="初始化">初始化</h3>
-<p>在开始使用并查集之前认为每一个点都代表一个独立的集合</p>
-<pre><code class="language-cpp">for(int i = 1; i &lt;= n; i++) 
-	dad[i] = i;
-</code></pre>
-<h3 id="查询操作">查询操作</h3>
-<p>将关联两个结点的关系看作图中的边，则查询操作就是不断查找一个结点的父结点，直至找到根节点，即代表该集合的结点。</p>
-<h4 id="朴素写法">朴素写法</h4>
-<pre><code class="language-cpp">int anc(int p) {
-    if(dad[p] == p) return p;
-    else return anc(dad[p]);
-}
-</code></pre>
-<p>这样查找在整个关系构成一条链时时间复杂度会达到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。</p>
-<p>因此诞生了路径压缩优化</p>
-<h4 id="路径压缩">路径压缩</h4>
-<p>在递归找到根节点后，回溯的过程中将子节点的父亲结点设为找到的根节点，这样就可以避免路径的重复访问</p>
-<pre><code class="language-cpp">int anc(int p) {
-    if(dad[p] == p) return p;
-    else return dad[p] = anc(p);
-}
-</code></pre>
-<p>这样单次查找的时间复杂度就变成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 了，总时间复杂度均摊 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(logn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 。</p>
-<h3 id="合并操作">合并操作</h3>
-<p>并查集中用一个数组用于储存每个集合中的代表元素，因此在合并两个集合时只要将这两个集合的代表元素合并到同一个集合中即可。</p>
-<pre><code class="language-cpp">void uni(int x,int y) {
-    x = anc(x);
-    y = anc(y);
-    if(x != y)
-        dad[x] = y;
-}
-</code></pre>
-<h3 id="种类并查集">种类并查集</h3>
-<p>在某些情况下会出现类似<strong>敌人的敌人是朋友</strong>的状态需要维护，这种情况下就需要使用种类并查集进行维护</p>
-<p>种类并查集需要开两倍大小的空间用于维护状态（有的时候不止两倍），其中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>−</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1-n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 用于维护朋友关系，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>+</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">n+1-2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault">n</span></span></span></span> 用于维护敌人关系。</p>
-<p>这样在合并操作时，同一个结点的敌人就会被合并到同一个集合里。</p>
-<p>与前面的并查集不同的是，假设要设定 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 为敌人关系，则合并 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">y+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">x+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 所在集合。</p>
-<h3 id="例题">例题</h3>
-<p><strong>并查集常规操作</strong></p>
-<p><a href="https://www.luogu.com.cn/record/32631894">题目链接</a></p>
-<p>并查集裸题，直接打模板即可</p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-using namespace std;
-
-int n, m, p;
-int dad[5005];
-
-int anc(int x){
-	if(dad[x] == x) return x;
-    return dad[x] = anc(dad[x]);
-}
-
-void uni(int x, int y){
-
-    x = anc(x);
-    y = anc(y);
-    
-    if(x != y)
-        dad[x] = y;
-}
-
-bool ask(int x,int y)
-{
-    return anc(x) == anc(y);
-}
-
-void inp(){
-
-    int x, y;
-    scanf(&quot;%d %d %d&quot;,&amp;n,&amp;m,&amp;p);
-    for(int i = 1; i &lt;= m; i++)
-    {
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        uni(x,y);
-    }
-}
-
-void getans(){
-
-    int x, y;
-    for(int i = 1; i &lt;= p; i++)
-    {
-        scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-        if(ask(x,y))
-            printf(&quot;Yes\n&quot;);
-        else
-            printf(&quot;No\n&quot;);
-    }
-}
-
-int main()
-{
-    inp();
-
-    getans();
-
-    return 0;
-}
-</code></pre>
-<p><strong>种类并查集</strong></p>
-<p><a href="https://www.luogu.com.cn/problem/P1525">题目链接</a></p>
-<p>本题要求冲突值尽可能小，则先对所有关系进行从大到小排序，优先合并冲突值大的关系，则第一次出现冲突是即为冲突值的最小值</p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 2e4+5;
-const int MAXM = 1e5+5;
-
-struct Node{
-    int x;
-    int y;
-    int num;
-}node[MAXM];
-
-inline int read() {
-    int x = 0;
-    char c = getchar();
-    while(c &lt; '0' || c &gt; '9')
-        c = getchar();
-    while(c &gt;= '0' &amp;&amp; c &lt;= '9') {
-        x = x*10 + c-'0';
-        c = getchar();
-    }
-    return x;
-}
-
-int ans;
-int n, m;
-int dad[MAXN&lt;&lt;1];
-
-int anc(int p) {
-    if(dad[p] == p) return p;
-    return dad[p] = anc(dad[p]);
-}
-
-void uni(int x,int y) { dad[anc(x)] = anc(y);}
-
-bool jud(Node&amp; x,Node&amp; y) {return x.num &gt; y.num;}
-
-int main() {
-    n = read();
-    m = read();
-
-    for(int i = 1; i &lt;= n; i++) {
-        dad[i] = i;
-        dad[i+n] = i+n;
-    }
-
-    for(int i = 0; i &lt; m; i++) {
-        node[i].x = read();
-        node[i].y = read();
-        node[i].num = read();
-    }
-    sort(node,node+m,jud);
-
-    for(int i = 0; i &lt; m; i++) {
-        if(anc(node[i].x) == anc(node[i].y)) {
-            ans = node[i].num;
-            break;
-        }
-        uni(node[i].x,node[i].y+n);
-        uni(node[i].x+n,node[i].y);
-    }
-
-    printf(&quot;%d\n&quot;,ans);
 
     return 0;
 }
