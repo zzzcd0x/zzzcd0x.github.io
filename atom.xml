@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-11-13T13:53:12.748Z</updated>
+    <updated>2020-11-19T08:02:32.634Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -131,6 +131,126 @@ int main() {
         ans += small[i]*big[i];
     }
     print(ans,'\n');
+    return 0;
+}
+</code></pre>
+<p><a href="https://www.luogu.com.cn/problem/P6186">洛谷P6186</a></p>
+<p><strong>题目大意</strong></p>
+<p>给定一个序列，对该序列执行两种操作：一种为交换序列中的第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个数，另一种为对该序列进行 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 轮冒泡排序，询问完成后序列中的逆序对个数。</p>
+<p><strong>解题思路</strong></p>
+<p>设数组 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi><mo>[</mo><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">ans[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span> 表示在每个数之前有多少个比自己大的数。</p>
+<p>对于每一轮冒泡排序对 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ans</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span></span></span></span> 数组的影响，如果一个数之前有比自己大的数那么一轮冒泡排序后一定会有一个被移动到这个数后面， <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ans</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span></span></span></span> 值会减 1。</p>
+<p>因此如果进行 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 轮冒泡排序，最终对答案有影响的只有排序前 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ans</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span></span></span></span> 值大于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 的个数。</p>
+<p>设比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ans</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span></span></span></span> 值的和为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">sum</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span></span></span></span> ，一共有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mi>n</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">cnt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mord mathdefault">n</span><span class="mord mathdefault">t</span></span></span></span> 个比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ans</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span></span></span></span> 值。</p>
+<p>则最终答案为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>m</mi><mo>−</mo><mi>k</mi><mo>∗</mo><mi>c</mi><mi>n</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">sum-k*cnt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mord mathdefault">n</span><span class="mord mathdefault">t</span></span></span></span></p>
+<p>对于每次交换，分会使逆序对减少或者会使逆序对增加两种情况处理。</p>
+<p><strong>AC代码</strong></p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 2e5+5;
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T&gt;inline void print(T x,char c) {print(x),putchar(c);}
+template&lt;class T&gt;inline bool read(T &amp;x,T &amp;y) {return read(x)&amp;&amp;read(y);}
+int n,m;
+int c[MAXN];
+int num[MAXN];
+int ans[MAXN];
+ll sum[MAXN&lt;&lt;2];
+ll cnt[MAXN&lt;&lt;2];
+inline int ls(int p) {return p&lt;&lt;1;}
+inline int rs(int p) {return p&lt;&lt;1|1;}
+inline int lowbit(int p) {return p&amp;(-p);}
+void ins(int p,int v) {
+    for(int i=p;i&lt;=n;i+=lowbit(i))
+    c[i]+=v;
+}
+int find(int p) {
+    int res=0;
+    for(int i=p;i;i-=lowbit(i))
+    res+=c[i];
+    return res;
+}
+void pushup(int now) {
+    sum[now]=sum[ls(now)]+sum[rs(now)];
+    cnt[now]=cnt[ls(now)]+cnt[rs(now)];
+}
+void modify(int now,int l,int r,int v,int k) {
+    if(l==r) {
+        sum[now]+=v*k;
+        cnt[now]+=k;
+        return;
+    }
+    int mid=(l+r)&gt;&gt;1;
+    if(mid&gt;=v) modify(ls(now),l,mid,v,k);
+    else modify(rs(now),mid+1,r,v,k);
+    pushup(now);
+}
+ll query(int now,int L,int R,int l,int r,int flag) {
+    if(l&gt;=L &amp;&amp; R&gt;=r) {
+        if(flag==1) return sum[now];
+        if(flag==2) return cnt[now];
+    }
+    ll tmp=0;
+    int mid=(l+r)&gt;&gt;1;
+    if(mid&gt;=L) tmp+=query(ls(now),L,R,l,mid,flag);
+    if(mid&lt;R) tmp+=query(rs(now),L,R,mid+1,r,flag);
+    return tmp; 
+}
+int main() {
+    read(n,m);
+    for(int i=1;i&lt;=n;i++) {
+        read(num[i]);
+        ans[i]=find(n)-find(num[i]);
+        ins(num[i],1);
+        modify(1,0,n,ans[i],1);
+    }
+    for(int i=1;i&lt;=m;i++) {
+        int opt,x;
+        read(opt,x);
+        if(opt==1) {
+            swap(num[x],num[x+1]);
+            swap(ans[x],ans[x+1]);
+            if(num[x+1]&gt;num[x]) {
+                modify(1,0,n,ans[x],-1);
+                ans[x]--;
+                modify(1,0,n,ans[x],1);
+            }
+            else {
+                modify(1,0,n,ans[x+1],-1);
+                ans[x+1]++;
+                modify(1,0,n,ans[x+1],1);
+            }
+        }
+        else {
+            x=min(n,x);
+            ll res=query(1,x,n,0,n,1)-x*query(1,x,n,0,n,2);
+            print(res,'\n');
+        }
+    }
     return 0;
 }
 </code></pre>
