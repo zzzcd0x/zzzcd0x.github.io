@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zzzcd0x.github.io</id>
     <title>zzzcd0x &apos;s Blog</title>
-    <updated>2020-11-19T08:02:32.634Z</updated>
+    <updated>2020-12-06T14:28:12.903Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zzzcd0x.github.io"/>
     <link rel="self" href="https://zzzcd0x.github.io/atom.xml"/>
@@ -10,6 +10,297 @@
     <logo>https://zzzcd0x.github.io/images/avatar.png</logo>
     <icon>https://zzzcd0x.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zzzcd0x &apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[树链剖分]]></title>
+        <id>https://zzzcd0x.github.io/post/shu-lian-pou-fen/</id>
+        <link href="https://zzzcd0x.github.io/post/shu-lian-pou-fen/">
+        </link>
+        <updated>2020-12-06T14:27:23.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="轻重链剖分">轻重链剖分</h3>
+<p>树链剖分的一种，一般树链剖分都默认为轻重链剖分。</p>
+<h4 id="是什么呢">是什么呢</h4>
+<p><strong>前置概念：</strong></p>
+<ul>
+<li>重儿子：一个非叶子节点的儿子中子树（以该儿子为根）最大的儿子。</li>
+<li>轻儿子：一个非叶子节点的儿子中除重儿子外的其他儿子。</li>
+<li>重边：父节点连接其重儿子的边。</li>
+<li>轻边：父节点连接其轻儿子的边。</li>
+<li>轻链：轻边组成的链。</li>
+<li>重链：重边组成的链。</li>
+</ul>
+<p><strong>轻重链剖分：</strong></p>
+<p>将一颗树剖分成轻链和重链，通过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 序将树转化为线性区间，然后就可以用线段树等数据结构来维护树上信息。</p>
+<p>是一种码量小但功能强大易于理解的算法。</p>
+<h3 id="实现过程">实现过程</h3>
+<p>轻重链剖分主要由两遍 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 完成。</p>
+<p><strong>dfs1​</strong></p>
+<p>从根节点开始（不然从哪开始），求出每个节点的深度和每个节点的父节点，更新每个节点的子树大小并求出每个节点的重儿子。</p>
+<p><strong>怎么判断一个节点的重儿子是谁呢？</strong></p>
+<p>在更新子树时判断一下去 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 的子节点的子树大小是否大于之前搜过的节点的子树大小，如果大于则更新重儿子，否则不更新。</p>
+<pre><code class="language-cpp">void dfs1(int now,int fa,int d) {
+    dep[now]=d;     //深度
+    dad[now]=fa;    //父节点
+    size[now]=1;    //子树大小
+    for(int i=head[now];i;i=nxt[i]) {
+        int y=to[i];
+        if(y==fa) continue;
+        dfs1(y,now,d+1);
+        size[now]+=size[y];                         //统计子树大小
+        if(size[y]&gt;size[sonv[now]]) sonv[now]=y;    //更新重儿子
+    }
+}
+</code></pre>
+<p><strong>dfs2</strong></p>
+<p>从根节点开始搜索，在搜索每个节点的子节点时，优先搜索重儿子，同时更新搜索过的每个节点的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 序，并求出每个节点所在链的顶端节点。</p>
+<p><strong>为什么搜索一个节点的子节点时优先搜索重儿子呢？</strong></p>
+<p>每次搜索先处理重链，得出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 序后重链是连续的。</p>
+<pre><code class="language-cpp">void dfs2(int now,int topn) {
+    dfn[now]=++dfscnt;      //dfs序
+    f[dfscnt]=num[now];     //存储节点信息
+    top[now]=topn;          //链的顶端节点
+    if(!sonv[now]) return;
+    dfs2(sonv[now],topn);   //优先处理重儿子
+    for(int i=head[now];i;i=nxt[i]) {
+        int y=to[i];
+        if(y==dad[now]||y==sonv[now]) continue;
+        dfs2(y,y);          //处理轻儿子 此时轻链的顶端为子节点。
+    }
+}
+</code></pre>
+<h3 id="那么剖完之后怎么维护信息呢">那么剖完之后怎么维护信息呢？</h3>
+<ol>
+<li>
+<p>处理两点间路径的点权和</p>
+<p>通过树剖时求出了可以知道每一个节点所在链的顶端节点是谁，也就是说，我们可以知道哪两个节点在同一个链中。</p>
+<p>处理两点间的路径时，设两点的所在链的顶端节点深度较浅的节点为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 。</p>
+<ol>
+<li>
+<p>通过线段树区间查询求出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 到其所在链顶端节点这段区间的点权和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span>，然后 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>n</mi><mi>s</mi><mo>+</mo><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">ans += v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span><span class="mord">+</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span> 统计答案。</p>
+</li>
+<li>
+<p>最后将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 跳到所在链的顶端节点的父节点。</p>
+</li>
+</ol>
+<p>重复上述步骤，直至两点属于同一条链，此时再统计一下两个节点所构成的区间之前的点权和即为所求。</p>
+<pre><code class="language-cpp">ll querylian(int x,int y) {
+    ll res=0;
+    while(top[x]!=top[y]) {                         //两节点不在同一条链中
+        if(dep[top[x]]&lt;dep[top[y]]) swap(x,y);      //处理所在链顶端节点深度较低的那个
+        res=(res+query(1,dfn[top[x]],dfn[x]))%mod;
+        x=top[x];
+        x=dad[x];
+    }
+    if(dep[x]&gt;dep[y]) swap(x,y);                    //处理两节点之间的节点
+    res=(res+query(1,dfn[x],dfn[y]))%mod;
+    return res;
+}
+</code></pre>
+</li>
+<li>
+<p>处理一点及其子树的点权和</p>
+<p>树剖时我们统计了以每个节点为根节点的子树的节点个数，用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>f</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">dfs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">s</span></span></span></span> 序处理过之后这些节点一定是连续的所以直接在线段树上查就好。</p>
+<pre><code class="language-cpp">query(1,dfn[x],dfn[x]+size[x]-1)
+</code></pre>
+</li>
+<li>
+<p>类似的修改过程同理。</p>
+</li>
+</ol>
+<p>模板（<a href="https://www.luogu.com.cn/problem/P3384">洛谷P3384</a>）</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const int MAXN = 2e5+5;
+template&lt;class T&gt; inline bool read(T &amp;x) {
+    x = 0;
+    bool f = false;
+    char c = getchar();
+    while(!isdigit(c)) {
+        if(c == EOF) return false;
+        f ^= c == '-';
+        c = getchar();
+    }
+    while(isdigit(c)) {
+        x = (x&lt;&lt;3) + (x&lt;&lt;1) + (c^48);
+        c = getchar();
+    }
+    if(f) x = -x;
+    return true;
+}
+template&lt;class T&gt; inline void print(T x) {
+    if(x &lt; 0) {
+        putchar('-');
+        x = -x;
+    }
+    if(x &gt; 9) print(x/10);
+    putchar(x%10^48);
+}
+template&lt;class T,class ...S&gt; inline void print(T x,char c) {print(x),putchar(c);}
+template&lt;class T,class ...S&gt; inline bool read(T &amp;x,S &amp;...y) {return read(x) &amp;&amp; read(y...);}
+int tot;
+ll dfscnt;
+int n,m,r,mod;
+ll f[MAXN&lt;&lt;1];
+ll to[MAXN&lt;&lt;1];
+ll num[MAXN&lt;&lt;1];
+ll top[MAXN&lt;&lt;1];
+ll dep[MAXN&lt;&lt;1];
+ll nxt[MAXN&lt;&lt;1];
+ll dad[MAXN&lt;&lt;1];
+ll dfn[MAXN&lt;&lt;1];
+int le[MAXN&lt;&lt;2];
+int ri[MAXN&lt;&lt;2];
+ll tag[MAXN&lt;&lt;2];
+ll sum[MAXN&lt;&lt;2];
+ll sonv[MAXN&lt;&lt;1];
+ll size[MAXN&lt;&lt;1];
+ll head[MAXN&lt;&lt;1];
+inline int ls(int p) {return p&lt;&lt;1;}
+inline int rs(int p) {return p&lt;&lt;1|1;}
+inline void pushup(int p) {sum[p]=(sum[ls(p)]+sum[rs(p)])%mod;}
+void add(int x,int y) {
+    nxt[++tot]=head[x];
+    head[x]=tot;
+    to[tot]=y;
+}
+void pushdown(int p) {
+    if(tag[p]==0) return;
+    ll len=1ll*(ri[p]-le[p]+1);
+    int l=ls(p);
+    int r=rs(p);
+    tag[l]+=tag[p];
+    tag[r]+=tag[p];
+    sum[l]+=tag[p]*(len-(len&gt;&gt;1));
+    sum[r]+=tag[p]*(len&gt;&gt;1);
+    sum[l]=sum[l]%mod;
+    sum[r]=sum[r]%mod;
+    tag[p]=0;
+}
+void dfs1(int now,int fa,int d) {
+    dep[now]=d;     //深度
+    dad[now]=fa;    //父节点
+    size[now]=1;    //子树大小
+    for(int i=head[now];i;i=nxt[i]) {
+        int y=to[i];
+        if(y==fa) continue;
+        dfs1(y,now,d+1);
+        size[now]+=size[y];                         //统计子树大小
+        if(size[y]&gt;size[sonv[now]]) sonv[now]=y;    //更新重儿子
+    }
+}
+void dfs2(int now,int topn) {
+    dfn[now]=++dfscnt;      //dfs序
+    f[dfscnt]=num[now];     //存储节点信息
+    top[now]=topn;          //链的顶端节点
+    if(!sonv[now]) return;
+    dfs2(sonv[now],topn);   //优先处理重儿子
+    for(int i=head[now];i;i=nxt[i]) {
+        int y=to[i];
+        if(y==dad[now]||y==sonv[now]) continue;
+        dfs2(y,y);          //处理轻儿子 此时轻链的顶端为子节点。
+    }
+}
+void build(int now,int l,int r) {
+    le[now]=l;
+    ri[now]=r;
+    if(l==r) {
+        sum[now]=f[l];
+        return;
+    }
+    int mid=(l+r)&gt;&gt;1;
+    build(ls(now),l,mid);
+    build(rs(now),mid+1,r);
+    pushup(now);
+}
+ll query(int now,int L,int R) {
+    ll res=0;
+    int l=le[now];
+    int r=ri[now];
+    if(l&gt;=L&amp;&amp;R&gt;=r) return sum[now];
+    pushdown(now);
+    int mid=(l+r)&gt;&gt;1;
+    if(mid&gt;=L) res+=query(ls(now),L,R);
+    if(mid&lt;R) res+=query(rs(now),L,R);
+    return res%mod;
+}
+void modify(int now,int L,int R,ll k) {
+    int l=le[now];
+    int r=ri[now];
+    ll len=1ll*(r-l+1);
+    if(l&gt;=L &amp;&amp; R&gt;=r) {
+        sum[now]=(sum[now]+len*k)%mod;
+        tag[now]=(tag[now]+k)%mod;
+        return;
+    }
+    pushdown(now);
+    int mid=(l+r)&gt;&gt;1;
+    if(mid&gt;=L) modify(ls(now),L,R,k);
+    if(R&gt;mid) modify(rs(now),L,R,k);
+    pushup(now);
+}
+ll querylian(int x,int y) {
+    ll res=0;
+    while(top[x]!=top[y]) {                         //两节点不在同一条链中
+        if(dep[top[x]]&lt;dep[top[y]]) swap(x,y);      //处理所在链顶端节点深度较低的那个
+        res=(res+query(1,dfn[top[x]],dfn[x]))%mod;
+        x=top[x];
+        x=dad[x];
+    }
+    if(dep[x]&gt;dep[y]) swap(x,y);                    //处理两节点之间的节点
+    res=(res+query(1,dfn[x],dfn[y]))%mod;
+    return res;
+}
+void modifylian(int x,int y,ll k) {
+    while(top[x]!=top[y]) {
+        if(dep[top[x]]&lt;dep[top[y]]) swap(x,y);
+        modify(1,dfn[top[x]],dfn[x],k);
+        x=dad[top[x]];
+    }
+    if(dep[x]&gt;dep[y]) swap(x,y);
+    modify(1,dfn[x],dfn[y],k);
+}
+int main() {
+    read(n,m,r,mod);
+    for(int i=1;i&lt;=n;i++) read(num[i]);
+    for(int i=1;i&lt;n;i++) {
+        int x,y;
+        read(x,y);
+        add(x,y);
+        add(y,x);
+    }
+    dfs1(r,0,1);dfs2(r,r);
+    build(1,1,n);
+    for(int i=1;i&lt;=m;i++) {
+        int opt;
+        read(opt);
+        if(opt==1) {
+            int x,y;
+            ll z;
+            read(x,y,z);
+            modifylian(x,y,z);
+        }
+        else if(opt==2) {
+            int x,y;
+            read(x,y);
+            print(querylian(x,y),'\n');
+        }
+        else if(opt==3) {
+            int x;
+            ll z;
+            read(x,z);
+            modify(1,dfn[x],dfn[x]+size[x]-1,z);
+        }
+        else if(opt==4) {
+            int x;
+            read(x);
+            print(query(1,dfn[x],dfn[x]+size[x]-1),'\n');
+        }
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[权值线段树解题报告]]></title>
         <id>https://zzzcd0x.github.io/post/quan-zhi-xian-duan-shu-jie-ti-bao-gao/</id>
@@ -2478,125 +2769,6 @@ int main() {
 
     while(bfs()) upd();
     printf(&quot;%lld %lld\n&quot;,Max_flow,Max_cost);
-
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最近公共祖先]]></title>
-        <id>https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/</id>
-        <link href="https://zzzcd0x.github.io/post/zui-jin-gong-gong-zu-xian/">
-        </link>
-        <updated>2020-07-25T07:45:50.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="树上倍增法">树上倍增法</h2>
-<h3 id="怎么计算的">怎么计算的？</h3>
-<p>假设要计算树上x和y结点的最近公共祖先，d[x]表示结点x的深度，F[x,k]表示结点x向上跳<code>2</code></p>
-<p>设<code>d[x] &gt;= d[y]</code>否则交换x和y</p>
-<p>将x结点尝试向上走<code>2^{log(n)}...2^{log(0)}</code>步，检查每次到达的结点是否比y深，若是，则令<code>x=F[x,k]</code>，跳出循环</p>
-<p>如果此时<code>x=y</code>则两个结点的LCA就是y</p>
-<p>如果不是，则将x和y同时向上调整，保持两者深度相同但不相等，即将两节点同时向上跳<code>2^{log(n)}...2^{log(0)}</code>步，若此时<code>F[x,k]!=F[y,k]</code>(即深度不相等)，则令<code>x=F[x,k],y=F[y,k]</code></p>
-<p>循环结束后x和y一定差一步到达同一结点，即他们的最近公共祖先为<code>F[x,0]</code>或<code>F[y,0]</code></p>
-<p>单次查询时间复杂度为<code>log(n)</code></p>
-<h3 id="例题">例题</h3>
-<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">模板题</a></p>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;string.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int MAXN = 4e4+5;
-const int MAXM = 2e2+5;
-
-int tot;
-int n, m;
-int dis[MAXN];
-int dep[MAXN];
-int head[MAXN];
-bool vis[MAXN];
-int to[MAXN&lt;&lt;1];
-int fa[MAXN][25];
-int nxt[MAXN&lt;&lt;1];
-int val[MAXN&lt;&lt;1];
-
-void add(int x,int y,int z) {
-    nxt[++tot] = head[x];
-    head[x] = tot;
-    to[tot] = y;
-    val[tot] = z;
-}
-
-void dfs(int now,int dad) {
-    if(vis[now]) return;
-    vis[now] = true;
-    fa[now][0] = dad;
-
-    for(int i = head[now]; i ;i = nxt[i]) {
-        if(to[i] == dad) continue;
-        dis[to[i]] = dis[now] + val[i];
-        dep[to[i]] = dep[now] + 1;
-        dfs(to[i],now);
-    }
-}
-
-int lca(int x,int y) {
-    if(dep[x] &gt; dep[y])
-        swap(x,y);
-    
-    for(int i = 20; i &gt;= 0; i--)
-        if((dep[y] - (1&lt;&lt;i) ) &gt;= dep[x])
-            y = fa[y][i];
-    
-    if(x == y) return x;
-
-    for(int i = 20; i &gt;= 0; i--)
-        if(fa[x][i] != fa[y][i]) {
-            x = fa[x][i];
-            y = fa[y][i];
-        }
-    return fa[x][0];
-}
-
-int t;
-
-void inp() {
-    for(int i = 1; i &lt; n; i++) {
-        int x, y, z;
-        scanf(&quot;%d %d %d&quot;,&amp;x,&amp;y,&amp;z);
-        add(x,y,z);
-        add(y,x,z);
-    }
-}
-
-void init() {
-    memset(dis,0,sizeof(dis));
-    memset(vis,0,sizeof(vis));
-    memset(dep,0,sizeof(dep));
-    memset(head,0,sizeof(head));
-    tot = 0;
-}
-
-int main() {
-
-    scanf(&quot;%d&quot;,&amp;t);
-    while(t) {
-        scanf(&quot;%d %d&quot;,&amp;n,&amp;m);
-        init();
-        inp();
-
-        dfs(1,1);
-
-        for(int i = 1; i &lt;= 20; i++)
-            for(int j = 1; j &lt;= n; j++)
-                fa[j][i] = fa[fa[j][i-1]][i-1];
-
-        for(int i = 1; i &lt;= m; i++) {
-            int x,y;
-            scanf(&quot;%d %d&quot;,&amp;x,&amp;y);
-            printf(&quot;%d\n&quot;,dis[x] + dis[y] - 2*dis[lca(x,y)]);
-        }
-        t--;
-    }
 
     return 0;
 }
